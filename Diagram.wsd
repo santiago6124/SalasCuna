@@ -1,0 +1,132 @@
+@startuml test
+
+class Infantes {
+    -id : int
+    -nombre : str
+    -apellido : str
+    -dni : str
+    -fecha_de_nacimiento : date
+    -id_genero : Generos
+    -id_sala : Salas
+    -id_turno : Turnos
+    -id_user : user
+    -fecha_de_ingreso : date
+    -id_tutor : Tutores
+    --
+    +generar_padron()
+}
+
+class Usuarios {
+    -id : int
+    -nombre_de_usuario : str
+    -contrasaeña : password
+    -email : mail
+    -rol : roles
+}
+
+class Salas {
+    -codigo_sala : int
+    -capacidad_maxima : int
+    -id_direccion : Direccion
+    -id_zona : Zonas
+    -id_turno : Turnos
+} 
+
+class Zonas {
+    -id : int
+    -nombre : str
+}
+
+class Tutores {
+    -id : int
+    -nombre : str
+    -apellido : str
+    -dni : str
+    -fecha_de_nacimiento : date
+    -id_telefono : Telefono_tutores
+    -id_genero : Generos
+}
+
+class Turnos {
+    -id : int
+    -nombre : str
+    -descripcion : str
+}
+
+class Generos {
+    -id : int
+    -nombre : str
+    -descripcion : str
+}
+
+class Roles {
+    -id : int
+    -nombre : str
+    -descripcion : str
+}
+
+class Telefono_tutores {
+    -id : int
+    -telefono : str
+}
+
+class Emails_Usuarios {
+    -id : int
+    -email : str
+}
+
+class Desinfectar {
+    -id : int
+    -fecha : date
+}
+
+class Direccion {
+    -id : int
+    -calle : str
+    -altura : int
+    -latitud : str
+    -longitud : str
+    -id_barrio : Barrios
+}
+
+class Barrios {
+    -id : int
+    -nombre : str
+    -id_localidad : Localidades
+}
+
+class Localidades {
+    -id : int
+    -nombre : str
+    -id_departamento : Departamentos
+}
+
+class Departamentos {
+    -id : int
+    -nombre : int
+}
+
+class Padrones {
+    -id : int
+
+}
+
+Padrones --> Infantes
+Infantes --> Salas
+Infantes --> Generos
+Infantes --> Tutores
+Infantes --> Turnos
+Infantes --> Usuarios
+Infantes --> Direccion
+Tutores --> Telefono_tutores
+Usuarios --> Roles
+Usuarios --> Emails_Usuarios
+Salas --> Zonas
+Salas --> Desinfectar
+Salas --> Turnos
+Salas --> Direccion
+Tutores --> Generos
+Direccion --> Barrios
+Barrios --> Localidades
+Localidades --> Departamentos
+@enduml
