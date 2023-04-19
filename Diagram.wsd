@@ -75,9 +75,12 @@ class Emails_Usuarios {
     -email : str
 }
 
-class Desinfectar {
+class Desinfecciones {
     -id : int
     -fecha : date
+    -empresa : str
+    -telefono_empresa : str
+    -id_sala : Salas
 }
 
 class Direccion {
@@ -108,7 +111,7 @@ class Departamentos {
 
 class Padrones {
     -id : int
-
+    -fecha_de_generacion : date
 }
 
 Padrones --> Infantes
@@ -122,7 +125,7 @@ Tutores --> Telefono_tutores
 Usuarios --> Roles
 Usuarios --> Emails_Usuarios
 Salas --> Zonas
-Salas --> Desinfectar
+Salas --> Desinfecciones
 Salas --> Turnos
 Salas --> Direccion
 Tutores --> Generos
