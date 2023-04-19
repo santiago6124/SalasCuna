@@ -1,4 +1,4 @@
-@startuml test
+@startuml Project_Diagram
 
 class Infantes {
     -id : int
