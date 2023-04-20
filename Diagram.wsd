@@ -1,135 +1,161 @@
 @startuml Project_Diagram
 
-class Infantes {
+class Children {
     -id : int
-    -nombre : str
-    -apellido : str
+    -first_name : str
+    -last_name : str
     -dni : str
-    -fecha_de_nacimiento : date
-    -id_genero : Generos
-    -id_sala : Salas
-    -id_turno : Turnos
-    -id_user : user
-    -fecha_de_ingreso : date
-    -id_tutor : Tutores
+    -birthdate : date
+    -gender_id : Genders
+    -id_sala : Cribrooms
+    -shift_id : Shifts
+    -user_id : Users
+    -registration_date : date
+    -guardian_id : Guardians
     --
     +generar_padron()
 }
 
-class Usuarios {
+class Users {
     -id : int
-    -nombre_de_usuario : str
-    -contrasaeña : password
-    -email : mail
-    -rol : roles
+    -username : str
+    -password : password
+    -email : User_emails
+    -role : roles
 }
 
-class Salas {
-    -codigo_sala : int
-    -capacidad_maxima : int
-    -id_direccion : Direccion
-    -id_zona : Zonas
-    -id_turno : Turnos
+class Cribrooms {
+    -cribroom_id : int
+    -max_capacity : int
+    -adress_id : Adresses
+    -zone_id : Zones
+    -shift_id : Shifts
 } 
 
-class Zonas {
+class Zones {
     -id : int
-    -nombre : str
+    -name : str
 }
 
-class Tutores {
+class Guardians {
     -id : int
-    -nombre : str
-    -apellido : str
+    -first_name : str
+    -last_name : str
     -dni : str
-    -fecha_de_nacimiento : date
-    -id_telefono : Telefono_tutores
-    -id_genero : Generos
+    -birthdate : date
+    -id_telefono : Guardian_phones
+    -id_gender : Genders
 }
 
-class Turnos {
+class Shifts {
     -id : int
-    -nombre : str
-    -descripcion : str
+    -first_name : str
+    -description : str
 }
 
-class Generos {
+class Genders {
     -id : int
-    -nombre : str
-    -descripcion : str
+    -first_name : str
+    -description : str
 }
 
 class Roles {
     -id : int
-    -nombre : str
-    -descripcion : str
+    -first_name : str
+    -description : str
 }
 
-class Telefono_tutores {
+class Guardian_phones {
     -id : int
-    -telefono : str
+    -phone_number : str
 }
 
-class Emails_Usuarios {
+class User_emails {
     -id : int
     -email : str
 }
 
-class Desinfecciones {
+class Desinfections {
     -id : int
-    -fecha : date
-    -empresa : str
-    -telefono_empresa : str
-    -id_sala : Salas
+    -desinfection_date : date
+    -company : str
+    -company_phone : str
+    -id_sala : Cribrooms
 }
 
-class Direccion {
+class Adresses {
     -id : int
-    -calle : str
-    -altura : int
-    -latitud : str
-    -longitud : str
-    -id_barrio : Barrios
+    -street : str
+    -number : int
+    -latitude : str
+    -longitude : str
+    -district_id : Districts
 }
 
-class Barrios {
+class Districts {
     -id : int
-    -nombre : str
-    -id_localidad : Localidades
+    -name : str
+    -locality_id : Localities
 }
 
-class Localidades {
+class Localities {
     -id : int
-    -nombre : str
-    -id_departamento : Departamentos
+    -name : str
+    -department_id : Departments
 }
 
-class Departamentos {
+class Departments {
     -id : int
-    -nombre : int
+    -name : int
 }
 
 class Padrones {
     -id : int
-    -fecha_de_generacion : date
+    -generation_date : date
 }
 
-Padrones --> Infantes
-Infantes --> Salas
-Infantes --> Generos
-Infantes --> Tutores
-Infantes --> Turnos
-Infantes --> Usuarios
-Infantes --> Direccion
-Tutores --> Telefono_tutores
-Usuarios --> Roles
-Usuarios --> Emails_Usuarios
-Salas --> Zonas
-Salas --> Desinfecciones
-Salas --> Turnos
-Salas --> Direccion
-Tutores --> Generos
-Direccion --> Barrios
-Barrios --> Localidades
-Localidades --> Departamentos
+class Questions {
+    -id : int
+    -question : str
+    -category : str
+    -question_types_id : Question_types
+}
+
+class Question_types {
+    -id : int
+    -name : str
+}
+
+class Options {
+    -id : int
+    -question_id : Questions
+}
+
+class Answers {
+    -id : int
+    -answer : str
+    -question_id  : Questions
+}
+
+Padrones --> Children
+Children --> Cribrooms
+Children --> Genders
+Children --> Guardians
+Children --> Shifts
+Children --> Users
+Children --> Adresses
+Guardians --> Guardian_phones
+Users --> Roles
+Users --> User_emails
+Cribrooms --> Zones
+Cribrooms --> Desinfections
+Cribrooms --> Shifts
+Cribrooms --> Adresses
+Guardians --> Genders
+Adresses --> Districts
+Districts --> Localities
+Localities --> Departments
+Options --> Questions
+Questions --> Question_types
+Answers --> Questions
 @enduml
