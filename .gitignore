@@ -1,3 +1,4 @@
 
 dataMigrate/db.sqlite3
+dataMigrate/data/migrations
 Pipfile
