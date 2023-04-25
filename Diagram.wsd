@@ -135,6 +135,13 @@ class Answers {
     -id : int
     -answer : str
     -question_id  : Questions
+    -form_id : int
+}
+
+class Forms {
+    -id : int
+    -generation_date : date
+    -user_id : int
 }
 
 Padrones --> Children
@@ -158,4 +165,7 @@ Localities --> Departments
 Options --> Questions
 Questions --> Question_types
 Answers --> Questions
+Answers --> Forms
+Users --> Forms
+Cribrooms --> Forms
 @enduml
