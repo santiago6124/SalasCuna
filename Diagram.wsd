@@ -142,6 +142,7 @@ class Forms {
     -id : int
     -generation_date : date
     -user_id : int
+    -cribroom_id : int
 }
 
 Padrones --> Children
