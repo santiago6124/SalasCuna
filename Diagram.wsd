@@ -12,8 +12,6 @@ class Children {
     -user_id : Users
     -registration_date : date
     -guardian_id : Guardians
-    --
-    +generar_padron()
 }
 
 class Users {
@@ -112,6 +110,8 @@ class Departments {
 class Padrones {
     -id : int
     -generation_date : date
+    --
+    +generar_padron()
 }
 
 class Questions {
@@ -135,19 +135,26 @@ class Answers {
     -id : int
     -answer : str
     -question_id  : Questions
-    -form_id : int
+    -form_id : Forms
 }
 
 class Forms {
     -id : int
     -generation_date : date
-    -user_id : int
-    -cribroom_id : int
+    -user_id : Users
+    -cribroom_id : Cribrooms
+}
+
+class Payouts {
+    -id : int
+    -date : date
+    -upcountry : int
+    -capital : int
 }
 
 Padrones --> Children
 Children --> Cribrooms
-Children --> Genders
+Children -->"*" Genders
 Children --> Guardians
 Children --> Shifts
 Children --> Users
