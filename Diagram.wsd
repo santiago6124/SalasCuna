@@ -152,13 +152,27 @@ class Payouts {
     -capital : int
 }
 
+class Paynote {
+    -id : int
+    -generation_date : date
+    -cribroom_id : Cribrooms
+}
+
+class Children_state {
+    -id : int
+    -state : bool
+    -description : str
+    -children_id : Children
+}
+
 Padrones --> Children
-Children --> Cribrooms
+Children "*"-->"1  " Cribrooms
 Children -->"*" Genders
 Children --> Guardians
 Children --> Shifts
 Children --> Users
 Children --> Adresses
+Children_state --> Children
 Guardians --> Guardian_phones
 Users --> Roles
 Users --> User_emails
