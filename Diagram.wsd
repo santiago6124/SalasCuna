@@ -11,7 +11,9 @@ class Children {
     -shift_id : Shifts
     -user_id : Users
     -registration_date : date
+    -disenroll_date : date
     -guardian_id : Guardians
+    -children_state_id : Children_state
 }
 
 class Users {
@@ -39,7 +41,7 @@ class Guardians {
     -id : int
     -first_name : str
     -last_name : str
-    -dni : str
+    -dni : str 
     -birthdate : date
     -id_telefono : Guardian_phones
     -id_gender : Genders
@@ -162,7 +164,6 @@ class Children_state {
     -id : int
     -state : bool
     -description : str
-    -children_id : Children
 }
 
 Padrones --> Children
@@ -172,7 +173,7 @@ Children --> Guardians
 Children --> Shifts
 Children --> Users
 Children --> Adresses
-Children_state --> Children
+Children --> Children_state
 Guardians --> Guardian_phones
 Users --> Roles
 Users --> User_emails
