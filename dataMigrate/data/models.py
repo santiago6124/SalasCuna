@@ -57,14 +57,14 @@ class TipoBarrio(models.Model):
 
 class Madre(models.Model):
     # Apellido y nombre de madre de chico
-    dni = models.IntegerField(primary_key=True)
+    dni = models.IntegerField()
     apellido_y_nombre = models.CharField(max_length=60)
 
     def __str__(self):
         return f"{self.apellido_y_nombre}"
 
 class Chico(models.Model):
-    dni = models.IntegerField(primary_key=True)
+    dni = models.IntegerField()
     sala_cuna = models.ForeignKey(SalaCuna, on_delete=models.CASCADE )
     apellido = models.CharField(max_length=40)
     nombre = models.CharField(max_length=40)
@@ -83,4 +83,3 @@ class Chico(models.Model):
     def __str__(self):
         return f"{self.apellido} {self.nombre} {self.calle} {self.numero_calle} {self.numero_telefono} {self.dni} {self.fecha_nacimiento} {self.sala_cuna} {self.estado} {self.turno} {self.madre} {self.sexo} {self.localidad} {self.barrio}   "
 
-# manage.py runserver
