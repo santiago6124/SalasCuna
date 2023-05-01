@@ -80,7 +80,7 @@ class Desinfections {
     -desinfection_date : date
     -company : str
     -company_phone : str
-    -id_sala : Cribrooms
+    -cribroom_id : Cribrooms
 }
 
 class Adresses {
@@ -157,7 +157,14 @@ class Payouts {
 class Paynote {
     -id : int
     -generation_date : date
+    -category : str
+    -payout_id : Payouts
+}
+
+class Cribroom_Paynote {
+    -id : int
     -cribroom_id : Cribrooms
+    -paynote_id : Paynote
 }
 
 class Children_state {
@@ -166,8 +173,9 @@ class Children_state {
     -description : str
 }
 
+
 Padrones --> Children
-Children "*"-->"1  " Cribrooms
+Children "*"-->"1" Cribrooms
 Children -->"*" Genders
 Children --> Guardians
 Children --> Shifts
@@ -178,7 +186,7 @@ Guardians --> Guardian_phones
 Users --> Roles
 Users --> User_emails
 Cribrooms --> Zones
-Cribrooms --> Desinfections
+Desinfections --> Cribrooms
 Cribrooms --> Shifts
 Cribrooms --> Adresses
 Guardians --> Genders
@@ -191,4 +199,7 @@ Answers --> Questions
 Answers --> Forms
 Users --> Forms
 Cribrooms --> Forms
+Cribroom_Paynote --> Cribrooms
+Cribroom_Paynote --> Paynote
+Paynote --> Payouts
 @enduml
