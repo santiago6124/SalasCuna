@@ -1,0 +1,205 @@
+@startuml Project_Diagram
+
+class Children {
+    -id : int
+    -first_name : str
+    -last_name : str
+    -dni : str
+    -birthdate : date
+    -gender_id : Genders
+    -id_sala : Cribrooms
+    -shift_id : Shifts
+    -user_id : Users
+    -registration_date : date
+    -disenroll_date : date
+    -guardian_id : Guardians
+    -children_state_id : Children_state
+}
+
+class Users {
+    -id : int
+    -username : str
+    -password : password
+    -email : User_emails
+    -role : roles
+}
+
+class Cribrooms {
+    -cribroom_id : int
+    -max_capacity : int
+    -adress_id : Adresses
+    -zone_id : Zones
+    -shift_id : Shifts
+} 
+
+class Zones {
+    -id : int
+    -name : str
+}
+
+class Guardians {
+    -id : int
+    -first_name : str
+    -last_name : str
+    -dni : str 
+    -birthdate : date
+    -id_telefono : Guardian_phones
+    -id_gender : Genders
+}
+
+class Shifts {
+    -id : int
+    -first_name : str
+    -description : str
+}
+
+class Genders {
+    -id : int
+    -first_name : str
+    -description : str
+}
+
+class Roles {
+    -id : int
+    -first_name : str
+    -description : str
+}
+
+class Guardian_phones {
+    -id : int
+    -phone_number : str
+}
+
+class User_emails {
+    -id : int
+    -email : str
+}
+
+class Desinfections {
+    -id : int
+    -desinfection_date : date
+    -company : str
+    -company_phone : str
+    -cribroom_id : Cribrooms
+}
+
+class Adresses {
+    -id : int
+    -street : str
+    -number : int
+    -latitude : str
+    -longitude : str
+    -district_id : Districts
+}
+
+class Districts {
+    -id : int
+    -name : str
+    -locality_id : Localities
+}
+
+class Localities {
+    -id : int
+    -name : str
+    -department_id : Departments
+}
+
+class Departments {
+    -id : int
+    -name : int
+}
+
+class Padrones {
+    -id : int
+    -generation_date : date
+    --
+    +generar_padron()
+}
+
+class Questions {
+    -id : int
+    -question : str
+    -category : str
+    -question_types_id : Question_types
+}
+
+class Question_types {
+    -id : int
+    -name : str
+}
+
+class Options {
+    -id : int
+    -question_id : Questions
+}
+
+class Answers {
+    -id : int
+    -answer : str
+    -question_id  : Questions
+    -form_id : Forms
+}
+
+class Forms {
+    -id : int
+    -generation_date : date
+    -user_id : Users
+    -cribroom_id : Cribrooms
+}
+
+class Payouts {
+    -id : int
+    -date : date
+    -upcountry : int
+    -capital : int
+}
+
+class Paynote {
+    -id : int
+    -generation_date : date
+    -category : str
+    -payout_id : Payouts
+}
+
+class Cribroom_Paynote {
+    -id : int
+    -cribroom_id : Cribrooms
+    -paynote_id : Paynote
+}
+
+class Children_state {
+    -id : int
+    -state : bool
+    -description : str
+}
+
+
+Padrones --> Children
+Children "*"-->"1" Cribrooms
+Children -->"*" Genders
+Children --> Guardians
+Children --> Shifts
+Children --> Users
+Children --> Adresses
+Children --> Children_state
+Guardians --> Guardian_phones
+Users --> Roles
+Users --> User_emails
+Cribrooms --> Zones
+Desinfections --> Cribrooms
+Cribrooms --> Shifts
+Cribrooms --> Adresses
+Guardians --> Genders
+Adresses --> Districts
+Districts --> Localities
+Localities --> Departments
+Options --> Questions
+Questions --> Question_types
+Answers --> Questions
+Answers --> Forms
+Users --> Forms
+Cribrooms --> Forms
+Cribroom_Paynote --> Cribrooms
+Cribroom_Paynote --> Paynote
+Paynote --> Payouts
+@enduml
