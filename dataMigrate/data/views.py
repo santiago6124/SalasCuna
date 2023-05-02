@@ -68,77 +68,81 @@ def migration(request):
 
                         # if SALA CUNA and there is not nan values, save data into db
                         if save_data and not pd.isna(file_table['NOMBRE']) and not pd.isna(file_table['APELLIDO']) and not pd.isna(file_table['APELLIDO Y NOMBRE']):
-                            
-                            barrio = obj[10]
-                            tipBar = TipoBarrio.objects.filter(barrio = barrio)
-                            if not tipBar:
-                                tipBar = TipoBarrio.objects.create(
-                                    barrio = barrio,
-                                )
-                            
-                            caracteristica = obj[12] if type(obj[12]) == int else 0
-                            tipCarTel = TipoCaracteristicaTel.objects.filter(caracteristica = caracteristica)
-                            if not tipCarTel:
-                                tipCarTel = TipoCaracteristicaTel.objects.create(
-                                    caracteristica = caracteristica,
-                                )  
 
-                            localidad = obj[11]
-                            tipLoc = TipoLocalidad.objects.filter(localidad = localidad)
-                            if not tipLoc:
-                                tipLoc = TipoLocalidad.objects.create(
-                                    localidad = localidad,
-                                )
+                            try:                            
+                                barrio = obj[10]
+                                tipBar = TipoBarrio.objects.filter(barrio = barrio)
+                                if not tipBar:
+                                    tipBar = TipoBarrio.objects.create(
+                                        barrio = barrio,
+                                    )
+                                
+                                caracteristica = obj[12] if type(obj[12]) == int else 0
+                                tipCarTel = TipoCaracteristicaTel.objects.filter(caracteristica = caracteristica)
+                                if not tipCarTel:
+                                    tipCarTel = TipoCaracteristicaTel.objects.create(
+                                        caracteristica = caracteristica,
+                                    )  
 
-                            estado = obj[-3] #
-                            tipEst = TipoEstado.objects.filter(estado = estado)
-                            if not tipEst:
-                                tipEst = TipoEstado.objects.create(
-                                    estado = estado,
-                                )
+                                localidad = obj[11]
+                                tipLoc = TipoLocalidad.objects.filter(localidad = localidad)
+                                if not tipLoc:
+                                    tipLoc = TipoLocalidad.objects.create(
+                                        localidad = localidad,
+                                    )
 
-                            turno = obj[-4] #
-                            tipTur = TipoTurno.objects.filter(turno = turno)
-                            if not tipTur:
-                                tipTur = TipoTurno.objects.create(
-                                    turno = turno,
-                                )
-                            
-                            sexo = obj[7] #
-                            tipSex = TipoSexo.objects.filter(sexo = sexo)
-                            if not tipSex:
-                                tipSex = TipoSexo.objects.create(
-                                    sexo = sexo,
-                                )
-                
-                            dniMad = obj[-5] if type(obj[-5]) == int else 0
-                            madre = Madre.objects.filter(dni = dniMad, apellido_y_nombre = obj[-6])
-                            if not madre:
-                                madre = Madre.objects.create(
-                                    dni = dniMad,
-                                    apellido_y_nombre = obj[-6],
-                                )
-                            
-                            dniChi = obj[4] if type(obj[4]) == int else 0
-                            chico = Chico.objects.filter(dni = dniChi, fecha_nacimiento = obj[5], sexo = tipSex[0] if type(tipSex) == models.QuerySet else tipSex )
-                            if not chico:
-                                chico = Chico.objects.create(
-                                    apellido = file_table['APELLIDO'],
-                                    nombre = file_table['NOMBRE'],
-                                    calle = file_table['CALLE'],
-                                    numero_calle = obj[9] if type(obj[9]) == int else 0,
-                                    caracteristica = tipCarTel[0] if type(tipCarTel) == models.QuerySet else tipCarTel,
-                                    numero_telefono = obj[9] if type(obj[9]) == int else 0,
-                                    dni = dniChi,
-                                    fecha_nacimiento = file_table['FECHA DE NACIMIENTO'],
-                                    barrio = tipBar[0] if type(tipBar) == models.QuerySet else tipBar,
-                                    localidad = tipLoc[0] if type(tipLoc) == models.QuerySet else tipLoc,
-                                    estado = tipEst[0] if type(tipEst) == models.QuerySet else tipEst,
-                                    turno = tipTur[0] if type(tipTur) == models.QuerySet else tipTur,
-                                    sexo = tipSex[0] if type(tipSex) == models.QuerySet else tipSex,
-                                    madre = madre[0] if type(madre) == models.QuerySet else madre,
-                                    sala_cuna = salacuna[0] if type(salacuna) == models.QuerySet else salacuna,
-                                )
+                                estado = obj[-3] #
+                                tipEst = TipoEstado.objects.filter(estado = estado)
+                                if not tipEst:
+                                    tipEst = TipoEstado.objects.create(
+                                        estado = estado,
+                                    )
+
+                                turno = obj[-4] #
+                                tipTur = TipoTurno.objects.filter(turno = turno)
+                                if not tipTur:
+                                    tipTur = TipoTurno.objects.create(
+                                        turno = turno,
+                                    )
+                                
+                                sexo = obj[7] #
+                                tipSex = TipoSexo.objects.filter(sexo = sexo)
+                                if not tipSex:
+                                    tipSex = TipoSexo.objects.create(
+                                        sexo = sexo,
+                                    )
+                    
+                                dniMad = obj[-5] if type(obj[-5]) == int else 0
+                                madre = Madre.objects.filter(dni = dniMad, apellido_y_nombre = obj[-6])
+                                if not madre:
+                                    madre = Madre.objects.create(
+                                        dni = dniMad,
+                                        apellido_y_nombre = obj[-6],
+                                    )
+                                
+                                dniChi = obj[4] if type(obj[4]) == int else 0
+                                chico = Chico.objects.filter(dni = dniChi, fecha_nacimiento = obj[5], sexo = tipSex[0] if type(tipSex) == models.QuerySet else tipSex, apellido = file_table['APELLIDO'] )
+                                if not chico:
+                                    chico = Chico.objects.create(
+                                        apellido = file_table['APELLIDO'],
+                                        nombre = file_table['NOMBRE'],
+                                        calle = file_table['CALLE'],
+                                        numero_calle = obj[9] if type(obj[9]) == int else 0,
+                                        caracteristica = tipCarTel[0] if type(tipCarTel) == models.QuerySet else tipCarTel,
+                                        numero_telefono = obj[9] if type(obj[9]) == int else 0,
+                                        dni = dniChi,
+                                        fecha_nacimiento = file_table['FECHA DE NACIMIENTO'],
+                                        barrio = tipBar[0] if type(tipBar) == models.QuerySet else tipBar,
+                                        localidad = tipLoc[0] if type(tipLoc) == models.QuerySet else tipLoc,
+                                        estado = tipEst[0] if type(tipEst) == models.QuerySet else tipEst,
+                                        turno = tipTur[0] if type(tipTur) == models.QuerySet else tipTur,
+                                        sexo = tipSex[0] if type(tipSex) == models.QuerySet else tipSex,
+                                        madre = madre[0] if type(madre) == models.QuerySet else madre,
+                                        sala_cuna = salacuna[0] if type(salacuna) == models.QuerySet else salacuna,
+                                    )
+
+                            except Exception as e:
+                                print(f'model object error: {e}')
 
                         # find SALA CUNA's codigo and name
                         # then change save_data to True to analize excel data
