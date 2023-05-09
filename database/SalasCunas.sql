@@ -1,3 +1,7 @@
+drop database if exists SalasCunas;
+create database SalasCunas;
+use SalasCunas;
+
 create table Genders (
     id int primary key auto_increment,
     first_name varchar(100),
