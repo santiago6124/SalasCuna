@@ -79,7 +79,7 @@ entity Child {
     FOREIGN_KEY(Gender)
     FOREIGN_KEY(Cribroom)
     FOREIGN_KEY(Shift)
-    FOREIGN_KEY(User)
+    social_worker = FOREIGN_KEY(User)
     FOREIGN_KEY(Guardian)
     FOREIGN_KEY(Child_state)
 }
@@ -92,8 +92,8 @@ entity User {
     username
     password
     --
-    FOREIGN_KEY(User_emails)
-    FOREIGN_KEY(Roles)
+    FOREIGN_KEY(User_email)
+    FOREIGN_KEY(Role)
 }
 
 Child "*" - "1" User
@@ -106,8 +106,8 @@ entity Guardian {
     dni 
     birthdate
     --
-    FOREIGN_KEY(Guardian_phones)
-    FOREIGN_KEY(Genders)
+    FOREIGN_KEY(Guardian_phone)
+    FOREIGN_KEY(Gender)
 }
 
 Child "*" -- "1" Guardian
