@@ -254,6 +254,9 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_TOKEN_CLASSES' : (
+        'rest_framework_simplejwt.tokens.AccessToken',
+    )
 }
 
 # GoogleOAuth2 backend
@@ -280,6 +283,7 @@ DJOSER = {
     'SERIALIZERS' : {
         'user_create' : 'SalaCuna.serializers.UserCreateSerializer',
         'user' : 'SalaCuna.serializers.UserCreateSerializer',
+        'current_user' : 'SalaCuna.serializers.UserCreateSerializer',
         'user_delete' : 'djoser.serializers.UserDeleteSerializer',
     }
 }
