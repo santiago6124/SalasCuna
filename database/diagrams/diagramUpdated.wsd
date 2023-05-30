@@ -1,0 +1,120 @@
+@startuml
+
+' !define ENTITY
+!define PRIMARY_KEY(x) <b><color:blue>x</color></b>
+!define FOREIGN_KEY(x) <color:green>x</color>
+
+hide circle
+
+
+
+' Padrones
+    ' Children
+        ' Users
+            ' Gender
+            ' Cribroom
+            ' Shift
+            ' User
+            ' Guardian
+            ' Children_state
+            ' Padron
+
+entity Padron {
+    + PRIMARY_KEY(id)
+    --
+    generation_date
+    --
+}
+
+entity Cribroom {
+    + PRIMARY_KEY(id)
+    --
+    max_capacity
+    --
+    FOREIGN_KEY(Adress)
+    FOREIGN_KEY(Zone)
+    FOREIGN_KEY(Shift)
+}
+' Cribroom muchos a muchos Shift
+' Cribroom puede tener
+
+entity Padron_Cribroom {
+    + PRIMARY_KEY(id)
+    --
+    --
+    FOREIGN_KEY(Padron)
+    FOREIGN_KEY(Cribroom)
+}
+
+' relation creada de Padron a Cribroom
+' porque padron necesita saber de cribroom
+' Se deberian crear methods en Cribroom como
+' childQuantity-etc que sean guardados en una
+' variable del padron
+Padron_Cribroom "*" - "1" Cribroom
+Padron "1" - "*" Padron_Cribroom
+
+entity Desinfection {
+    + PRIMARY_KEY(id)
+    --
+    desinfection_date
+    company
+    company_phone
+    --
+    FOREIGN_KEY(Cribroom)
+}
+Desinfection "*" -- "1" Cribroom
+
+entity Payout {
+    + PRIMARY_KEY(id)
+    --
+    amount
+    month
+    --
+    FOREIGN_KEY(Payout_Adress)
+    ' Payout_Adress = capital or upcountry
+}
+
+entity Paynote {
+    + PRIMARY_KEY(id)
+    --
+    generation_date
+    --
+    FOREIGN_KEY(Payout)
+}
+
+class Cribroom_Paynote {
+    + PRIMARY_KEY(id)
+    --
+
+    --
+    FOREIGN_KEY(Cribroom)
+    FOREIGN_KEY(Paynote)
+}
+
+Cribroom_Paynote "*" -- "1" Cribroom
+Paynote "1" -- "*" Cribroom_Paynote
+
+Paynote "*" - "1" Payout
+
+entity Child {
+    + PRIMARY_KEY(id)
+    --
+    first_name
+    last_name
+    dni
+    birthdate
+    registration_date
+    disenroll_date
+    --
+    FOREIGN_KEY(Gender)
+    FOREIGN_KEY(Cribroom)
+    FOREIGN_KEY(Shift)
+    FOREIGN_KEY(User)
+    FOREIGN_KEY(Guardian)
+    FOREIGN_KEY(Child_state)
+}
+
+Cribroom "1" - "*" Child
+
+@enduml
