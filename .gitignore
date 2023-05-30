@@ -2,5 +2,7 @@
 dataMigrate/db.sqlite3
 dataMigrate/data/migrations
 SalaCuna/confApp/migrations
+SalaCuna/confApp/__pycache__
+SalaCuna/SalaCuna/__pycache__
 Pipfile
 02. FEBREROS A DATOS
