@@ -237,7 +237,7 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# JWT Auth
+# JWT Authentication
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -248,13 +248,22 @@ REST_FRAMEWORK = {
     ),
 }
 
+# JWT
+
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
-#DJOSER Conf
+# GoogleOAuth2 backend
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
+# DJOSER Configuration
 
 DJOSER = {
     'LOGIN_FIELD' : 'email',
