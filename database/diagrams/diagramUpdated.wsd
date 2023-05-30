@@ -86,4 +86,31 @@ entity Child {
 
 Cribroom "1" - "*" Child
 
+entity User {
+    + PRIMARY_KEY(id)
+    --
+    username
+    password
+    --
+    FOREIGN_KEY(User_emails)
+    FOREIGN_KEY(Roles)
+}
+
+Child "*" - "1" User
+
+entity Guardian {
+    + PRIMARY_KEY(id)
+    --
+    first_name
+    last_name
+    dni 
+    birthdate
+    --
+    FOREIGN_KEY(Guardian_phones)
+    FOREIGN_KEY(Genders)
+}
+
+Child "*" -- "1" Guardian
+
+
 @enduml
