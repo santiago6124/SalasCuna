@@ -19,12 +19,6 @@ hide circle
             ' Children_state
             ' Padron
 
-entity Padron {
-    + PRIMARY_KEY(id)
-    --
-    generation_date
-    --
-}
 
 entity Cribroom {
     + PRIMARY_KEY(id)
@@ -38,21 +32,6 @@ entity Cribroom {
 ' Cribroom muchos a muchos Shift
 ' Cribroom puede tener
 
-entity Padron_Cribroom {
-    + PRIMARY_KEY(id)
-    --
-    --
-    FOREIGN_KEY(Padron)
-    FOREIGN_KEY(Cribroom)
-}
-
-' relation creada de Padron a Cribroom
-' porque padron necesita saber de cribroom
-' Se deberian crear methods en Cribroom como
-' childQuantity-etc que sean guardados en una
-' variable del padron
-Padron_Cribroom "*" - "1" Cribroom
-Padron "1" - "*" Padron_Cribroom
 
 entity Desinfection {
     + PRIMARY_KEY(id)
@@ -92,10 +71,10 @@ class Cribroom_Paynote {
     FOREIGN_KEY(Paynote)
 }
 
-Cribroom_Paynote "*" -- "1" Cribroom
-Paynote "1" -- "*" Cribroom_Paynote
+Cribroom_Paynote "*" - "1" Cribroom
+Paynote "1" - "*" Cribroom_Paynote
 
-Paynote "*" - "1" Payout
+Payout "*" - "1" Paynote
 
 entity Child {
     + PRIMARY_KEY(id)
