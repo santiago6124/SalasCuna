@@ -266,6 +266,11 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend'
 )
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '448362844636-vbqn8ivc7p0dl9nvidiuveq8k1l6hc4s.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATE = ['first_name', 'last_name']
+
 # DJOSER Configuration
 
 DJOSER = {
