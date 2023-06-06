@@ -7,6 +7,39 @@
 hide circle
 
 
+' estado en clases
+' table intermedia user cribroom
+' rever forms
+' buscar plantillas de forms en internet
+    ' es algo bastante gral y ya conocido
+' dates
+' entidades para historial de estados
+' guardar periodos de aprobacion
+' guardar historial de payout/tarifa
+' cambiar nombre por historial de costos
+' usar hexadecimal primary keys
+
+' diagramar Form
+    ' decision tree con single choice resuelto
+    ' queda:
+        ' resuelto:
+            ' if multiple choice
+                ' -> insert Question fk
+            ' else
+                ' -> Question fk null
+            ' eliminar text option in question type
+            ' Choice insert nextQuestion fk
+                ' -> puede ser null
+            
+        ' decision tree con multiple choices
+        ' question despues de choice sin ser conditionalChoice
+' tema forms resuelto implementando Google Forms API
+    ' buscar pricing
+    ' implementar api
+    ' usar django para el manejo de roles
+    ' buscar manera mas eficiente para visualizacion de data
+' diagram states en entities ( deleted = default = False )
+' diagramar UML
 
 ' Padrones
     ' Children
@@ -49,7 +82,7 @@ entity Payout {
     --
     amount
     month
-    --
+        --
     FOREIGN_KEY(Zone)
     ' Payout_Adress = capital or upcountry
 }
@@ -128,50 +161,11 @@ entity Form {
     --
     generation_date
     --
-    FOREIGN_KEY(Cribroom)
-    FOREIGN_KEY(User)
+    FOREIGN_KEY(Cribroom_User)
     FOREIGN_KEY(Role)
 }
 
-User "1" -- "*" Form
-Cribroom "1" - "*" Form
-
-' entity Question_type {
-'     + PRIMARY_KEY(id)
-'     --
-'     text
-'     --
-' }
-
-' entity Option {
-'     + PRIMARY_KEY(id)
-'     --
-'     text
-'     --
-'     FOREIGN_KEY(Question)
-' }
-
-entity Question {
-    + PRIMARY_KEY(id)
-    --
-    question
-    category
-    --
-    FOREIGN_KEY(Question_type)
-    FOREIGN_KEY(Form)
-}
-Question "*" - "1" Form
-
-entity Answer {
-    + PRIMARY_KEY(id)
-    --
-    answer
-    --
-    FOREIGN_KEY(Question)
-    FOREIGN_KEY(User)
-}
-Answer "*" - "1" Question
-
+Cribroom_User "*" -- "1" Form
 
 ' DUDAS
     ' Custom USER model
