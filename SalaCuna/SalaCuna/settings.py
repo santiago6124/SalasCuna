@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "djoser",
     "corsheaders",
-    'social_django',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist'
 ]
@@ -149,7 +148,7 @@ JAZZMIN_UI_TWEAKS = {
 
 
 MIDDLEWARE = [
-    'social_django.middleware.SocialAuthExceptionMiddleware',
+    'corsheaders.middleware.security.SecurityMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -245,7 +244,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
@@ -255,22 +254,13 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+        'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+
     'AUTH_TOKEN_CLASSES' : (
         'rest_framework_simplejwt.tokens.AccessToken',
     )
 }
-
-# GoogleOAuth2 backend
-
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend'
-)
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '448362844636-vbqn8ivc7p0dl9nvidiuveq8k1l6hc4s.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'openid']
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATE = ['first_name', 'last_name']
 
 # DJOSER Configuration
 
@@ -286,8 +276,6 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL' : 'email/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL' : 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL' : True,
-    'SOCIAL_AUTH_TOKEN_STRATEGY' : 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS' : ['http://localhost:8000/google'],
     'SERIALIZERS' : {
         'user_create' : 'SalaCuna.serializers.UserCreateSerializer',
         'user' : 'SalaCuna.serializers.UserCreateSerializer',
@@ -314,4 +302,6 @@ EMAIL_HOST_USER = 'cuentas.sistemas.sc@gmail.com'
 EMAIL_HOST_PASSWORD = 'fkyqnsrctntvrtmx'
 EMAIL_USE_TLS = True
 
-# CORS_ALLOW_ALL_ORIGINS = True
+# Corsheaders configuration
+ 
+CORS_ALLOW_ALL_ORIGINS = True
