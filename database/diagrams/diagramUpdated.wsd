@@ -6,7 +6,6 @@
 
 hide circle
 
-
 entity Cribroom {
     + PRIMARY_KEY(id)
     --
