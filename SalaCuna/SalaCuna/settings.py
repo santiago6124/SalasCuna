@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "confApp",
     "rest_framework",
     "djoser",
+    "corsheaders",
     'social_django',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist'
@@ -312,3 +313,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'cuentas.sistemas.sc@gmail.com'
 EMAIL_HOST_PASSWORD = 'fkyqnsrctntvrtmx'
 EMAIL_USE_TLS = True
+
+# CORS_ALLOW_ALL_ORIGINS = True
