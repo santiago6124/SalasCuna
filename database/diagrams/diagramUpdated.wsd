@@ -7,84 +7,53 @@
 hide circle
 
 
-' estado en clases
-' table intermedia user cribroom
-' rever forms
-' buscar plantillas de forms en internet
-    ' es algo bastante gral y ya conocido
-' dates
-' entidades para historial de estados
-' guardar periodos de aprobacion
-' guardar historial de payout/tarifa
-' cambiar nombre por historial de costos
-' usar hexadecimal primary keys
-
-' diagramar Form
-    ' decision tree con single choice resuelto
-    ' queda:
-        ' resuelto:
-            ' if multiple choice
-                ' -> insert Question fk
-            ' else
-                ' -> Question fk null
-            ' eliminar text option in question type
-            ' Choice insert nextQuestion fk
-                ' -> puede ser null
-            
-        ' decision tree con multiple choices
-        ' question despues de choice sin ser conditionalChoice
-' tema forms resuelto implementando Google Forms API
-    ' buscar pricing
-    ' implementar api
-    ' usar django para el manejo de roles
-    ' buscar manera mas eficiente para visualizacion de data
-' diagram states en entities ( deleted = default = False )
-' diagramar UML
-
-' Padrones
-    ' Children
-        ' Users
-            ' Gender
-            ' Cribroom
-            ' Shift
-            ' User
-            ' Guardian
-            ' Children_state
-            ' Padron
-
-
 entity Cribroom {
     + PRIMARY_KEY(id)
     --
-    max_capacity
+    max_capacity = int
     --
     FOREIGN_KEY(Adress)
     FOREIGN_KEY(Zone)
     FOREIGN_KEY(Shift)
+    --
+    ()
 }
-' Cribroom muchos a muchos Shift
-' Cribroom puede tener mañana y tarde o solo mañana, etc
 
+entity Company {
+    + PRIMARY_KEY(id)
+    --
+    title = str
+    phone = int
+    --
+    --
+    ()
+}
 
 entity Desinfection {
     + PRIMARY_KEY(id)
     --
-    desinfection_date
-    company
-    company_phone
+    date = datetime
+    description = str
     --
     FOREIGN_KEY(Cribroom)
+    FOREIGN_KEY(Company)
+    --
+    ()
 }
+
+Desinfection "*" - "1" Company
 Desinfection "*" -- "1" Cribroom
 
 entity Payout {
     + PRIMARY_KEY(id)
     --
-    amount
-    month
+    amount = float
+    date = date
     --
     FOREIGN_KEY(Zone)
     ' Payout_Adress = capital or upcountry
+    --
+    ()
 }
 
 entity Zone {
@@ -94,6 +63,8 @@ entity Zone {
     --
 
     ' interior or capital
+    --
+    ()
 }
 
 Payout "*" - "1" Zone
@@ -115,6 +86,8 @@ entity Child {
     social_worker = FOREIGN_KEY(User)
     FOREIGN_KEY(Guardian)
     FOREIGN_KEY(Child_state)
+    --
+    ()
 }
 
 Cribroom "1" - "*" Child
@@ -127,6 +100,8 @@ entity User {
     --
     FOREIGN_KEY(User_email)
     FOREIGN_KEY(Role)
+    --
+    ()
 }
 
 entity Cribroom_User {
@@ -136,6 +111,8 @@ entity Cribroom_User {
     --
     FOREIGN_KEY(Cribroom)
     FOREIGN_KEY(User)
+    --
+    ()
 }
 
 Cribroom "1" - "*" Cribroom_User
@@ -152,6 +129,8 @@ entity Guardian {
     --
     FOREIGN_KEY(Guardian_phone)
     FOREIGN_KEY(Gender)
+    --
+    ()
 }
 
 Child "*" -- "1" Guardian
@@ -163,6 +142,8 @@ entity Form {
     --
     FOREIGN_KEY(Cribroom_User)
     FOREIGN_KEY(Role)
+    --
+    ()
 }
 
 Cribroom_User "*" -- "1" Form
