@@ -82,7 +82,7 @@ entity Payout {
     --
     amount
     month
-        --
+    --
     FOREIGN_KEY(Zone)
     ' Payout_Adress = capital or upcountry
 }
@@ -167,27 +167,6 @@ entity Form {
 
 Cribroom_User "*" -- "1" Form
 
-' DUDAS
-    ' Custom USER model
-        ' por que no usar django model user
-        ' analizar tema de roles y permissions
-        ' para ver si storear en diagrama o no
-    ' Relacionar Forms con Cribrooms
-    ' Ver si relacionar User con Cribrooms
-    ' Analizar campos de Forms
-        ' posiblemente Role sea necesario
 
-    ' User Forms muchos a muchos
-    ' User Cribroom muchos a muchos
-
-' entidad
-' CUIT
-' Salas name
-' ubicacion
-' 
-' 
-
-
-' diferenciar trabajadora social del resto
 
 @enduml
