@@ -4,6 +4,34 @@ create database SalasCunas;
 
 use SalasCunas;
 
+CREATE TABLE Gender ( id INT PRIMARY KEY, name VARCHAR(255) );
+
+CREATE TABLE Adress ( id INT PRIMARY KEY, name VARCHAR(255) );
+
+CREATE TABLE Shift ( id INT PRIMARY KEY, name VARCHAR(255) );
+
+CREATE TABLE Role ( id INT PRIMARY KEY, name VARCHAR(255) );
+
+CREATE TABLE Zone ( id INT PRIMARY KEY, name VARCHAR(255) );
+
+CREATE TABLE
+    User_email (
+        id INT PRIMARY KEY,
+        email VARCHAR(255)
+    );
+
+CREATE TABLE
+    Guardian_phone (
+        id INT PRIMARY KEY,
+        phone VARCHAR(255)
+    );
+
+CREATE TABLE
+    Child_state (
+        id INT PRIMARY KEY,
+        name VARCHAR(255)
+    );
+
 CREATE TABLE
     Cribroom (
         id INT PRIMARY KEY,
@@ -17,25 +45,55 @@ CREATE TABLE
     );
 
 CREATE TABLE
+    Company (
+        id INT PRIMARY KEY,
+        title VARCHAR(255),
+        phone INT
+    );
+
+CREATE TABLE
     Desinfection (
         id INT PRIMARY KEY,
-        desinfection_date DATE,
-        company VARCHAR(255),
-        company_phone VARCHAR(255),
+        date DATETIME,
+        description VARCHAR(255),
         Cribroom_id INT,
-        FOREIGN KEY (Cribroom_id) REFERENCES Cribroom (id)
+        Company_id INT,
+        FOREIGN KEY (Cribroom_id) REFERENCES Cribroom (id),
+        FOREIGN KEY (Company_id) REFERENCES Company (id)
     );
 
 CREATE TABLE
     Payout (
         id INT PRIMARY KEY,
-        amount DECIMAL,
-        month DATE,
+        amount FLOAT,
+        date DATE,
         Zone_id INT,
         FOREIGN KEY (Zone_id) REFERENCES Zone (id)
     );
 
-CREATE TABLE Zone ( id INT PRIMARY KEY, name VARCHAR(255) );
+CREATE TABLE
+    User (
+        id INT PRIMARY KEY,
+        username VARCHAR(255),
+        password VARCHAR(255),
+        User_email_id INT,
+        Role_id INT,
+        FOREIGN KEY (User_email_id) REFERENCES User_email (id),
+        FOREIGN KEY (Role_id) REFERENCES Role (id)
+    );
+
+CREATE TABLE
+    Guardian (
+        id INT PRIMARY KEY,
+        first_name VARCHAR(255),
+        last_name VARCHAR(255),
+        dni VARCHAR(255),
+        birthdate DATE,
+        Guardian_phone_id INT,
+        Gender_id INT,
+        FOREIGN KEY (Guardian_phone_id) REFERENCES Guardian_phone (id),
+        FOREIGN KEY (Gender_id) REFERENCES Gender (id)
+    );
 
 CREATE TABLE
     Child (
@@ -61,36 +119,12 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    User (
-        id INT PRIMARY KEY,
-        username VARCHAR(255),
-        password VARCHAR(255),
-        User_email_id INT,
-        Role_id INT,
-        FOREIGN KEY (User_email_id) REFERENCES User_email (id),
-        FOREIGN KEY (Role_id) REFERENCES Role (id)
-    );
-
-CREATE TABLE
     Cribroom_User (
         id INT PRIMARY KEY,
         Cribroom_id INT,
         User_id INT,
         FOREIGN KEY (Cribroom_id) REFERENCES Cribroom (id),
         FOREIGN KEY (User_id) REFERENCES User (id)
-    );
-
-CREATE TABLE
-    Guardian (
-        id INT PRIMARY KEY,
-        first_name VARCHAR(255),
-        last_name VARCHAR(255),
-        dni VARCHAR(255),
-        birthdate DATE,
-        Guardian_phone_id INT,
-        Gender_id INT,
-        FOREIGN KEY (Guardian_phone_id) REFERENCES Guardian_phone (id),
-        FOREIGN KEY (Gender_id) REFERENCES Gender (id)
     );
 
 CREATE TABLE

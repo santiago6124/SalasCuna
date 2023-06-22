@@ -8,26 +8,13 @@
 from django.db import models
 
 
-class Addresses(models.Model):
-    street = models.CharField(max_length=150, blank=True, null=True)
-    number = models.IntegerField(blank=True, null=True)
-    latitude = models.CharField(max_length=100, blank=True, null=True)
-    longitude = models.CharField(max_length=100, blank=True, null=True)
-    district = models.ForeignKey('Districts', models.DO_NOTHING, blank=True, null=True)
+class Adress(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'addresses'
-
-
-class Answers(models.Model):
-    answer = models.CharField(max_length=200, blank=True, null=True)
-    question = models.ForeignKey('Questions', models.DO_NOTHING, blank=True, null=True)
-    form = models.ForeignKey('Forms', models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'answers'
+        db_table = "adress"
 
 
 class AuthGroup(models.Model):
@@ -35,29 +22,29 @@ class AuthGroup(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_group'
+        db_table = "auth_group"
 
 
 class AuthGroupPermissions(models.Model):
     id = models.BigAutoField(primary_key=True)
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
+    permission = models.ForeignKey("AuthPermission", models.DO_NOTHING)
 
     class Meta:
         managed = False
-        db_table = 'auth_group_permissions'
-        unique_together = (('group', 'permission'),)
+        db_table = "auth_group_permissions"
+        unique_together = (("group", "permission"),)
 
 
 class AuthPermission(models.Model):
     name = models.CharField(max_length=255)
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
+    content_type = models.ForeignKey("DjangoContentType", models.DO_NOTHING)
     codename = models.CharField(max_length=100)
 
     class Meta:
         managed = False
-        db_table = 'auth_permission'
-        unique_together = (('content_type', 'codename'),)
+        db_table = "auth_permission"
+        unique_together = (("content_type", "codename"),)
 
 
 class AuthUser(models.Model):
@@ -74,7 +61,7 @@ class AuthUser(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_user'
+        db_table = "auth_user"
 
 
 class AuthUserGroups(models.Model):
@@ -84,8 +71,8 @@ class AuthUserGroups(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_user_groups'
-        unique_together = (('user', 'group'),)
+        db_table = "auth_user_groups"
+        unique_together = (("user", "group"),)
 
 
 class AuthUserUserPermissions(models.Model):
@@ -95,75 +82,111 @@ class AuthUserUserPermissions(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'auth_user_user_permissions'
-        unique_together = (('user', 'permission'),)
+        db_table = "auth_user_user_permissions"
+        unique_together = (("user", "permission"),)
 
 
-class Children(models.Model):
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    last_name = models.CharField(max_length=100, blank=True, null=True)
-    dni = models.CharField(max_length=40, blank=True, null=True)
+class Child(models.Model):
+    id = models.IntegerField(primary_key=True)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    dni = models.CharField(max_length=255, blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
     registration_date = models.DateField(blank=True, null=True)
     disenroll_date = models.DateField(blank=True, null=True)
-    gender = models.ForeignKey('Genders', models.DO_NOTHING, blank=True, null=True)
-    cribroom = models.ForeignKey('Cribrooms', models.DO_NOTHING, blank=True, null=True)
-    shift = models.ForeignKey('Shifts', models.DO_NOTHING, blank=True, null=True)
-    user = models.ForeignKey('Users', models.DO_NOTHING, blank=True, null=True)
-    guardian = models.ForeignKey('Guardians', models.DO_NOTHING, blank=True, null=True)
-    children_state = models.ForeignKey('ChildrenState', models.DO_NOTHING, blank=True, null=True)
+    gender = models.ForeignKey(
+        "Gender", models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
+    )  # Field name made lowercase.
+    cribroom = models.ForeignKey(
+        "Cribroom", models.DO_NOTHING, db_column="Cribroom_id", blank=True, null=True
+    )  # Field name made lowercase.
+    shift = models.ForeignKey(
+        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
+    )  # Field name made lowercase.
+    user = models.ForeignKey(
+        "User", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+    )  # Field name made lowercase.
+    guardian = models.ForeignKey(
+        "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=True, null=True
+    )  # Field name made lowercase.
+    child_state = models.ForeignKey(
+        "ChildState",
+        models.DO_NOTHING,
+        db_column="Child_state_id",
+        blank=True,
+        null=True,
+    )  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'children'
+        db_table = "child"
 
 
-class ChildrenState(models.Model):
-    active = models.IntegerField(blank=True, null=True)
-    description = models.CharField(max_length=200, blank=True, null=True)
+class ChildState(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'children_state'
+        db_table = "child_state"
 
 
-class Cribrooms(models.Model):
+class Company(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = "company"
+
+
+class Cribroom(models.Model):
+    id = models.IntegerField(primary_key=True)
     max_capacity = models.IntegerField(blank=True, null=True)
-    address = models.ForeignKey(Addresses, models.DO_NOTHING, blank=True, null=True)
-    zone = models.ForeignKey('Zones', models.DO_NOTHING, blank=True, null=True)
-    shift = models.ForeignKey('Shifts', models.DO_NOTHING, blank=True, null=True)
+    adress = models.ForeignKey(
+        Adress, models.DO_NOTHING, db_column="Adress_id", blank=True, null=True
+    )  # Field name made lowercase.
+    zone = models.ForeignKey(
+        "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
+    )  # Field name made lowercase.
+    shift = models.ForeignKey(
+        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
+    )  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'cribrooms'
+        db_table = "cribroom"
 
 
-class Departments(models.Model):
-    name = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'departments'
-
-
-class Desinfections(models.Model):
-    desinfection_date = models.DateField(blank=True, null=True)
-    company = models.CharField(max_length=100, blank=True, null=True)
-    company_phone = models.CharField(max_length=100, blank=True, null=True)
-    cribroom = models.ForeignKey(Cribrooms, models.DO_NOTHING, blank=True, null=True)
+class CribroomUser(models.Model):
+    id = models.IntegerField(primary_key=True)
+    cribroom = models.ForeignKey(
+        Cribroom, models.DO_NOTHING, db_column="Cribroom_id", blank=True, null=True
+    )  # Field name made lowercase.
+    user = models.ForeignKey(
+        "User", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+    )  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'desinfections'
+        db_table = "cribroom_user"
 
 
-class Districts(models.Model):
-    name = models.CharField(max_length=100, blank=True, null=True)
-    locality = models.ForeignKey('Localities', models.DO_NOTHING, blank=True, null=True)
+class Desinfection(models.Model):
+    id = models.IntegerField(primary_key=True)
+    date = models.DateTimeField(blank=True, null=True)
+    description = models.CharField(max_length=255, blank=True, null=True)
+    cribroom = models.ForeignKey(
+        Cribroom, models.DO_NOTHING, db_column="Cribroom_id", blank=True, null=True
+    )  # Field name made lowercase.
+    company = models.ForeignKey(
+        Company, models.DO_NOTHING, db_column="Company_id", blank=True, null=True
+    )  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'districts'
+        db_table = "desinfection"
 
 
 class DjangoAdminLog(models.Model):
@@ -172,12 +195,14 @@ class DjangoAdminLog(models.Model):
     object_repr = models.CharField(max_length=200)
     action_flag = models.PositiveSmallIntegerField()
     change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
+    content_type = models.ForeignKey(
+        "DjangoContentType", models.DO_NOTHING, blank=True, null=True
+    )
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
 
     class Meta:
         managed = False
-        db_table = 'django_admin_log'
+        db_table = "django_admin_log"
 
 
 class DjangoContentType(models.Model):
@@ -186,8 +211,8 @@ class DjangoContentType(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'django_content_type'
-        unique_together = (('app_label', 'model'),)
+        db_table = "django_content_type"
+        unique_together = (("app_label", "model"),)
 
 
 class DjangoMigrations(models.Model):
@@ -198,7 +223,7 @@ class DjangoMigrations(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'django_migrations'
+        db_table = "django_migrations"
 
 
 class DjangoSession(models.Model):
@@ -208,152 +233,128 @@ class DjangoSession(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'django_session'
+        db_table = "django_session"
 
 
-class Forms(models.Model):
+class Form(models.Model):
+    id = models.IntegerField(primary_key=True)
     generation_date = models.DateField(blank=True, null=True)
-    user = models.ForeignKey('Users', models.DO_NOTHING, blank=True, null=True)
-    cribroom = models.ForeignKey(Cribrooms, models.DO_NOTHING, blank=True, null=True)
+    cribroom_user = models.ForeignKey(
+        CribroomUser,
+        models.DO_NOTHING,
+        db_column="Cribroom_User_id",
+        blank=True,
+        null=True,
+    )  # Field name made lowercase.
+    role = models.ForeignKey(
+        "Role", models.DO_NOTHING, db_column="Role_id", blank=True, null=True
+    )  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'forms'
+        db_table = "form"
 
 
-class Genders(models.Model):
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    description = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'genders'
-
-
-class GuardianPhones(models.Model):
-    phone_number = models.CharField(max_length=100, blank=True, null=True)
+class Gender(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'guardian_phones'
+        db_table = "gender"
 
 
-class Guardians(models.Model):
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    last_name = models.CharField(max_length=100, blank=True, null=True)
-    dni = models.CharField(max_length=40, blank=True, null=True)
+class Guardian(models.Model):
+    id = models.IntegerField(primary_key=True)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    dni = models.CharField(max_length=255, blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
-    phone = models.ForeignKey(GuardianPhones, models.DO_NOTHING, blank=True, null=True)
-    gender = models.ForeignKey(Genders, models.DO_NOTHING, blank=True, null=True)
+    guardian_phone = models.ForeignKey(
+        "GuardianPhone",
+        models.DO_NOTHING,
+        db_column="Guardian_phone_id",
+        blank=True,
+        null=True,
+    )  # Field name made lowercase.
+    gender = models.ForeignKey(
+        Gender, models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
+    )  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'guardians'
+        db_table = "guardian"
 
 
-class Localities(models.Model):
-    name = models.CharField(max_length=100, blank=True, null=True)
-    department = models.ForeignKey(Departments, models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'localities'
-
-
-class Options(models.Model):
-    question = models.ForeignKey('Questions', models.DO_NOTHING, blank=True, null=True)
+class GuardianPhone(models.Model):
+    id = models.IntegerField(primary_key=True)
+    phone = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'options'
+        db_table = "guardian_phone"
 
 
-class Padrones(models.Model):
-    generation_date = models.DateField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'padrones'
-
-
-class Paynote(models.Model):
-    generation_date = models.DateField(blank=True, null=True)
-    category = models.CharField(max_length=100, blank=True, null=True)
-    payout = models.ForeignKey('Payouts', models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'paynote'
-
-
-class Payouts(models.Model):
+class Payout(models.Model):
+    id = models.IntegerField(primary_key=True)
+    amount = models.FloatField(blank=True, null=True)
     date = models.DateField(blank=True, null=True)
-    upcountry = models.IntegerField(blank=True, null=True)
-    capital = models.IntegerField(blank=True, null=True)
+    zone = models.ForeignKey(
+        "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
+    )  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'payouts'
+        db_table = "payout"
 
 
-class QuestionTypes(models.Model):
-    question_type = models.CharField(max_length=200, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'question_types'
-
-
-class Questions(models.Model):
-    question = models.CharField(max_length=200, blank=True, null=True)
-    category = models.CharField(max_length=200, blank=True, null=True)
-    question_types = models.ForeignKey(QuestionTypes, models.DO_NOTHING, blank=True, null=True)
+class Role(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'questions'
+        db_table = "role"
 
 
-class Roles(models.Model):
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    description = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'roles'
-
-
-class Shifts(models.Model):
-    first_name = models.CharField(max_length=100, blank=True, null=True)
-    description = models.CharField(max_length=100, blank=True, null=True)
+class Shift(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'shifts'
+        db_table = "shift"
 
 
-class UserEmails(models.Model):
-    email = models.CharField(max_length=100, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'user_emails'
-
-
-class Users(models.Model):
+class User(models.Model):
+    id = models.IntegerField(primary_key=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     password = models.CharField(max_length=255, blank=True, null=True)
-    email = models.ForeignKey(UserEmails, models.DO_NOTHING, blank=True, null=True)
-    role = models.ForeignKey(Roles, models.DO_NOTHING, blank=True, null=True)
+    user_email = models.ForeignKey(
+        "UserEmail", models.DO_NOTHING, db_column="User_email_id", blank=True, null=True
+    )  # Field name made lowercase.
+    role = models.ForeignKey(
+        Role, models.DO_NOTHING, db_column="Role_id", blank=True, null=True
+    )  # Field name made lowercase.
 
     class Meta:
         managed = False
-        db_table = 'users'
+        db_table = "user"
 
 
-class Zones(models.Model):
-    name = models.CharField(max_length=100, blank=True, null=True)
+class UserEmail(models.Model):
+    id = models.IntegerField(primary_key=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'zones'
+        db_table = "user_email"
+
+
+class Zone(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = "zone"
