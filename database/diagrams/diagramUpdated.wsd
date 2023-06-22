@@ -15,7 +15,9 @@ entity Cribroom {
     FOREIGN_KEY(Zone)
     FOREIGN_KEY(Shift)
     --
-    ()
+    generarPadron()
+    generarNotaDePago()
+    generarInformeTecnico()
 }
 
 entity Company {
@@ -142,7 +144,7 @@ entity Form {
     FOREIGN_KEY(Cribroom_User)
     FOREIGN_KEY(Role)
     --
-    ()
+    setRole()
 }
 
 Cribroom_User "*" -- "1" Form
