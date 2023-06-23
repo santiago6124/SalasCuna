@@ -148,7 +148,7 @@ JAZZMIN_UI_TWEAKS = {
 
 
 MIDDLEWARE = [
-    'corsheaders.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -188,7 +188,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "SalasCunas",
-        "USER": "bdi",
+        "USER": "franco",
         "PASSWORD": "pepe1234",
         "HOST": "localhost",
         "PORT": "3306",
@@ -231,11 +231,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build/static')
-]
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # JWT Authentication
 
