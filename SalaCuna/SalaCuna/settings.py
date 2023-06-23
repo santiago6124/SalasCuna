@@ -180,7 +180,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "SalaCuna.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -188,7 +187,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "SalasCunas",
-        "USER": "franco",
+        "USER": "bdi",
         "PASSWORD": "pepe1234",
         "HOST": "localhost",
         "PORT": "3306",
