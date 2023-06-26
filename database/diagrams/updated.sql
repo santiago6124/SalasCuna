@@ -4,37 +4,57 @@ create database SalasCunas;
 
 use SalasCunas;
 
-CREATE TABLE Gender ( id INT PRIMARY KEY, name VARCHAR(255) );
+CREATE TABLE
+    Gender (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(255)
+    );
 
-CREATE TABLE Adress ( id INT PRIMARY KEY, name VARCHAR(255) );
+CREATE TABLE
+    Adress (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(255)
+    );
 
-CREATE TABLE Shift ( id INT PRIMARY KEY, name VARCHAR(255) );
+CREATE TABLE
+    Shift (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(255)
+    );
 
-CREATE TABLE Role ( id INT PRIMARY KEY, name VARCHAR(255) );
+CREATE TABLE
+    Role (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(255)
+    );
 
-CREATE TABLE Zone ( id INT PRIMARY KEY, name VARCHAR(255) );
+CREATE TABLE
+    Zone (
+        id INT PRIMARY KEY AUTO_INCREMENT,
+        name VARCHAR(255)
+    );
 
 CREATE TABLE
     User_email (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         email VARCHAR(255)
     );
 
 CREATE TABLE
     Guardian_phone (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         phone VARCHAR(255)
     );
 
 CREATE TABLE
     Child_state (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(255)
     );
 
 CREATE TABLE
     Cribroom (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         max_capacity INT,
         Adress_id INT,
         Zone_id INT,
@@ -46,14 +66,14 @@ CREATE TABLE
 
 CREATE TABLE
     Company (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         title VARCHAR(255),
         phone INT
     );
 
 CREATE TABLE
     Desinfection (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         date DATETIME,
         description VARCHAR(255),
         Cribroom_id INT,
@@ -64,7 +84,7 @@ CREATE TABLE
 
 CREATE TABLE
     Payout (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         amount FLOAT,
         date DATE,
         Zone_id INT,
@@ -73,7 +93,7 @@ CREATE TABLE
 
 CREATE TABLE
     User (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         username VARCHAR(255),
         password VARCHAR(255),
         User_email_id INT,
@@ -84,7 +104,7 @@ CREATE TABLE
 
 CREATE TABLE
     Guardian (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         first_name VARCHAR(255),
         last_name VARCHAR(255),
         dni VARCHAR(255),
@@ -97,7 +117,7 @@ CREATE TABLE
 
 CREATE TABLE
     Child (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         first_name VARCHAR(255),
         last_name VARCHAR(255),
         dni VARCHAR(255),
@@ -120,7 +140,7 @@ CREATE TABLE
 
 CREATE TABLE
     Cribroom_User (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         Cribroom_id INT,
         User_id INT,
         FOREIGN KEY (Cribroom_id) REFERENCES Cribroom (id),
@@ -129,7 +149,7 @@ CREATE TABLE
 
 CREATE TABLE
     Form (
-        id INT PRIMARY KEY,
+        id INT PRIMARY KEY AUTO_INCREMENT,
         generation_date DATE,
         Cribroom_User_id INT,
         Role_id INT,
