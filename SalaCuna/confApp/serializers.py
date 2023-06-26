@@ -73,3 +73,13 @@ class ChildSerializer(serializers.ModelSerializer):
     class Meta:
         model = Child
         fields = '__all__'
+
+
+class AllObjectsSerializer(serializers.Serializer):
+    genders = GenderSerializer(many=True)
+    cribrooms = CribroomSerializer(many=True)
+    shifts = ShiftSerializer(many=True)
+    users = UserSerializer(many=True)
+    guardians = GuardianSerializer(many=True)
+    child_states = ChildStateSerializer(many=True)
+    childs = ChildSerializer(many=True)

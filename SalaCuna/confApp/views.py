@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
+from rest_framework.response import Response
+from rest_framework import status
+
 # Create your views here.
 from rest_framework import generics
 from .models import Child, Gender, Cribroom, Shift, User, Guardian, ChildState
@@ -11,6 +14,7 @@ from .serializers import (
     UserSerializer,
     GuardianSerializer,
     ChildStateSerializer,
+    AllObjectsSerializer,
 )
 
 
@@ -26,6 +30,27 @@ class ChildListCreateView(generics.ListCreateAPIView):
             return serializer_class(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
+
+class AllObjectsView(generics.GenericAPIView):
+    def get(self, request, *args, **kwargs):
+        genders = Gender.objects.all()
+        cribrooms = Cribroom.objects.all()
+        shifts = Shift.objects.all()
+        users = User.objects.all()
+        guardians = Guardian.objects.all()
+        child_states = ChildState.objects.all()
+        childs = Child.objects.all()
+
+        serializer = AllObjectsSerializer({
+            'genders': genders,
+            'cribrooms': cribrooms,
+            'shifts': shifts,
+            'users': users,
+            'guardians': guardians,
+            'child_states': child_states,
+            'childs': childs
+        })
+        return Response(serializer.data)
 
 
 class ChildRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
