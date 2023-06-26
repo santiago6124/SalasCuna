@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Adress(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -87,7 +87,7 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Child(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     dni = models.CharField(max_length=255, blank=True, null=True)
@@ -123,7 +123,7 @@ class Child(models.Model):
 
 
 class ChildState(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -132,7 +132,7 @@ class ChildState(models.Model):
 
 
 class Company(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=255, blank=True, null=True)
     phone = models.IntegerField(blank=True, null=True)
 
@@ -142,7 +142,7 @@ class Company(models.Model):
 
 
 class Cribroom(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     max_capacity = models.IntegerField(blank=True, null=True)
     adress = models.ForeignKey(
         Adress, models.DO_NOTHING, db_column="Adress_id", blank=True, null=True
@@ -160,7 +160,7 @@ class Cribroom(models.Model):
 
 
 class CribroomUser(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     cribroom = models.ForeignKey(
         Cribroom, models.DO_NOTHING, db_column="Cribroom_id", blank=True, null=True
     )  # Field name made lowercase.
@@ -174,7 +174,7 @@ class CribroomUser(models.Model):
 
 
 class Desinfection(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     date = models.DateTimeField(blank=True, null=True)
     description = models.CharField(max_length=255, blank=True, null=True)
     cribroom = models.ForeignKey(
@@ -237,7 +237,7 @@ class DjangoSession(models.Model):
 
 
 class Form(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     generation_date = models.DateField(blank=True, null=True)
     cribroom_user = models.ForeignKey(
         CribroomUser,
@@ -256,7 +256,7 @@ class Form(models.Model):
 
 
 class Gender(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -265,7 +265,7 @@ class Gender(models.Model):
 
 
 class Guardian(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     dni = models.CharField(max_length=255, blank=True, null=True)
@@ -287,7 +287,7 @@ class Guardian(models.Model):
 
 
 class GuardianPhone(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -296,7 +296,7 @@ class GuardianPhone(models.Model):
 
 
 class Payout(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     amount = models.FloatField(blank=True, null=True)
     date = models.DateField(blank=True, null=True)
     zone = models.ForeignKey(
@@ -309,7 +309,7 @@ class Payout(models.Model):
 
 
 class Role(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -318,7 +318,7 @@ class Role(models.Model):
 
 
 class Shift(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -327,7 +327,7 @@ class Shift(models.Model):
 
 
 class User(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     password = models.CharField(max_length=255, blank=True, null=True)
     user_email = models.ForeignKey(
@@ -343,7 +343,7 @@ class User(models.Model):
 
 
 class UserEmail(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     email = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -352,7 +352,7 @@ class UserEmail(models.Model):
 
 
 class Zone(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
