@@ -18,6 +18,15 @@ class ChildListCreateView(generics.ListCreateAPIView):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
 
+    def get_serializer(self, *args, **kwargs):
+        # Use modified serializer for POST requests
+        if self.request.method == 'POST':
+            serializer_class = self.get_serializer_class()
+            kwargs['context'] = self.get_serializer_context()
+            return serializer_class(*args, **kwargs)
+        return super().get_serializer(*args, **kwargs)
+
+
 
 class ChildRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Child.objects.all()
