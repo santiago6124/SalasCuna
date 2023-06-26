@@ -187,7 +187,7 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "SalasCunas",
-        "USER": "bdi",
+        "USER": "franco",
         "PASSWORD": "pepe1234",
         "HOST": "localhost",
         "PORT": "3306",
@@ -295,6 +295,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'cuentas.sistemas.sc@gmail.com'
 EMAIL_HOST_PASSWORD = 'fkyqnsrctntvrtmx'
 EMAIL_USE_TLS = True
+
+DOMAIN = ('localhost:3000')
+SITE_NAME = ('Salas Cuna')
 
 # Corsheaders configuration
  
