@@ -35,3 +35,7 @@ urlpatterns = [
     path('childstate/', ChildStateListCreateView.as_view(), name='childstate-list-create'),
     path('childstate/<int:pk>/', ChildStateRetrieveUpdateDestroyView.as_view(), name='childstate-retrieve-update-destroy'),
 ]
+
+urlpatterns  = [
+    path('', views.getRoutes, name ='routes'),
+]
