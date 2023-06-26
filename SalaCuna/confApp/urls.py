@@ -14,9 +14,12 @@ from .views import (
     GuardianRetrieveUpdateDestroyView,
     ChildStateListCreateView,
     ChildStateRetrieveUpdateDestroyView,
+    AllObjectsView,
 )
 
 urlpatterns = [
+    path('all-objects/', AllObjectsView.as_view(), name='all-objects'),
+
     path('child/', ChildListCreateView.as_view(), name='child-list-create'),
     path('child/<int:pk>/', ChildRetrieveUpdateDestroyView.as_view(), name='child-retrieve-update-destroy'),
     path('gender/', GenderListCreateView.as_view(), name='gender-list-create'),
@@ -31,4 +34,8 @@ urlpatterns = [
     path('guardian/<int:pk>/', GuardianRetrieveUpdateDestroyView.as_view(), name='guardian-retrieve-update-destroy'),
     path('childstate/', ChildStateListCreateView.as_view(), name='childstate-list-create'),
     path('childstate/<int:pk>/', ChildStateRetrieveUpdateDestroyView.as_view(), name='childstate-retrieve-update-destroy'),
+]
+
+urlpatterns  = [
+    path('', views.getRoutes, name ='routes'),
 ]
