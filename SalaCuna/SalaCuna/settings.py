@@ -32,8 +32,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "djoser",
     "corsheaders",
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist'
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 JAZZMIN_SETTINGS = {
@@ -51,16 +51,21 @@ JAZZMIN_SETTINGS = {
         },
         {"name": "-", "url": ""},
         {
-            "name": "Repository",
+            "name": "Repository (Backend)",
             "url": "https://github.com/santiago6124/SalasCuna",
+            "new_window": True,
+        },
+        {"name": "-", "url": ""},
+        {
+            "name": "Repository (Frontend)",
+            "url": "https://github.com/santiago6124/SalasCuna-FE-",
             "new_window": True,
         },
         {"name": "-", "url": ""},
         {"app": "confApp"},
     ],
+    "hide_apps": ["auth", "token_blacklist"],
     "icons": {
-        "auth.user": "far fa-user",
-        "auth.Group": "fas fa-users",
         "confApp.Adress": "fas fa-font",
         "confApp.Child": "fas fa-baby",
         "confApp.ChildState": "fas fa-check",
@@ -75,12 +80,13 @@ JAZZMIN_SETTINGS = {
         "confApp.Payout": "fas fa-money-bill",
         "confApp.Role": "fas fa-user-tie",
         "confApp.Shift": "far fa-address-card",
+        "confApp.UserAccount": "fas fa-user-secret",
         "confApp.UserEmail": "far fa-envelope",
         "confApp.User": "fas fa-street-view",
         "confApp.Zone": "far fa-square",
     },
     "order_with_respect_to": [
-        "auth.user",
+        "confApp.UserAccount",
         "confApp.User",
         "confApp.UserEmail",
         "confApp.Role",
@@ -134,7 +140,7 @@ JAZZMIN_UI_TWEAKS = {
 
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -149,7 +155,7 @@ ROOT_URLCONF = "SalaCuna.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'build')],  
+        "DIRS": [os.path.join(BASE_DIR, "build")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -157,8 +163,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect'
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -173,8 +179,8 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "SalasCunas",
-        "USER": "franco",
-        "PASSWORD": "pepe1234",
+        "USER": "djangoProject",
+        "PASSWORD": "1234",
         "HOST": "localhost",
         "PORT": "3306",
     }
@@ -220,48 +226,43 @@ STATIC_URL = "static/"
 # JWT Authentication
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated'
-    ],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
 
 # JWT
 
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-        'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-
-    'AUTH_TOKEN_CLASSES' : (
-        'rest_framework_simplejwt.tokens.AccessToken',
-    )
+    "AUTH_HEADER_TYPES": ("JWT",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 
 # DJOSER Configuration
 
 DJOSER = {
-    'LOGIN_FIELD' : 'email',
-    'USER_CREATE_PASSWORD_RETYPE' : True,
-    'USERNAME_CHANGED_EMAIL_CONFIRMATION' : True,
-    'PASSWORD_CHANGED_EMAIL_CONFIRMATION' : True,
-    'SEND_CONFIRMATION_EMAIL' : True,
-    'SET_USERNAME_RETYPE' : True,
-    'SET_PASSWORD_RETYPE' : True,
-    'PASSWORD_RESET_CONFIRM_URL' : 'password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL' : 'email/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL' : 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL' : True,
-    'SERIALIZERS' : {
-        'user_create' : 'SalaCuna.serializers.UserCreateSerializer',
-        'user' : 'SalaCuna.serializers.UserCreateSerializer',
-        'current_user' : 'SalaCuna.serializers.UserCreateSerializer',
-        'user_delete' : 'djoser.serializers.UserDeleteSerializer',
-    }
+    "LOGIN_FIELD": "email",
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "SET_USERNAME_RETYPE": True,
+    "SET_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
+    "USERNAME_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": True,
+    "SERIALIZERS": {
+        "user_create": "SalaCuna.serializers.UserCreateSerializer",
+        "user": "SalaCuna.serializers.UserCreateSerializer",
+        "current_user": "SalaCuna.serializers.UserCreateSerializer",
+        "user_delete": "djoser.serializers.UserDeleteSerializer",
+    },
 }
 
 # Default primary key field type
@@ -275,16 +276,16 @@ AUTH_USER_MODEL = "confApp.UserAccount"
 
 # Email configutation
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'cuentas.sistemas.sc@gmail.com'
-EMAIL_HOST_PASSWORD = 'fkyqnsrctntvrtmx'
+EMAIL_HOST_USER = "cuentas.sistemas.sc@gmail.com"
+EMAIL_HOST_PASSWORD = "fkyqnsrctntvrtmx"
 EMAIL_USE_TLS = True
 
-DOMAIN = ('localhost:3000')
-SITE_NAME = ('Salas Cuna')
+DOMAIN = "localhost:3000"
+SITE_NAME = "Salas Cuna"
 
 # Corsheaders configuration
- 
+
 CORS_ALLOW_ALL_ORIGINS = True
