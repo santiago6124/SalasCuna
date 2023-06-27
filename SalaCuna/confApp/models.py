@@ -6,25 +6,29 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    PermissionsMixin,
+    BaseUserManager,
+)
+
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("Users must have an email address")
-        
+
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
 
         user.set_password(password)
         user.save()
+
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
         return self.create_user(email, password, **extra_fields)
 
-        return user
-        
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
@@ -41,12 +45,12 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def get_full_name(self):
         return self.first_name
-    
+
     def get_short_name(self):
         return self.last_name
 
     def __str__(self):
-        return self.email
+        return f"{self.email}, ({self.last_name}, {self.first_name})"
 
 
 class Adress(models.Model):
@@ -55,6 +59,9 @@ class Adress(models.Model):
     class Meta:
         managed = False
         db_table = "adress"
+
+    def __str__(self):
+        return self.name
 
 
 class Child(models.Model):
@@ -91,6 +98,9 @@ class Child(models.Model):
         managed = False
         db_table = "child"
 
+    def __str__(self):
+        return f"{self.last_name}, {self.first_name}"
+
 
 class ChildState(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -98,6 +108,9 @@ class ChildState(models.Model):
     class Meta:
         managed = False
         db_table = "child_state"
+
+    def __str__(self):
+        return self.name
 
 
 class Company(models.Model):
@@ -107,6 +120,9 @@ class Company(models.Model):
     class Meta:
         managed = False
         db_table = "company"
+
+    def __str__(self):
+        return self.title
 
 
 class Cribroom(models.Model):
@@ -125,6 +141,9 @@ class Cribroom(models.Model):
         managed = False
         db_table = "cribroom"
 
+    def __str__(self):
+        return f"Zone:{self.zone}, Max:{self.max_capacity}"
+
 
 class CribroomUser(models.Model):
     cribroom = models.ForeignKey(
@@ -137,6 +156,9 @@ class CribroomUser(models.Model):
     class Meta:
         managed = False
         db_table = "cribroom_user"
+
+    def __str__(self):
+        return f"{self.user}, {self.cribroom}"
 
 
 class Desinfection(models.Model):
@@ -152,6 +174,9 @@ class Desinfection(models.Model):
     class Meta:
         managed = False
         db_table = "desinfection"
+
+    def __str__(self):
+        return f"{self.cribroom}, {self.date}"
 
 
 class Form(models.Model):
@@ -171,6 +196,9 @@ class Form(models.Model):
         managed = False
         db_table = "form"
 
+    def __str__(self):
+        return f"{self.id}, {self.generation_date}"
+
 
 class Gender(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -178,6 +206,9 @@ class Gender(models.Model):
     class Meta:
         managed = False
         db_table = "gender"
+
+    def __str__(self):
+        return self.name
 
 
 class Guardian(models.Model):
@@ -200,6 +231,9 @@ class Guardian(models.Model):
         managed = False
         db_table = "guardian"
 
+    def __str__(self):
+        return f"^{self.last_name}, {self.first_name}"
+
 
 class GuardianPhone(models.Model):
     phone = models.CharField(max_length=255, blank=True, null=True)
@@ -207,6 +241,9 @@ class GuardianPhone(models.Model):
     class Meta:
         managed = False
         db_table = "guardian_phone"
+
+    def __str__(self):
+        return self.phone
 
 
 class Payout(models.Model):
@@ -220,6 +257,9 @@ class Payout(models.Model):
         managed = False
         db_table = "payout"
 
+    def __str__(self):
+        return f"{self.id}, {self.amount}"
+
 
 class Role(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -228,6 +268,9 @@ class Role(models.Model):
         managed = False
         db_table = "role"
 
+    def __str__(self):
+        return self.name
+
 
 class Shift(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -235,6 +278,9 @@ class Shift(models.Model):
     class Meta:
         managed = False
         db_table = "shift"
+
+    def __str__(self):
+        return self.name
 
 
 class User(models.Model):
@@ -251,6 +297,9 @@ class User(models.Model):
         managed = False
         db_table = "user"
 
+    def __str__(self):
+        return f"{self.username}, {self.user_email}"
+
 
 class UserEmail(models.Model):
     email = models.CharField(max_length=255, blank=True, null=True)
@@ -259,6 +308,9 @@ class UserEmail(models.Model):
         managed = False
         db_table = "user_email"
 
+    def __str__(self):
+        return self.email
+
 
 class Zone(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -266,3 +318,6 @@ class Zone(models.Model):
     class Meta:
         managed = False
         db_table = "zone"
+
+    def __str__(self):
+        return self.name
