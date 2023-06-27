@@ -34,6 +34,8 @@ class ChildListCreateView(generics.ListCreateAPIView):
 
 
 class AllObjectsView(generics.GenericAPIView):
+    permission_classes = []
+
     def get(self, request, *args, **kwargs):
         genders = Gender.objects.all()
         cribrooms = Cribroom.objects.all()
