@@ -21,6 +21,8 @@ from .serializers import (
 class ChildListCreateView(generics.ListCreateAPIView):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
+    
+    permission_classes = []
 
     def get_serializer(self, *args, **kwargs):
         # Use modified serializer for POST requests
