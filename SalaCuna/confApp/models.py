@@ -4,7 +4,6 @@
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -56,9 +55,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 class Adress(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "adress"
+
+
 
     def __str__(self):
         return self.name
@@ -94,9 +92,8 @@ class Child(models.Model):
         null=True,
     )  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = "child"
+
+
 
     def __str__(self):
         return f"{self.last_name}, {self.first_name}"
@@ -105,9 +102,8 @@ class Child(models.Model):
 class ChildState(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "child_state"
+
+
 
     def __str__(self):
         return self.name
@@ -117,9 +113,8 @@ class Company(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     phone = models.IntegerField(blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "company"
+
+
 
     def __str__(self):
         return self.title
@@ -137,9 +132,8 @@ class Cribroom(models.Model):
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = "cribroom"
+
+
 
     def __str__(self):
         return f"Zone:{self.zone}, Max:{self.max_capacity}"
@@ -153,9 +147,8 @@ class CribroomUser(models.Model):
         "User", models.DO_NOTHING, db_column="User_id", blank=True, null=True
     )  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = "cribroom_user"
+
+
 
     def __str__(self):
         return f"{self.user}, {self.cribroom}"
@@ -171,9 +164,8 @@ class Desinfection(models.Model):
         Company, models.DO_NOTHING, db_column="Company_id", blank=True, null=True
     )  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = "desinfection"
+
+
 
     def __str__(self):
         return f"{self.cribroom}, {self.date}"
@@ -192,9 +184,8 @@ class Form(models.Model):
         "Role", models.DO_NOTHING, db_column="Role_id", blank=True, null=True
     )  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = "form"
+
+
 
     def __str__(self):
         return f"{self.id}, {self.generation_date}"
@@ -203,9 +194,8 @@ class Form(models.Model):
 class Gender(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "gender"
+
+
 
     def __str__(self):
         return self.name
@@ -227,9 +217,8 @@ class Guardian(models.Model):
         Gender, models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
     )  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = "guardian"
+
+
 
     def __str__(self):
         return f"^{self.last_name}, {self.first_name}"
@@ -238,9 +227,8 @@ class Guardian(models.Model):
 class GuardianPhone(models.Model):
     phone = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "guardian_phone"
+
+
 
     def __str__(self):
         return self.phone
@@ -253,9 +241,8 @@ class Payout(models.Model):
         "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
     )  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = "payout"
+
+
 
     def __str__(self):
         return f"{self.id}, {self.amount}"
@@ -264,9 +251,8 @@ class Payout(models.Model):
 class Role(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "role"
+
+
 
     def __str__(self):
         return self.name
@@ -275,9 +261,8 @@ class Role(models.Model):
 class Shift(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "shift"
+
+
 
     def __str__(self):
         return self.name
@@ -293,9 +278,8 @@ class User(models.Model):
         Role, models.DO_NOTHING, db_column="Role_id", blank=True, null=True
     )  # Field name made lowercase.
 
-    class Meta:
-        managed = False
-        db_table = "user"
+
+
 
     def __str__(self):
         return f"{self.username}, {self.user_email}"
@@ -304,9 +288,8 @@ class User(models.Model):
 class UserEmail(models.Model):
     email = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "user_email"
+
+
 
     def __str__(self):
         return self.email
@@ -315,9 +298,8 @@ class UserEmail(models.Model):
 class Zone(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = "zone"
+
+
 
     def __str__(self):
         return self.name
