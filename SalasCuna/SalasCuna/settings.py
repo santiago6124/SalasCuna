@@ -150,7 +150,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "SalaCuna.urls"
+ROOT_URLCONF = "SalasCuna.urls"
 
 TEMPLATES = [
     {
@@ -170,7 +170,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "SalaCuna.wsgi.application"
+WSGI_APPLICATION = "SalasCuna.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -254,9 +254,9 @@ DJOSER = {
     "ACTIVATION_URL": "activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": True,
     "SERIALIZERS": {
-        "user_create": "SalaCuna.serializers.UserCreateSerializer",
-        "user": "SalaCuna.serializers.UserCreateSerializer",
-        "current_user": "SalaCuna.serializers.UserCreateSerializer",
+        "user_create": "SalasCuna.serializers.UserCreateSerializer",
+        "user": "SalasCuna.serializers.UserCreateSerializer",
+        "current_user": "SalasCuna.serializers.UserCreateSerializer",
         "user_delete": "djoser.serializers.UserDeleteSerializer",
     },
 }
