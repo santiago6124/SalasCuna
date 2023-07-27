@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import migration
+from .views import storage_method
 
 urlpatterns = [
-    path('', migration, name="data migrate"),
+    path('', storage_method, name="data migrate"),
 ]
