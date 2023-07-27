@@ -177,7 +177,7 @@ WSGI_APPLICATION = "SalaCuna.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
+        "ENGINE": "django.db.backends.sqlite3",
         "NAME": "SalasCunas",
         "USER": "djangoProject",
         "PASSWORD": "1234",
