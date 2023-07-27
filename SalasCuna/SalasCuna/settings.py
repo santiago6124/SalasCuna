@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "SalasCuna_api",
+    "excel_to_db",
     "rest_framework",
     "djoser",
     "corsheaders",
