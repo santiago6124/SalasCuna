@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ConfappConfig(AppConfig):
+class SalasCuna_apiConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "confApp"
+    name = "SalasCuna_api"
