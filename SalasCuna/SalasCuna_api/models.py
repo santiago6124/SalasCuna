@@ -75,13 +75,33 @@ class Adress(models.Model):
         return self.name
 
 
+class Locality(models.Model):
+    locality = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.locality
+
+class Neighborhood(models.Model):
+    neighborhood = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.neighborhood
+
 class Child(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     dni = models.CharField(max_length=255, blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
+
+    street = models.CharField(max_length=255, blank=True, null=True)
+    house_number = models.IntegerField(blank=True, null=True)
+
     registration_date = models.DateField(blank=True, null=True)
     disenroll_date = models.DateField(blank=True, null=True)
+
+    locality = models.ForeignKey(Locality, on_delete=models.CASCADE)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
+
     gender = models.ForeignKey(
         "Gender", models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
     )  # Field name made lowercase.
@@ -134,6 +154,8 @@ class Company(models.Model):
 
 
 class Cribroom(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+    code = models.IntegerField(blank=True, null=True)
     max_capacity = models.IntegerField(blank=True, null=True)
     adress = models.ForeignKey(
         Adress, models.DO_NOTHING, db_column="Adress_id", blank=True, null=True
@@ -145,11 +167,8 @@ class Cribroom(models.Model):
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
 
-
-
-
     def __str__(self):
-        return f"Zone:{self.zone}, Max:{self.max_capacity}"
+        return f"Zone:{self.name}, Max:{self.code}"
 
 
 class CribroomUser(models.Model):
@@ -205,46 +224,42 @@ class Form(models.Model):
 
 
 class Gender(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
-
-
-
+    gender = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.gender
+
+
+class Phone_feature(models.Model):
+    feature = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.feature
+
+class Guardian_Type(models.Model):
+    type = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.type
 
 
 class Guardian(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     dni = models.CharField(max_length=255, blank=True, null=True)
-    birthdate = models.DateField(blank=True, null=True)
-    guardian_phone = models.ForeignKey(
-        "GuardianPhone",
-        models.DO_NOTHING,
-        db_column="Guardian_phone_id",
-        blank=True,
-        null=True,
-    )  # Field name made lowercase.
+    
+    phone_number =  models.IntegerField(blank=True, null=True)    
+    
+    phone_feature = models.ForeignKey(Phone_feature, on_delete=models.CASCADE)
+    guardian_type = models.ForeignKey(Guardian_Type, on_delete=models.CASCADE)
+
     gender = models.ForeignKey(
         Gender, models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
     )  # Field name made lowercase.
 
 
-
-
     def __str__(self):
-        return f"^{self.last_name}, {self.first_name}"
-
-
-class GuardianPhone(models.Model):
-    phone = models.CharField(max_length=255, blank=True, null=True)
-
-
-
-
-    def __str__(self):
-        return self.phone
+        return f"{self.last_name}, {self.first_name}"
 
 
 class Payout(models.Model):
