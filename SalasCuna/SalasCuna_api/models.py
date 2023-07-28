@@ -230,13 +230,13 @@ class Gender(models.Model):
         return self.gender
 
 
-class Phone_feature(models.Model):
+class PhoneFeature(models.Model):
     feature = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.feature
 
-class Guardian_Type(models.Model):
+class GuardianType(models.Model):
     type = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
@@ -250,8 +250,8 @@ class Guardian(models.Model):
     
     phone_number =  models.IntegerField(blank=True, null=True)    
     
-    phone_feature = models.ForeignKey(Phone_feature, on_delete=models.CASCADE, blank=True, null=True)
-    guardian_type = models.ForeignKey(Guardian_Type, on_delete=models.CASCADE, blank=True, null=True)
+    phone_Feature = models.ForeignKey(PhoneFeature, on_delete=models.CASCADE, blank=True, null=True)
+    guardian_Type = models.ForeignKey(GuardianType, on_delete=models.CASCADE, blank=True, null=True)
 
     gender = models.ForeignKey(
         Gender, models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
