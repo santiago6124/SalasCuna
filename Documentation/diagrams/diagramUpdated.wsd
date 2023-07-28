@@ -9,6 +9,8 @@ hide circle
 entity Cribroom {
     + PRIMARY_KEY(id)
     --
+    name
+    code
     max_capacity = int
     --
     FOREIGN_KEY(Adress)
@@ -78,9 +80,13 @@ entity Child {
     last_name
     dni
     birthdate
+    street
+    house_number
     registration_date
-    disenroll_date
+    disenroll_date = default null
     --
+    FOREIGN_KEY(Locality)
+    FOREIGN_KEY(Neighborhood)
     FOREIGN_KEY(Gender)
     FOREIGN_KEY(Cribroom)
     FOREIGN_KEY(Shift)
@@ -125,11 +131,12 @@ entity Guardian {
     --
     first_name
     last_name
-    dni 
-    birthdate
+    dni
+    phone_number
     --
-    FOREIGN_KEY(Guardian_phone)
+    FOREIGN_KEY(Phone_feature)
     FOREIGN_KEY(Gender)
+    FOREIGN_KEY(Guardian_Type)
     --
     ()
 }
