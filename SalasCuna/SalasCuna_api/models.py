@@ -99,8 +99,8 @@ class Child(models.Model):
     registration_date = models.DateField(blank=True, null=True)
     disenroll_date = models.DateField(blank=True, null=True)
 
-    locality = models.ForeignKey(Locality, on_delete=models.CASCADE)
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
+    locality = models.ForeignKey(Locality, on_delete=models.CASCADE, blank=True, null=True)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, blank=True, null=True)
 
     gender = models.ForeignKey(
         "Gender", models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
@@ -250,8 +250,8 @@ class Guardian(models.Model):
     
     phone_number =  models.IntegerField(blank=True, null=True)    
     
-    phone_feature = models.ForeignKey(Phone_feature, on_delete=models.CASCADE)
-    guardian_type = models.ForeignKey(Guardian_Type, on_delete=models.CASCADE)
+    phone_feature = models.ForeignKey(Phone_feature, on_delete=models.CASCADE, blank=True, null=True)
+    guardian_type = models.ForeignKey(Guardian_Type, on_delete=models.CASCADE, blank=True, null=True)
 
     gender = models.ForeignKey(
         Gender, models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
