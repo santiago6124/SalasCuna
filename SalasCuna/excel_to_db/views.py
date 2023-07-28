@@ -10,6 +10,24 @@ import os
 import pandas as pd
 import numpy
 
+# {'SALA CUNA': 'I.0041',
+# 'APELLIDO': 'ABBA',
+# 'NOMBRE': 'MIA OLIVIA',
+# 'N DNI': '59074326',
+# 'FECHA DE NACIMIENTO': datetime.datetime(2021, 12, 3, 0, 0),
+# 'EDAD': 1,
+# 'SEXO': 'F',
+# 'CALLE': 'ITUZAINGO',
+# 'NUMERO': 'S/N',
+# 'DEPARTAMENTO': 'CALAMUCHITA',
+# 'LOCALIDAD': 'SAN AGUSTIN',
+# 'CARACTERISTICA TELEFONICA': 3547,
+# 'TELEFONO': 564346,
+# 'APELLIDO Y NOMBRE': 'VELARDEZ SOLEDAD',
+# 'DNI': '29437676',
+# 'TURNO': 'MAÑANA',
+# 'ESTADO': 'SIN MODIFICAR'}
+
 def storage_method(request):
     rta = "todo bien"
 
@@ -49,7 +67,7 @@ def storage_method(request):
                             'NUMERO': obj[9],
                             'DEPARTAMENTO': obj[10],
                             'LOCALIDAD': obj[11],
-                            'CARACTERISTICA TELEFONICA,': obj[12],
+                            'CARACTERISTICA TELEFONICA': obj[12],
                             'TELEFONO': obj[13],
                             'APELLIDO Y NOMBRE': obj[14],
                             'DNI': obj[15],
