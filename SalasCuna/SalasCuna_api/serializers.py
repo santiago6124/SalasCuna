@@ -1,85 +1,83 @@
 from rest_framework import serializers
-from .models import Child, Gender, Cribroom, Shift, User, Guardian, ChildState
+
+# from django.contrib.auth.models import User
+
+from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState
+
+
+# entity Child {
+#     + PRIMARY_KEY(id)
+#     --
+#     first_name
+#     last_name
+#     dni
+#     birthdate
+#     street
+#     house_number
+#     registration_date
+#     disenroll_date = default null
+#     --
+#     FOREIGN_KEY(Locality)
+#     FOREIGN_KEY(Neighborhood)
+#     FOREIGN_KEY(Gender)
+#     FOREIGN_KEY(Cribroom)
+#     FOREIGN_KEY(Shift)
+#     social_worker = FOREIGN_KEY(User)
+#     FOREIGN_KEY(Guardian)
+#     FOREIGN_KEY(Child_state)
+#     --
+#     ()
+# }
+
+
+class LocalitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Locality
+        fields = "__all__"
+
+class NeighborhoodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Neighborhood
+        fields = "__all__"
 
 
 class GenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gender
-        fields = '__all__'
-
+        fields = "__all__"
 
 class CribroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cribroom
-        fields = '__all__'
-
+        fields = "__all__"
 
 class ShiftSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shift
-        fields = '__all__'
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
-
+        fields = "__all__"
 
 class GuardianSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guardian
-        fields = '__all__'
-
+        fields = "__all__"
 
 class ChildStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChildState
-        fields = '__all__'
+        fields = "__all__"
+
+class ChildRelatedObjectsSerializer(serializers.Serializer):
+    locality = LocalitySerializer(many=True)
+    neighborhood = NeighborhoodSerializer(many=True)
+    gender = GenderSerializer(many=True)
+    cribroom = CribroomSerializer(many=True)
+    shift = ShiftSerializer(many=True)
+    guardian = GuardianSerializer(many=True)
+    child_state = ChildStateSerializer(many=True)
 
 
 class ChildSerializer(serializers.ModelSerializer):
-    gender = serializers.PrimaryKeyRelatedField(
-        queryset=Gender.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    cribroom = serializers.PrimaryKeyRelatedField(
-        queryset=Cribroom.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    shift = serializers.PrimaryKeyRelatedField(
-        queryset=Shift.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    guardian = serializers.PrimaryKeyRelatedField(
-        queryset=Guardian.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    child_state = serializers.PrimaryKeyRelatedField(
-        queryset=ChildState.objects.all(),
-        many=False,
-        allow_null=True
-    )
-
     class Meta:
         model = Child
-        fields = '__all__'
-
-
-class AllObjectsSerializer(serializers.Serializer):
-    genders = GenderSerializer(many=True)
-    cribrooms = CribroomSerializer(many=True)
-    shifts = ShiftSerializer(many=True)
-    users = UserSerializer(many=True)
-    guardians = GuardianSerializer(many=True)
-    child_states = ChildStateSerializer(many=True)
-    childs = ChildSerializer(many=True)
+        fields = "__all__"
+        read_only_fields = ['user']
