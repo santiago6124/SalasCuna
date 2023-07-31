@@ -25,7 +25,9 @@ class GenderSerializer(serializers.ModelSerializer):
 class CribroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cribroom
+        depth = 1
         fields = "__all__"
+
 
 class ShiftSerializer(serializers.ModelSerializer):
     class Meta:

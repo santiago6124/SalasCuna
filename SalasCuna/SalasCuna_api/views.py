@@ -3,8 +3,8 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticated, DjangoModel
 from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 
-from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState
-from .serializers import ChildSerializer, ChildRelatedObjectsSerializer, GuardianSerializer, NeighborhoodSerializer
+from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState, PhoneFeature, GuardianType
+from .serializers import ChildSerializer, ChildAndGuardian_RelatedObjectsSerializer, GuardianSerializer, NeighborhoodSerializer, CribroomSerializer
 
 from datetime import datetime
 
@@ -114,3 +114,16 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+class CribroomModelViewSet(viewsets.ModelViewSet):
+    queryset = Cribroom.objects.all()
+    serializer_class = CribroomSerializer
+    permission_classes = [AllowAny]
+
+    def create(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def update(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def destroy(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
