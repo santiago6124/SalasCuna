@@ -70,3 +70,18 @@ class ChildSerializer(serializers.ModelSerializer):
         model = Child
         fields = "__all__"
         read_only_fields = ['user']
+
+class DepthGuardianSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guardian
+        depth = 1
+        fields = "__all__"
+
+
+class DepthChildSerializer(serializers.ModelSerializer):
+    guardian = DepthGuardianSerializer()
+    class Meta:
+        model = Child
+        depth = 1
+        fields = "__all__"
+        read_only_fields = ['user']

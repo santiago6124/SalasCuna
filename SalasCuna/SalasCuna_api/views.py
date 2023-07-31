@@ -4,7 +4,7 @@ from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 
 from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState, PhoneFeature, GuardianType
-from .serializers import ChildSerializer, ChildAndGuardian_RelatedObjectsSerializer, GuardianSerializer, NeighborhoodSerializer, CribroomSerializer
+from .serializers import ChildSerializer, ChildAndGuardian_RelatedObjectsSerializer, GuardianSerializer, NeighborhoodSerializer, CribroomSerializer, DepthChildSerializer
 
 from datetime import datetime
 
@@ -41,6 +41,37 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
     permission_classes = [AllowAny]
+    
+    def get_queryset(self):
+        padron_cribroom_id = self.request.query_params.get('padron_cribroom_id')
+
+        if padron_cribroom_id != None:
+            self.queryset = Child.objects.filter(cribroom_id = padron_cribroom_id)
+            self.serializer_class = DepthChildSerializer
+
+        return super().get_queryset()
+    
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        disenroll = bool(self.request.query_params.get('disenroll'))
+        # disenroll_date
+        print(f'paramter: {disenroll}')
+        
+        if disenroll == True:
+            print(f'disenroll: {disenroll}')
+            instance.disenroll_date = datetime.now()
+            # instance.user=self.request.user
+            instance.save()
+
+            return Response( status=status.HTTP_202_ACCEPTED)
+        else: 
+            # If 'disenroll' parameter is not present, proceed with normal update
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def perform_create(self, serializer):
         # First, create the Child object
