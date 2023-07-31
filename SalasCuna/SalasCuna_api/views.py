@@ -52,8 +52,9 @@ class ChildModelViewSet(viewsets.ModelViewSet):
                 'last_name': request_data.get('guardian_last_name'),
                 'dni': request_data.get('guardian_dni'),
                 'phone_number': request_data.get('guardian_phone_number'),
-                'guardian_Type': None,
-                'gender': None, 
+                'phone_Feature': request_data.get('guardian_phone_Feature_id'),
+                'guardian_Type': request_data.get('guardian_guardian_Type_id'),
+                'gender': request_data.get('guardian_gender_id'), 
             }
 
             guardian_serializer = GuardianSerializer(data=guardian_data)
@@ -67,7 +68,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
                 
                 return Response({"message":"check the guardian data"}, status=status.HTTP_400_BAD_REQUEST)
             
-        if child_instance.neighborhood is None:
+        if child_instance.neighborhood is None and request_data.get('neighborhood_neighborhood') is None:
 
             # Now, create the associated Neighborhood object
             neighborhood_data = {
