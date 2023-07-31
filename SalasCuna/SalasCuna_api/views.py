@@ -4,7 +4,7 @@ from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 
 from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState
-from .serializers import ChildSerializer, ChildRelatedObjectsSerializer
+from .serializers import ChildSerializer, ChildRelatedObjectsSerializer, GuardianSerializer, NeighborhoodSerializer
 
 from datetime import datetime
 
@@ -37,6 +37,55 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     serializer_class = ChildSerializer
     permission_classes = [AllowAny]
     
+    def perform_create(self, serializer):
+        # First, create the Child object
+        child_instance = serializer.save()
+        
+        request_data = self.request.data
+
+        
+        if child_instance.guardian is None:
+
+            # Now, create the associated Guardian object
+            guardian_data = {
+                'first_name': request_data.get('guardian_first_name'),
+                'last_name': request_data.get('guardian_last_name'),
+                'dni': request_data.get('guardian_dni'),
+                'phone_number': request_data.get('guardian_phone_number'),
+                'guardian_Type': None,
+                'gender': None, 
+            }
+
+            guardian_serializer = GuardianSerializer(data=guardian_data)
+            if guardian_serializer.is_valid():
+                guardian_instance = guardian_serializer.save()
+                child_instance.guardian = guardian_instance
+                child_instance.save()
+            else:
+                # If the guardian serializer is not valid, you may handle the error here
+                print(guardian_serializer.errors)
+                
+                return Response({"message":"check the guardian data"}, status=status.HTTP_400_BAD_REQUEST)
+            
+        if child_instance.neighborhood is None:
+
+            # Now, create the associated Neighborhood object
+            neighborhood_data = {
+                'neighborhood':  request_data.get('neighborhood_neighborhood'),
+            }
+
+            neighborhood_serializer = NeighborhoodSerializer(data=neighborhood_data)
+            if neighborhood_serializer.is_valid():
+                neighborhood_instance = neighborhood_serializer.save()
+                child_instance.neighborhood = neighborhood_instance
+                child_instance.save()
+            else:
+                # If the Neighborhood serializer is not valid, you may handle the error here
+                print(neighborhood_serializer.errors)
+                
+                return Response({"message":"check the neighborhood data"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     
     def update(self, request, *args, **kwargs):
@@ -63,5 +112,4 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
 

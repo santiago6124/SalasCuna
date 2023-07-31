@@ -79,13 +79,13 @@ class Locality(models.Model):
     locality = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.locality
+        return f"{self.locality}"
 
 class Neighborhood(models.Model):
     neighborhood = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.neighborhood
+        return f"{self.neighborhood}"
 
 class Child(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
@@ -128,8 +128,8 @@ class Child(models.Model):
 
 
 
-    def __str__(self):
-        return f"{self.last_name}, {self.first_name}"
+    # def __str__(self):
+    #     return f"{self.last_name}, {self.first_name}"
 
 
 class ChildState(models.Model):
@@ -139,7 +139,7 @@ class ChildState(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 
 class Company(models.Model):
@@ -227,20 +227,20 @@ class Gender(models.Model):
     gender = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.gender
+        return f"{self.gender}"
 
 
 class PhoneFeature(models.Model):
     feature = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return self.feature
+        return f"{self.feature}"
 
 class GuardianType(models.Model):
     type = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.type
+        return f"{self.type}"
 
 
 class Guardian(models.Model):
@@ -293,7 +293,7 @@ class Shift(models.Model):
 
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 
 class User(models.Model):
