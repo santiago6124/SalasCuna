@@ -5,30 +5,6 @@ from rest_framework import serializers
 from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState
 
 
-# entity Child {
-#     + PRIMARY_KEY(id)
-#     --
-#     first_name
-#     last_name
-#     dni
-#     birthdate
-#     street
-#     house_number
-#     registration_date
-#     disenroll_date = default null
-#     --
-#     FOREIGN_KEY(Locality)
-#     FOREIGN_KEY(Neighborhood)
-#     FOREIGN_KEY(Gender)
-#     FOREIGN_KEY(Cribroom)
-#     FOREIGN_KEY(Shift)
-#     social_worker = FOREIGN_KEY(User)
-#     FOREIGN_KEY(Guardian)
-#     FOREIGN_KEY(Child_state)
-#     --
-#     ()
-# }
-
 
 class LocalitySerializer(serializers.ModelSerializer):
     class Meta:
