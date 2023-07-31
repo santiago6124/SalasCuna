@@ -8,7 +8,7 @@ from .serializers import ChildSerializer, ChildAndGuardian_RelatedObjectsSeriali
 
 from datetime import datetime
 
-class ChildRelatedObjectsView(generics.RetrieveAPIView):
+class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
@@ -19,8 +19,11 @@ class ChildRelatedObjectsView(generics.RetrieveAPIView):
         shifts = Shift.objects.all()
         guardians = Guardian.objects.all()
         child_states = ChildState.objects.all()
+        phone_Features = PhoneFeature.objects.all()
+        guardian_Types = GuardianType.objects.all()
 
-        serializer = ChildRelatedObjectsSerializer({
+
+        serializer = ChildAndGuardian_RelatedObjectsSerializer({
             'locality' : localitys,
             'neighborhood' : neighborhoods,
             'gender': genders,
@@ -28,6 +31,8 @@ class ChildRelatedObjectsView(generics.RetrieveAPIView):
             'shift': shifts,
             'guardian': guardians,
             'child_state': child_states,
+            'phone_Feature': phone_Features,
+            'guardian_Type': guardian_Types,
         })
 
         return Response(serializer.data)

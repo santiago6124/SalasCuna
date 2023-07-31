@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 # from django.contrib.auth.models import User
 
-from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState
+from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState, PhoneFeature, GuardianType
 
 
 
@@ -28,7 +28,6 @@ class CribroomSerializer(serializers.ModelSerializer):
         depth = 1
         fields = "__all__"
 
-
 class ShiftSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shift
@@ -44,7 +43,17 @@ class ChildStateSerializer(serializers.ModelSerializer):
         model = ChildState
         fields = "__all__"
 
-class ChildRelatedObjectsSerializer(serializers.Serializer):
+class PhoneFeatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneFeature
+        fields = "__all__"
+
+class GuardianTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GuardianType
+        fields = "__all__"
+
+class ChildAndGuardian_RelatedObjectsSerializer(serializers.Serializer):
     locality = LocalitySerializer(many=True)
     neighborhood = NeighborhoodSerializer(many=True)
     gender = GenderSerializer(many=True)
@@ -52,6 +61,8 @@ class ChildRelatedObjectsSerializer(serializers.Serializer):
     shift = ShiftSerializer(many=True)
     guardian = GuardianSerializer(many=True)
     child_state = ChildStateSerializer(many=True)
+    phone_Feature = PhoneFeatureSerializer(many=True)
+    guardian_Type = GuardianTypeSerializer(many=True)
 
 
 class ChildSerializer(serializers.ModelSerializer):
