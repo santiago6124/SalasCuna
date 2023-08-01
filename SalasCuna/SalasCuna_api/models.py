@@ -23,10 +23,19 @@ class UserAccountManager(BaseUserManager):
         user.set_password(password)
         user.save()
 
+        return user  # Add this line to return the created user object
+
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         return self.create_user(email, password, **extra_fields)
+
+
+def create_superuser(self, email, password=None, **extra_fields):
+    extra_fields.setdefault("is_staff", True)
+    extra_fields.setdefault("is_superuser", True)
+    extra_fields.setdefault("is_active", True)  # Make sure to set is_active to True for superusers
+    return self.create_user(email, password, is_staff=True, is_superuser=True, **extra_fields)
 
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
@@ -36,7 +45,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=True)
-
+    
     """         "first_name": e.target.first_name.value,
                 "last_name": e.target.last_name.value,
                 "dni": e.target.dni.value,
