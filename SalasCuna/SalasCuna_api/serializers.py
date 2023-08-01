@@ -1,85 +1,87 @@
 from rest_framework import serializers
-from .models import Child, Gender, Cribroom, Shift, User, Guardian, ChildState
+
+# from django.contrib.auth.models import User
+
+from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState, PhoneFeature, GuardianType
+
+
+
+class LocalitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Locality
+        fields = "__all__"
+
+class NeighborhoodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Neighborhood
+        fields = "__all__"
 
 
 class GenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gender
-        fields = '__all__'
-
+        fields = "__all__"
 
 class CribroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cribroom
-        fields = '__all__'
-
+        depth = 1
+        fields = "__all__"
 
 class ShiftSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shift
-        fields = '__all__'
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
-
+        fields = "__all__"
 
 class GuardianSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guardian
-        fields = '__all__'
-
+        fields = "__all__"
 
 class ChildStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChildState
-        fields = '__all__'
+        fields = "__all__"
+
+class PhoneFeatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneFeature
+        fields = "__all__"
+
+class GuardianTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GuardianType
+        fields = "__all__"
+
+class ChildAndGuardian_RelatedObjectsSerializer(serializers.Serializer):
+    locality = LocalitySerializer(many=True)
+    neighborhood = NeighborhoodSerializer(many=True)
+    gender = GenderSerializer(many=True)
+    cribroom = CribroomSerializer(many=True)
+    shift = ShiftSerializer(many=True)
+    guardian = GuardianSerializer(many=True)
+    child_state = ChildStateSerializer(many=True)
+    phone_Feature = PhoneFeatureSerializer(many=True)
+    guardian_Type = GuardianTypeSerializer(many=True)
 
 
 class ChildSerializer(serializers.ModelSerializer):
-    gender = serializers.PrimaryKeyRelatedField(
-        queryset=Gender.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    cribroom = serializers.PrimaryKeyRelatedField(
-        queryset=Cribroom.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    shift = serializers.PrimaryKeyRelatedField(
-        queryset=Shift.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    guardian = serializers.PrimaryKeyRelatedField(
-        queryset=Guardian.objects.all(),
-        many=False,
-        allow_null=True
-    )
-    child_state = serializers.PrimaryKeyRelatedField(
-        queryset=ChildState.objects.all(),
-        many=False,
-        allow_null=True
-    )
-
     class Meta:
         model = Child
-        fields = '__all__'
+        fields = "__all__"
+        read_only_fields = ['user']
+
+class DepthGuardianSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guardian
+        depth = 1
+        fields = "__all__"
 
 
-class AllObjectsSerializer(serializers.Serializer):
-    genders = GenderSerializer(many=True)
-    cribrooms = CribroomSerializer(many=True)
-    shifts = ShiftSerializer(many=True)
-    users = UserSerializer(many=True)
-    guardians = GuardianSerializer(many=True)
-    child_states = ChildStateSerializer(many=True)
-    childs = ChildSerializer(many=True)
+class DepthChildSerializer(serializers.ModelSerializer):
+    guardian = DepthGuardianSerializer()
+    class Meta:
+        model = Child
+        depth = 1
+        fields = "__all__"
+        read_only_fields = ['user']
