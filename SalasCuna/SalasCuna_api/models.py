@@ -19,6 +19,7 @@ class UserAccountManager(BaseUserManager):
 
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
+        extra_fields.setdefault("is_active", True)
 
         user.set_password(password)
         user.save()
@@ -42,23 +43,16 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    dni = models.CharField(max_length=11)
+    role = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=15)
+    address = models.CharField(max_length=255)
+    department = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=True)
     
-    """         "first_name": e.target.first_name.value,
-                "last_name": e.target.last_name.value,
-                "dni": e.target.dni.value,
-                "role": e.target.role.value,
-                "phone_number": e.target.phone_number.value,
-                "address": e.target.address.value,
-                "department": e.target.department.value,
-                "city": e. target.city.value,
-                "email": e.target.email.value,
-                "password": e.target.password.value,
-                "re_password": e.target.re_password.value
-    """
-
     objects = UserAccountManager()
 
     USERNAME_FIELD = "email"
