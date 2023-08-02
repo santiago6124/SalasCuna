@@ -29,14 +29,8 @@ class UserAccountManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        return self.create_user(email, password, **extra_fields)
-
-
-def create_superuser(self, email, password=None, **extra_fields):
-    extra_fields.setdefault("is_staff", True)
-    extra_fields.setdefault("is_superuser", True)
-    extra_fields.setdefault("is_active", True)  # Make sure to set is_active to True for superusers
-    return self.create_user(email, password, is_staff=True, is_superuser=True, **extra_fields)
+        extra_fields.setdefault("is_active", True)  # Make sure to set is_active to True for superusers
+        return self.create_user(email, password, is_staff=True, is_superuser=True, **extra_fields)
 
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
