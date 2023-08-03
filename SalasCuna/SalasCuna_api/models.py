@@ -67,10 +67,10 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
 
 class Adress(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
+    adress = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return self.name
+        return self.adress
 
 
 class Locality(models.Model):
@@ -129,8 +129,8 @@ class Child(models.Model):
         null=True,
     )  # Field name made lowercase.
 
-    # def __str__(self):
-    #     return f"{self.last_name}, {self.first_name}"
+    def __str__(self):
+        return f"{self.last_name}, {self.first_name}"
 
 
 class ChildState(models.Model):
@@ -163,7 +163,7 @@ class Cribroom(models.Model):
     )  # Field name made lowercase.
 
     def __str__(self):
-        return f"Zone:{self.name}, Max:{self.code}"
+        return f"Zone:{self.name}, Max:{self.max_capacity}"
 
 
 class CribroomUser(models.Model):
