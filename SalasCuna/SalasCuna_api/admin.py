@@ -33,11 +33,8 @@ class RoleAdmin(admin.ModelAdmin):
 # Register your models here.
 @admin.register(UserAccount)
 class UserAdmin(admin.ModelAdmin):
-    """
-    list_display = ("id", "username", "user_email", "role")
+    list_display = ("id", "__str__", "email", "role")
     list_filter = [
         "role",
-        "username",
-        "user_email",
+        "email",
     ]
-    """

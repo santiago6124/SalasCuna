@@ -31,11 +31,9 @@ from .serializers import (
 
 from datetime import datetime
 
-from .permissions import IsTrabajadoraSocial
-
 
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
-    permission_classes = [IsTrabajadoraSocial & IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         localitys = Locality.objects.all()
@@ -68,7 +66,7 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
 class ChildModelViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
-    permission_classes = [IsTrabajadoraSocial & IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         padron_cribroom_id = self.request.query_params.get("padron_cribroom_id")
@@ -187,7 +185,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 class CribroomModelViewSet(viewsets.ModelViewSet):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
-    permission_classes = [IsTrabajadoraSocial & IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
