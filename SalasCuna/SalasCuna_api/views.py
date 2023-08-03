@@ -1,15 +1,41 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAdminUser, IsAuthenticated, DjangoModelPermissionsOrAnonReadOnly, AllowAny
+from rest_framework.permissions import (
+    IsAdminUser,
+    IsAuthenticated,
+    DjangoModelPermissionsOrAnonReadOnly,
+    AllowAny,
+)
 from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 
-from .models import Child, Locality, Neighborhood, Gender, Cribroom, Shift, Guardian, ChildState, PhoneFeature, GuardianType
-from .serializers import ChildSerializer, ChildAndGuardian_RelatedObjectsSerializer, GuardianSerializer, NeighborhoodSerializer, CribroomSerializer, DepthChildSerializer
+from .models import (
+    Child,
+    Locality,
+    Neighborhood,
+    Gender,
+    Cribroom,
+    Shift,
+    Guardian,
+    ChildState,
+    PhoneFeature,
+    GuardianType,
+)
+from .serializers import (
+    ChildSerializer,
+    ChildAndGuardian_RelatedObjectsSerializer,
+    GuardianSerializer,
+    NeighborhoodSerializer,
+    CribroomSerializer,
+    DepthChildSerializer,
+)
 
 from datetime import datetime
 
+from .permissions import IsTrabajadoraSocial
+
+
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsTrabajadoraSocial & IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         localitys = Locality.objects.all()
@@ -22,49 +48,51 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
         phone_Features = PhoneFeature.objects.all()
         guardian_Types = GuardianType.objects.all()
 
-
-        serializer = ChildAndGuardian_RelatedObjectsSerializer({
-            'locality' : localitys,
-            'neighborhood' : neighborhoods,
-            'gender': genders,
-            'cribroom': cribrooms,
-            'shift': shifts,
-            'guardian': guardians,
-            'child_state': child_states,
-            'phone_Feature': phone_Features,
-            'guardian_Type': guardian_Types,
-        })
+        serializer = ChildAndGuardian_RelatedObjectsSerializer(
+            {
+                "locality": localitys,
+                "neighborhood": neighborhoods,
+                "gender": genders,
+                "cribroom": cribrooms,
+                "shift": shifts,
+                "guardian": guardians,
+                "child_state": child_states,
+                "phone_Feature": phone_Features,
+                "guardian_Type": guardian_Types,
+            }
+        )
 
         return Response(serializer.data)
+
 
 class ChildModelViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
-    permission_classes = [AllowAny]
-    
+    permission_classes = [IsTrabajadoraSocial & IsAuthenticated]
+
     def get_queryset(self):
-        padron_cribroom_id = self.request.query_params.get('padron_cribroom_id')
+        padron_cribroom_id = self.request.query_params.get("padron_cribroom_id")
 
         if padron_cribroom_id != None:
-            self.queryset = Child.objects.filter(cribroom_id = padron_cribroom_id)
+            self.queryset = Child.objects.filter(cribroom_id=padron_cribroom_id)
             self.serializer_class = DepthChildSerializer
 
         return super().get_queryset()
-    
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        disenroll = bool(self.request.query_params.get('disenroll'))
+        disenroll = bool(self.request.query_params.get("disenroll"))
         # disenroll_date
-        print(f'paramter: {disenroll}')
-        
+        print(f"paramter: {disenroll}")
+
         if disenroll == True:
-            print(f'disenroll: {disenroll}')
+            print(f"disenroll: {disenroll}")
             instance.disenroll_date = datetime.now()
             # instance.user=self.request.user
             instance.save()
 
-            return Response( status=status.HTTP_202_ACCEPTED)
-        else: 
+            return Response(status=status.HTTP_202_ACCEPTED)
+        else:
             # If 'disenroll' parameter is not present, proceed with normal update
             serializer = self.get_serializer(instance, data=request.data, partial=True)
 
@@ -72,25 +100,23 @@ class ChildModelViewSet(viewsets.ModelViewSet):
                 serializer.save()
                 return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def perform_create(self, serializer):
         # First, create the Child object
         child_instance = serializer.save()
-        
+
         request_data = self.request.data
 
-        
         if child_instance.guardian is None:
-
             # Now, create the associated Guardian object
             guardian_data = {
-                'first_name': request_data.get('guardian_first_name'),
-                'last_name': request_data.get('guardian_last_name'),
-                'dni': request_data.get('guardian_dni'),
-                'phone_number': request_data.get('guardian_phone_number'),
-                'phone_Feature': request_data.get('guardian_phone_Feature_id'),
-                'guardian_Type': request_data.get('guardian_guardian_Type_id'),
-                'gender': request_data.get('guardian_gender_id'), 
+                "first_name": request_data.get("guardian_first_name"),
+                "last_name": request_data.get("guardian_last_name"),
+                "dni": request_data.get("guardian_dni"),
+                "phone_number": request_data.get("guardian_phone_number"),
+                "phone_Feature": request_data.get("guardian_phone_Feature_id"),
+                "guardian_Type": request_data.get("guardian_guardian_Type_id"),
+                "gender": request_data.get("guardian_gender_id"),
             }
 
             guardian_serializer = GuardianSerializer(data=guardian_data)
@@ -101,14 +127,19 @@ class ChildModelViewSet(viewsets.ModelViewSet):
             else:
                 # If the guardian serializer is not valid, you may handle the error here
                 print(guardian_serializer.errors)
-                
-                return Response({"message":"check the guardian data"}, status=status.HTTP_400_BAD_REQUEST)
-            
-        if child_instance.neighborhood is None and request_data.get('neighborhood_neighborhood') is None:
 
+                return Response(
+                    {"message": "check the guardian data"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        if (
+            child_instance.neighborhood is None
+            and request_data.get("neighborhood_neighborhood") is None
+        ):
             # Now, create the associated Neighborhood object
             neighborhood_data = {
-                'neighborhood':  request_data.get('neighborhood_neighborhood'),
+                "neighborhood": request_data.get("neighborhood_neighborhood"),
             }
 
             neighborhood_serializer = NeighborhoodSerializer(data=neighborhood_data)
@@ -119,26 +150,28 @@ class ChildModelViewSet(viewsets.ModelViewSet):
             else:
                 # If the Neighborhood serializer is not valid, you may handle the error here
                 print(neighborhood_serializer.errors)
-                
-                return Response({"message":"check the neighborhood data"}, status=status.HTTP_400_BAD_REQUEST)
+
+                return Response(
+                    {"message": "check the neighborhood data"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        disenroll = bool(self.request.query_params.get('disenroll'))
+        disenroll = bool(self.request.query_params.get("disenroll"))
         # disenroll_date
-        print(f'paramter: {disenroll}')
-        
+        print(f"paramter: {disenroll}")
+
         if disenroll == True:
-            print(f'disenroll: {disenroll}')
+            print(f"disenroll: {disenroll}")
             instance.disenroll_date = datetime.now()
             # instance.user=self.request.user
             instance.save()
 
-            return Response( status=status.HTTP_202_ACCEPTED)
-        else: 
+            return Response(status=status.HTTP_202_ACCEPTED)
+        else:
             # If 'disenroll' parameter is not present, proceed with normal update
             serializer = self.get_serializer(instance, data=request.data, partial=True)
 
@@ -150,10 +183,11 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+
 class CribroomModelViewSet(viewsets.ModelViewSet):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsTrabajadoraSocial & IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

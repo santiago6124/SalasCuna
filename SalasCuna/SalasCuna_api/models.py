@@ -27,10 +27,14 @@ class UserAccountManager(BaseUserManager):
         return user  # Add this line to return the created user object
 
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
-        extra_fields.setdefault("is_active", True)  # Make sure to set is_active to True for superusers
-        return self.create_user(email, password, is_staff=True, is_superuser=True, **extra_fields)
+        # extra_fields.setdefault("is_staff", True)
+        # extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault(
+            "is_active", True
+        )  # Make sure to set is_active to True for superusers
+        return self.create_user(
+            email, password, is_staff=True, is_superuser=True, **extra_fields
+        )
 
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
@@ -38,7 +42,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     dni = models.CharField(max_length=11)
-    role = models.CharField(max_length=255)
+    role = models.ForeignKey("Role", on_delete=models.CASCADE, blank=True, null=True)
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
     department = models.CharField(max_length=255)
@@ -46,7 +50,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=True)
-    
+
     objects = UserAccountManager()
 
     USERNAME_FIELD = "email"
@@ -65,9 +69,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 class Adress(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
-
-
-
     def __str__(self):
         return self.name
 
@@ -78,11 +79,13 @@ class Locality(models.Model):
     def __str__(self):
         return f"{self.locality}"
 
+
 class Neighborhood(models.Model):
     neighborhood = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"{self.neighborhood}"
+
 
 class Child(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
@@ -96,8 +99,12 @@ class Child(models.Model):
     registration_date = models.DateField(blank=True, null=True)
     disenroll_date = models.DateField(blank=True, null=True)
 
-    locality = models.ForeignKey(Locality, on_delete=models.CASCADE, blank=True, null=True)
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, blank=True, null=True)
+    locality = models.ForeignKey(
+        Locality, on_delete=models.CASCADE, blank=True, null=True
+    )
+    neighborhood = models.ForeignKey(
+        Neighborhood, on_delete=models.CASCADE, blank=True, null=True
+    )
 
     gender = models.ForeignKey(
         "Gender", models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
@@ -109,7 +116,7 @@ class Child(models.Model):
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
     user = models.ForeignKey(
-        "User", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
     )  # Field name made lowercase.
     guardian = models.ForeignKey(
         "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=True, null=True
@@ -122,18 +129,12 @@ class Child(models.Model):
         null=True,
     )  # Field name made lowercase.
 
-
-
-
     # def __str__(self):
     #     return f"{self.last_name}, {self.first_name}"
 
 
 class ChildState(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-
-
-
 
     def __str__(self):
         return f"{self.name}"
@@ -142,9 +143,6 @@ class ChildState(models.Model):
 class Company(models.Model):
     title = models.CharField(max_length=255, blank=True, null=True)
     phone = models.IntegerField(blank=True, null=True)
-
-
-
 
     def __str__(self):
         return self.title
@@ -173,11 +171,8 @@ class CribroomUser(models.Model):
         Cribroom, models.DO_NOTHING, db_column="Cribroom_id", blank=True, null=True
     )  # Field name made lowercase.
     user = models.ForeignKey(
-        "User", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
     )  # Field name made lowercase.
-
-
-
 
     def __str__(self):
         return f"{self.user}, {self.cribroom}"
@@ -192,9 +187,6 @@ class Desinfection(models.Model):
     company = models.ForeignKey(
         Company, models.DO_NOTHING, db_column="Company_id", blank=True, null=True
     )  # Field name made lowercase.
-
-
-
 
     def __str__(self):
         return f"{self.cribroom}, {self.date}"
@@ -213,9 +205,6 @@ class Form(models.Model):
         "Role", models.DO_NOTHING, db_column="Role_id", blank=True, null=True
     )  # Field name made lowercase.
 
-
-
-
     def __str__(self):
         return f"{self.id}, {self.generation_date}"
 
@@ -233,6 +222,7 @@ class PhoneFeature(models.Model):
     def __str__(self):
         return f"{self.feature}"
 
+
 class GuardianType(models.Model):
     type = models.CharField(max_length=255, blank=True, null=True)
 
@@ -244,16 +234,19 @@ class Guardian(models.Model):
     first_name = models.CharField(max_length=255, blank=True, null=True)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     dni = models.CharField(max_length=255, blank=True, null=True)
-    
-    phone_number =  models.IntegerField(blank=True, null=True)    
-    
-    phone_Feature = models.ForeignKey(PhoneFeature, on_delete=models.CASCADE, blank=True, null=True)
-    guardian_Type = models.ForeignKey(GuardianType, on_delete=models.CASCADE, blank=True, null=True)
+
+    phone_number = models.IntegerField(blank=True, null=True)
+
+    phone_Feature = models.ForeignKey(
+        PhoneFeature, on_delete=models.CASCADE, blank=True, null=True
+    )
+    guardian_Type = models.ForeignKey(
+        GuardianType, on_delete=models.CASCADE, blank=True, null=True
+    )
 
     gender = models.ForeignKey(
         Gender, models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
     )  # Field name made lowercase.
-
 
     def __str__(self):
         return f"{self.last_name}, {self.first_name}"
@@ -266,18 +259,12 @@ class Payout(models.Model):
         "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
     )  # Field name made lowercase.
 
-
-
-
     def __str__(self):
         return f"{self.id}, {self.amount}"
 
 
 class Role(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-
-
-
 
     def __str__(self):
         return self.name
@@ -286,45 +273,12 @@ class Role(models.Model):
 class Shift(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
 
-
-
-
     def __str__(self):
         return f"{self.name}"
 
 
-class User(models.Model):
-    username = models.CharField(max_length=255, blank=True, null=True)
-    password = models.CharField(max_length=255, blank=True, null=True)
-    user_email = models.ForeignKey(
-        "UserEmail", models.DO_NOTHING, db_column="User_email_id", blank=True, null=True
-    )  # Field name made lowercase.
-    role = models.ForeignKey(
-        Role, models.DO_NOTHING, db_column="Role_id", blank=True, null=True
-    )  # Field name made lowercase.
-
-
-
-
-    def __str__(self):
-        return f"{self.username}, {self.user_email}"
-
-
-class UserEmail(models.Model):
-    email = models.CharField(max_length=255, blank=True, null=True)
-
-
-
-
-    def __str__(self):
-        return self.email
-
-
 class Zone(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-
-
-
 
     def __str__(self):
         return self.name

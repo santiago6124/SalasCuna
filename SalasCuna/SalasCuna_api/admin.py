@@ -19,9 +19,25 @@ admin.site.register(PhoneFeature)
 admin.site.register(GuardianType)
 admin.site.register(Guardian)
 admin.site.register(Payout)
-admin.site.register(Role)
 admin.site.register(Shift)
-admin.site.register(UserEmail)
-admin.site.register(User)
-admin.site.register(UserAccount)
 admin.site.register(Zone)
+
+
+# Register your models here.
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    list_filter = ["name"]
+
+
+# Register your models here.
+@admin.register(UserAccount)
+class UserAdmin(admin.ModelAdmin):
+    """
+    list_display = ("id", "username", "user_email", "role")
+    list_filter = [
+        "role",
+        "username",
+        "user_email",
+    ]
+    """
