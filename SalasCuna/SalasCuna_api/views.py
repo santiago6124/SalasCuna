@@ -19,6 +19,7 @@ from .models import (
     ChildState,
     PhoneFeature,
     GuardianType,
+    Role,
 )
 from .serializers import (
     ChildSerializer,
@@ -27,9 +28,16 @@ from .serializers import (
     NeighborhoodSerializer,
     CribroomSerializer,
     DepthChildSerializer,
+    RoleSerializer,
 )
 
 from datetime import datetime
+
+
+class RoleViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
 
 
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
