@@ -41,7 +41,7 @@ class CompanyAdmin(admin.ModelAdmin):
 
 class CribroomAdmin(admin.ModelAdmin):
     list_display = ("id", "code", "name", "__str__")
-    list_filter = ["code", "name", "zone"]
+    list_filter = ["code", "name", "locality"]
 
 
 class CribroomUserAdmin(admin.ModelAdmin):
