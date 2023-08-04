@@ -76,6 +76,10 @@ class Adress(models.Model):
 class Locality(models.Model):
     locality = models.CharField(max_length=255, blank=True, null=True)
 
+    zone = models.ForeignKey(
+        "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
+    )  # Field name made lowercase.
+
     def __str__(self):
         return f"{self.locality}"
 
@@ -152,12 +156,21 @@ class Cribroom(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
     max_capacity = models.IntegerField(blank=True, null=True)
+
+    street = models.CharField(max_length=255, blank=True, null=True)
+    house_number = models.IntegerField(blank=True, null=True)
+
     adress = models.ForeignKey(
         Adress, models.DO_NOTHING, db_column="Adress_id", blank=True, null=True
     )  # Field name made lowercase.
-    zone = models.ForeignKey(
-        "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
-    )  # Field name made lowercase.
+
+    locality = models.ForeignKey(
+        Locality, on_delete=models.CASCADE, blank=True, null=True
+    )
+    neighborhood = models.ForeignKey(
+        Neighborhood, on_delete=models.CASCADE, blank=True, null=True
+    )
+
     shift = models.ForeignKey(
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
