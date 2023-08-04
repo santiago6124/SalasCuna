@@ -154,10 +154,6 @@ class Cribroom(models.Model):
     street = models.CharField(max_length=255, blank=True, null=True)
     house_number = models.IntegerField(blank=True, null=True)
 
-    adress = models.ForeignKey(
-        Adress, models.DO_NOTHING, db_column="Adress_id", blank=True, null=True
-    )  # Field name made lowercase.
-
     locality = models.ForeignKey(
         Locality, on_delete=models.CASCADE, blank=True, null=True
     )

@@ -8,10 +8,6 @@ from .models import *
 # Register your models here.
 
 
-class AdressAdmin(admin.ModelAdmin):
-    list_display = ("id", "adress")
-    list_filter = ["adress"]
-
 
 class LocalityAdmin(admin.ModelAdmin):
     list_display = ("id", "locality")
@@ -112,7 +108,6 @@ class ZoneAdmin(admin.ModelAdmin):
     list_filter = ["name"]
 
 
-admin.site.register(Adress, AdressAdmin)
 admin.site.register(Child, ChildAdmin)
 admin.site.register(ChildState, ChildStateAdmin)
 admin.site.register(Company, CompanyAdmin)
