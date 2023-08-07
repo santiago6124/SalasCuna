@@ -12,9 +12,11 @@ entity Cribroom {
     name
     code
     max_capacity = int
+    street
+    house_number
     --
-    FOREIGN_KEY(Adress)
-    FOREIGN_KEY(Zone)
+    FOREIGN_KEY(Locality)
+    FOREIGN_KEY(Neighborhood)
     FOREIGN_KEY(Shift)
     --
     generarPadron()
@@ -71,7 +73,7 @@ entity Zone {
 }
 
 Payout "*" - "1" Zone
-Zone "1" - "*" Cribroom
+' Zone "1" - "*" Cribroom
 
 entity Child {
     + PRIMARY_KEY(id)
@@ -156,6 +158,18 @@ entity Form {
 
 Cribroom_User "*" -- "1" Form
 
+entity Locality {
+    + PRIMARY_KEY(id)
+    --
+    name
+    --
+    FOREIGN_KEY(Zone)
+    --
+    ()
+}
+
+Zone "1" - "*" Locality
+Locality "*" - "1" Cribroom
 
 
 @enduml
