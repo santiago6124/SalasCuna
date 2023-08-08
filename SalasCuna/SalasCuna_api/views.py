@@ -29,6 +29,7 @@ from .serializers import (
     CribroomSerializer,
     DepthChildSerializer,
     RoleSerializer,
+    ShiftSerializer,
 )
 
 from datetime import datetime
@@ -203,3 +204,9 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+class ShiftModelViewSet(viewsets.ModelViewSet):
+    queryset = Shift.objects.all()
+    serializer_class = ShiftSerializer
+    permission_classes = [AllowAny]

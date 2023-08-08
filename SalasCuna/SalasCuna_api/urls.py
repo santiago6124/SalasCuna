@@ -5,12 +5,14 @@ from .views import (
     ChildAndGuardian_RelatedObjectsView,
     CribroomModelViewSet,
     RoleViewSet,
+    ShiftModelViewSet
 )
 
 router = routers.DefaultRouter()
 
 router.register(r"child", ChildModelViewSet)
 router.register(r"cribroom", CribroomModelViewSet)
+router.register(r"shift", ShiftModelViewSet)
 
 urlpatterns = router.urls + [
     path(
