@@ -14,6 +14,7 @@ from .models import (
     PhoneFeature,
     GuardianType,
     Role,
+    Zone,
 )
 
 
@@ -111,4 +112,9 @@ class DepthChildSerializer(serializers.ModelSerializer):
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
+        fields = "__all__"
+
+class ZoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zone
         fields = "__all__"

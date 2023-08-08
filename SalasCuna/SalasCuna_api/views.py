@@ -20,6 +20,7 @@ from .models import (
     PhoneFeature,
     GuardianType,
     Role,
+    Zone,
 )
 from .serializers import (
     ChildSerializer,
@@ -30,6 +31,7 @@ from .serializers import (
     DepthChildSerializer,
     RoleSerializer,
     ShiftSerializer,
+    ZoneSerializer,
 )
 
 from datetime import datetime
@@ -209,4 +211,9 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
 class ShiftModelViewSet(viewsets.ModelViewSet):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
+    permission_classes = [AllowAny]
+
+class ZoneModelViewSet(viewsets.ModelViewSet):
+    queryset = Zone.objects.all()
+    serializer_class = ZoneSerializer
     permission_classes = [AllowAny]
