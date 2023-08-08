@@ -20,6 +20,7 @@ from .models import (
     PhoneFeature,
     GuardianType,
     Role,
+    UserAccount,
 )
 from .serializers import (
     ChildSerializer,
@@ -29,6 +30,7 @@ from .serializers import (
     CribroomSerializer,
     DepthChildSerializer,
     RoleSerializer,
+    UserAccountSerializer,
 )
 
 from datetime import datetime
@@ -38,6 +40,12 @@ class RoleViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
+
+
+class UserAccountViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = UserAccount.objects.all()
+    serializer_class = UserAccountSerializer
 
 
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
