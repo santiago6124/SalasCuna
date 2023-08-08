@@ -30,7 +30,7 @@ from .serializers import (
     CribroomSerializer,
     DepthChildSerializer,
     RoleSerializer,
-    UserAccountSerializer,
+    UserSerializer,
 )
 
 from datetime import datetime
@@ -42,10 +42,10 @@ class RoleViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = RoleSerializer
 
 
-class UserAccountViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     queryset = UserAccount.objects.all()
-    serializer_class = UserAccountSerializer
+    serializer_class = UserSerializer
 
 
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):

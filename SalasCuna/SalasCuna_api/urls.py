@@ -5,7 +5,7 @@ from .views import (
     ChildAndGuardian_RelatedObjectsView,
     CribroomModelViewSet,
     RoleViewSet,
-    UserAccountViewSet,
+    UserViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -21,8 +21,8 @@ urlpatterns = router.urls + [
     ),
     path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
     path(
-        "UserAccountViewSet/",
-        UserAccountViewSet.as_view({"get": "list"}),
-        name="UserAccountViewSet",
+        "UserViewSet/",
+        UserViewSet.as_view({"get": "list"}),
+        name="UserViewSet",
     ),
 ]
