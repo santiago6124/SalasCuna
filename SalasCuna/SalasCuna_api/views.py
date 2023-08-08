@@ -29,6 +29,8 @@ from .serializers import (
     CribroomSerializer,
     DepthChildSerializer,
     RoleSerializer,
+    LocalitySerializer,
+    
 )
 
 from datetime import datetime
@@ -70,6 +72,10 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
 
         return Response(serializer.data)
 
+class LocalityListView(generics.ListAPIView):
+    queryset = Locality.objects.all()
+    serializer_class = LocalitySerializer
+    permission_classes = [AllowAny]
 
 class ChildModelViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
