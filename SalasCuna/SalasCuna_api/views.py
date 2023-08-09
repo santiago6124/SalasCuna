@@ -198,14 +198,6 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     serializer_class = CribroomSerializer
     permission_classes = [AllowAny]
 
-    def create(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def update(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def destroy(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class ShiftModelViewSet(viewsets.ModelViewSet):
