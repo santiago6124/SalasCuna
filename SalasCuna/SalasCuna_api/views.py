@@ -36,11 +36,10 @@ from .serializers import (
 from datetime import datetime
 
 
-class PayoutViewSet(viewsets.ReadOnlyModelViewSet):
+class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Payout.objects.all()
     serializer_class = PayoutSerializer
-
 
 class RoleViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
