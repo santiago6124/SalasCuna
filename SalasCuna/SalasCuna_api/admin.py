@@ -1,12 +1,8 @@
 from django.contrib import admin
-
-# Register your models here.
-
 from .models import *
-
+from simple_history.admin import SimpleHistoryAdmin
 
 # Register your models here.
-
 
 
 class LocalityAdmin(admin.ModelAdmin):
@@ -125,4 +121,4 @@ admin.site.register(Payout, PayoutAdmin)
 admin.site.register(Role, RoleAdmin)
 admin.site.register(Shift, ShiftAdmin)
 admin.site.register(UserAccount, UserAccountAdmin)
-admin.site.register(Zone, ZoneAdmin)
+admin.site.register(Zone, SimpleHistoryAdmin)

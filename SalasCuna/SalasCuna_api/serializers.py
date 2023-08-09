@@ -42,6 +42,15 @@ class CribroomSerializer(serializers.ModelSerializer):
         depth = 1
         fields = "__all__"
 
+    """     ESTO ES PARA HACER DISPLAY DEL DICCIONARIO CON EL HISTORIAL/AUDITORIA
+    history = serializers.SerializerMethodField()
+    
+
+    def get_history(self, instance):
+        return instance.history.values()
+    
+    """
+
 
 class ShiftSerializer(serializers.ModelSerializer):
     class Meta:
