@@ -42,7 +42,10 @@ class CribroomSerializer(serializers.ModelSerializer):
         depth = 1
         fields = "__all__"
 
-    """     ESTO ES PARA HACER DISPLAY DEL DICCIONARIO CON EL HISTORIAL/AUDITORIA
+    """
+    ESTO ES PARA HACER DISPLAY DEL DICCIONARIO CON EL HISTORIAL/AUDITORIA
+    RETURN HISTORIAL: list[dictionary{attribute: value, attribute: value}, dictionary{attribute: value, attribute: value}]
+    
     history = serializers.SerializerMethodField()
     
 
