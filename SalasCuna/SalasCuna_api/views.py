@@ -41,7 +41,6 @@ class PayoutViewSet(viewsets.ModelViewSet):
     queryset = Payout.objects.all()
     serializer_class = PayoutSerializer
 
-
 class RoleViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     queryset = Role.objects.all()
