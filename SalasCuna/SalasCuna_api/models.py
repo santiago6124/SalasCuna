@@ -165,6 +165,10 @@ class Cribroom(models.Model):
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
 
+    zone = models.ForeignKey(
+        "Zone", models.DO_NOTHING, db_column="zone_id", blank=True, null=True
+    )
+
     def __str__(self):
         return f"Zone:{self.name}, Max:{self.max_capacity}"
 
