@@ -12,6 +12,7 @@ router = routers.DefaultRouter()
 
 router.register(r"child", ChildModelViewSet)
 router.register(r"cribroom", CribroomModelViewSet)
+router.register(r"UserViewSet", UserViewSet)
 
 urlpatterns = router.urls + [
     path(
@@ -20,9 +21,4 @@ urlpatterns = router.urls + [
         name="ChildRelatedObjectsView",
     ),
     path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
-    path(
-        "UserViewSet/",
-        UserViewSet.as_view({"get": "list"}),
-        name="UserViewSet",
-    ),
 ]
