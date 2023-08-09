@@ -20,6 +20,7 @@ from .models import (
     PhoneFeature,
     GuardianType,
     Role,
+    Payout,
 )
 from .serializers import (
     ChildSerializer,
@@ -29,9 +30,16 @@ from .serializers import (
     CribroomSerializer,
     DepthChildSerializer,
     RoleSerializer,
+    PayoutSerializer,
 )
 
 from datetime import datetime
+
+
+class PayoutViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Payout.objects.all()
+    serializer_class = PayoutSerializer
 
 
 class RoleViewSet(viewsets.ReadOnlyModelViewSet):
