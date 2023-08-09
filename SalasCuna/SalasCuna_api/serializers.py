@@ -15,6 +15,7 @@ from .models import (
     GuardianType,
     Role,
     Payout,
+    Zone,
 )
 
 
@@ -118,4 +119,10 @@ class RoleSerializer(serializers.ModelSerializer):
 class PayoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payout
+        fields = "__all__"
+
+
+class ZoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zone
         fields = "__all__"

@@ -6,6 +6,7 @@ from .views import (
     CribroomModelViewSet,
     RoleViewSet,
     PayoutViewSet,
+    ZoneViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -21,4 +22,5 @@ urlpatterns = router.urls + [
         name="ChildRelatedObjectsView",
     ),
     path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
+    path("ZoneViewSet/", ZoneViewSet.as_view({"get": "list"}), name="ZoneViewSet"),
 ]
