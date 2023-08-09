@@ -42,7 +42,7 @@ class RoleViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = RoleSerializer
 
 
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = UserAccount.objects.all()
     serializer_class = UserSerializer
