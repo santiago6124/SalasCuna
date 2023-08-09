@@ -118,4 +118,4 @@ class RoleSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
-        fields = ["first_name", "last_name", "email", "role", "phone_number", "dni"]
+        fields = "__all__"
