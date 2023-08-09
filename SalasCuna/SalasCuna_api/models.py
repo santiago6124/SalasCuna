@@ -66,7 +66,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return f"{self.email}, ({self.last_name}, {self.first_name})"
 
 
-
 class Locality(models.Model):
     locality = models.CharField(max_length=255, blank=True, null=True)
 
@@ -166,7 +165,7 @@ class Cribroom(models.Model):
     )  # Field name made lowercase.
 
     def __str__(self):
-        return f"Zone:{self.name}, Max:{self.max_capacity}"
+        return f"Zone: {self.name}, Max: {self.max_capacity}"
 
 
 class CribroomUser(models.Model):
