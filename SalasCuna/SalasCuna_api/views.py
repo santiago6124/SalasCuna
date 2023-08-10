@@ -224,6 +224,9 @@ class ChildModelViewSet(viewsets.ModelViewSet):
         if disenroll == True:
             print(f"disenroll: {disenroll}")
             instance.disenroll_date = datetime.now()
+            instance.child_state = ChildState.objects.get(name = 'Inactive')
+            print(instance)
+            print(ChildState.objects.get(name = 'Inactive'))
             # instance.user=self.request.user
             instance.save()
 
