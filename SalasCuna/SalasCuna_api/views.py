@@ -48,6 +48,15 @@ class ZoneViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     queryset = Zone.objects.all()
     serializer_class = ZoneSerializer
+    
+    def get_queryset(self):
+        zone_filter_id = self.request.query_params.get("zone_filter_id")
+
+        if zone_filter_id != None:
+            self.queryset = Zone.objects.filter(id=zone_filter_id)
+            self.serializer_class = ZoneSerializer
+
+        return super().get_queryset()
 
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
