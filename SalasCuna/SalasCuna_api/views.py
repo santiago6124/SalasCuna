@@ -44,7 +44,7 @@ from .serializers import (
 from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
-class ZoneViewSet(viewsets.ReadOnlyModelViewSet):
+class ZoneReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     queryset = Zone.objects.all()
     serializer_class = ZoneSerializer

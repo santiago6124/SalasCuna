@@ -14,7 +14,7 @@ from .views import (
     PhoneFeatureListView,
     GuardianTypeListView,
     PayoutViewSet,
-    ZoneViewSet,
+    ZoneReadOnlyModelViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -38,5 +38,5 @@ urlpatterns = router.urls + [
     path("PhoneFeatureListView/",PhoneFeatureListView.as_view(),name="PhoneFeatureListView",),
     path("GuardianTypeListView/",GuardianTypeListView.as_view(),name="GuardianTypeListView",),
     path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
-    path("ZoneViewSet/", ZoneViewSet.as_view({"get": "list"}), name="ZoneViewSet"),
+    path("ZoneReadOnlyModelViewSet/", ZoneReadOnlyModelViewSet.as_view({"get": "list"}), name="ZoneReadOnlyModelViewSet"),
 ]
