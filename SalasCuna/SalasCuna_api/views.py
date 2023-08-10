@@ -157,27 +157,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 
         return super().get_queryset()
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        disenroll = bool(self.request.query_params.get("disenroll"))
-        # disenroll_date
-        print(f"paramter: {disenroll}")
-
-        if disenroll == True:
-            print(f"disenroll: {disenroll}")
-            instance.disenroll_date = datetime.now()
-            # instance.user=self.request.user
-            instance.save()
-
-            return Response(status=status.HTTP_202_ACCEPTED)
-        else:
-            # If 'disenroll' parameter is not present, proceed with normal update
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
         # First, create the Child object
