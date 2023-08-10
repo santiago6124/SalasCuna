@@ -67,7 +67,6 @@ JAZZMIN_SETTINGS = {
     ],
     "hide_apps": ["auth", "token_blacklist"],
     "icons": {
-        "SalasCuna_api.Adress": "fas fa-font",
         "SalasCuna_api.Child": "fas fa-baby",
         "SalasCuna_api.ChildState": "fas fa-check",
         "SalasCuna_api.Company": "fas fa-landmark",
@@ -105,7 +104,6 @@ JAZZMIN_SETTINGS = {
         "SalasCuna_api.Locality",
         "SalasCuna_api.Zone",
         "SalasCuna_api.Neighborhood",
-        "SalasCuna_api.Adress",
         "SalasCuna_api.Form",
     ],
 }
