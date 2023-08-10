@@ -31,8 +31,14 @@ from .serializers import (
     CribroomSerializer,
     DepthChildSerializer,
     RoleSerializer,
+    LocalitySerializer,
+    GenderSerializer,
+    ShiftSerializer,
+    PhoneFeatureSerializer,
+    GuardianTypeSerializer,
+    ChildStateSerializer,
     PayoutSerializer,
-    ZoneSerializer
+    ZoneSerializer,
 )
 
 from datetime import datetime
@@ -83,6 +89,47 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
         )
 
         return Response(serializer.data)
+
+
+class LocalityListView(generics.ListAPIView):
+    queryset = Locality.objects.all()
+    serializer_class = LocalitySerializer
+    permission_classes = [AllowAny]
+
+class NeighborhoodListView(generics.ListAPIView):
+    queryset = Neighborhood.objects.all()
+    serializer_class = NeighborhoodSerializer
+    permission_classes = [AllowAny]
+
+class GenderListView(generics.ListAPIView):
+    queryset = Gender.objects.all()
+    serializer_class = GenderSerializer
+    permission_classes = [AllowAny]
+
+class CribroomListView(generics.ListAPIView):
+    queryset = Cribroom.objects.all()
+    serializer_class = CribroomSerializer
+    permission_classes = [AllowAny]
+
+class ShiftListView(generics.ListAPIView):
+    queryset = Shift.objects.all()
+    serializer_class = ShiftSerializer
+    permission_classes = [AllowAny]
+
+class ChildStateListView(generics.ListAPIView):
+    queryset = ChildState.objects.all()
+    serializer_class = ChildStateSerializer
+    permission_classes = [AllowAny]
+
+class PhoneFeatureListView(generics.ListAPIView):
+    queryset = PhoneFeature.objects.all()
+    serializer_class = PhoneFeatureSerializer
+    permission_classes = [AllowAny]
+
+class GuardianTypeListView(generics.ListAPIView):
+    queryset = GuardianType.objects.all()
+    serializer_class = GuardianTypeSerializer
+    permission_classes = [AllowAny]
 
 
 class ChildModelViewSet(viewsets.ModelViewSet):
