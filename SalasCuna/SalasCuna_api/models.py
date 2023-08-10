@@ -150,6 +150,7 @@ class Cribroom(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
     max_capacity = models.IntegerField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     street = models.CharField(max_length=255, blank=True, null=True)
     house_number = models.IntegerField(blank=True, null=True)
