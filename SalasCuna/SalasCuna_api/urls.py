@@ -22,6 +22,8 @@ router = routers.DefaultRouter()
 router.register(r"child", ChildModelViewSet)
 router.register(r"cribroom", CribroomModelViewSet)
 router.register(r"payout", PayoutViewSet)
+router.register(r"shift", ShiftListView)
+router.register(r"zone", ZoneReadOnlyModelViewSet)
 
 urlpatterns = router.urls + [
     path(

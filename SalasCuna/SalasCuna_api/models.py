@@ -155,6 +155,7 @@ class Cribroom(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
     max_capacity = models.IntegerField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     street = models.CharField(max_length=255, blank=True, null=True)
     house_number = models.IntegerField(blank=True, null=True)
@@ -170,6 +171,10 @@ class Cribroom(models.Model):
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
     history = HistoricalRecords()
+
+    zone = models.ForeignKey(
+        "Zone", models.DO_NOTHING, db_column="zone_id", blank=True, null=True
+    )
 
     def __str__(self):
         return f"Zone:{self.name}, Max:{self.max_capacity}"
