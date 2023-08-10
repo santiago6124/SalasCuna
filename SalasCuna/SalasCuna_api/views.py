@@ -20,6 +20,8 @@ from .models import (
     PhoneFeature,
     GuardianType,
     Role,
+    Payout,
+    Zone,
 )
 from .serializers import (
     ChildSerializer,
@@ -35,10 +37,22 @@ from .serializers import (
     PhoneFeatureSerializer,
     GuardianTypeSerializer,
     ChildStateSerializer,
+    PayoutSerializer,
+    ZoneSerializer,
 )
 
 from datetime import datetime
+from rest_framework.views import APIView  # Import APIView from rest_framework
 
+class ZoneViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Zone.objects.all()
+    serializer_class = ZoneSerializer
+
+class PayoutViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = Payout.objects.all()
+    serializer_class = PayoutSerializer
 
 class RoleViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]

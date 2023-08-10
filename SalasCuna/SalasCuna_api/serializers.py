@@ -14,6 +14,8 @@ from .models import (
     PhoneFeature,
     GuardianType,
     Role,
+    Payout,
+    Zone,
 )
 
 
@@ -104,11 +106,23 @@ class DepthChildSerializer(serializers.ModelSerializer):
     class Meta:
         model = Child
         depth = 1
-        fields = "__all__"
+        exclude = ["cribroom"]
         read_only_fields = ["user"]
 
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
+        fields = "__all__"
+
+
+class PayoutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payout
+        fields = "__all__"
+
+
+class ZoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Zone
         fields = "__all__"

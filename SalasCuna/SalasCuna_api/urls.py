@@ -13,12 +13,15 @@ from .views import (
     ChildStateListView,
     PhoneFeatureListView,
     GuardianTypeListView,
+    PayoutViewSet,
+    ZoneViewSet,
 )
 
 router = routers.DefaultRouter()
 
 router.register(r"child", ChildModelViewSet)
 router.register(r"cribroom", CribroomModelViewSet)
+router.register(r"PayoutViewSet", PayoutViewSet)
 
 urlpatterns = router.urls + [
     path(
@@ -35,4 +38,5 @@ urlpatterns = router.urls + [
     path("PhoneFeatureListView/",PhoneFeatureListView.as_view(),name="PhoneFeatureListView",),
     path("GuardianTypeListView/",GuardianTypeListView.as_view(),name="GuardianTypeListView",),
     path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
+    path("ZoneViewSet/", ZoneViewSet.as_view({"get": "list"}), name="ZoneViewSet"),
 ]
