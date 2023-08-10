@@ -5,7 +5,16 @@ from .views import (
     ChildAndGuardian_RelatedObjectsView,
     CribroomModelViewSet,
     RoleViewSet,
+    LocalityListView,
+    NeighborhoodListView,
+    GenderListView,
+    CribroomListView,
+    ShiftListView,
+    ChildStateListView,
+    PhoneFeatureListView,
+    GuardianTypeListView,
     PayoutViewSet,
+    ZoneViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -20,5 +29,14 @@ urlpatterns = router.urls + [
         ChildAndGuardian_RelatedObjectsView.as_view(),
         name="ChildRelatedObjectsView",
     ),
+    path("LocalityListView/",LocalityListView.as_view(),name="LocalityListView",),
+    path("NeighborhoodListView/",NeighborhoodListView.as_view(),name="NeighborhoodListView",),
+    path("GenderListView/",GenderListView.as_view(),name="GenderListView",),
+    path("CribroomListView/",CribroomListView.as_view(),name="CribroomListView",),
+    path("ShiftListView/",ShiftListView.as_view(),name="ShiftListView",),
+    path("ChildStateListView/",ChildStateListView.as_view(),name="ChildStateListView",),
+    path("PhoneFeatureListView/",PhoneFeatureListView.as_view(),name="PhoneFeatureListView",),
+    path("GuardianTypeListView/",GuardianTypeListView.as_view(),name="GuardianTypeListView",),
     path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
+    path("ZoneViewSet/", ZoneViewSet.as_view({"get": "list"}), name="ZoneViewSet"),
 ]
