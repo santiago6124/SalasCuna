@@ -12,7 +12,7 @@ router = routers.DefaultRouter()
 
 router.register(r"child", ChildModelViewSet)
 router.register(r"cribroom", CribroomModelViewSet)
-router.register(r"UserViewSet", UserViewSet)
+router.register(r"user", UserViewSet)
 
 urlpatterns = router.urls + [
     path(
