@@ -7,7 +7,7 @@ from rest_framework.permissions import (
 )
 from rest_framework import mixins, generics, views
 from rest_framework.response import Response
-
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import (
     Child,
     Locality,
@@ -57,18 +57,8 @@ class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Payout.objects.all()
     serializer_class = PayoutSerializer
-
-    def get_queryset(self):
-        zone_id_filter = self.request.query_params.get("zone_id_filter")
-        id_filter = self.request.query_params.get("id_filter")
-
-        if zone_id_filter != None:
-            self.queryset = Payout.objects.filter(zone_id=zone_id_filter)
-
-        if id_filter != None:
-            self.queryset = Payout.objects.filter(id=id_filter)
-
-        return super().get_queryset()
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["amount", "zone"]  # fields to filter
 
 
 class RoleViewSet(viewsets.ReadOnlyModelViewSet):
@@ -174,7 +164,10 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
     permission_classes = [AllowAny]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "locality"]  # fields to filter
 
+    # Fijarse como cambiar el Serializer al filtrar por id con la librería
     def get_queryset(self):
         padron_cribroom_id = self.request.query_params.get("padron_cribroom_id")
 
