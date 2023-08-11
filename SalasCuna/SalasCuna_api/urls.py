@@ -73,9 +73,4 @@ urlpatterns = router.urls + [
         name="GuardianTypeListView",
     ),
     path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
-    path(
-        "ZoneReadOnlyModelViewSet/",
-        ZoneReadOnlyModelViewSet.as_view({"get": "list"}),
-        name="ZoneReadOnlyModelViewSet",
-    ),
 ]

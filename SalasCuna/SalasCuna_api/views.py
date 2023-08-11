@@ -47,12 +47,6 @@ from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
 
-class ZoneReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [AllowAny]
-    queryset = Zone.objects.all()
-    serializer_class = ZoneSerializer
-
-
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Payout.objects.all()
@@ -167,7 +161,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]  # This makes django-filters works
     filterset_fields = ["id", "locality"]  # fields to filter
 
-    # Fijarse como cambiar el Serializer al filtrar por id con la librería
+    # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
         padron_cribroom_id = self.request.query_params.get("padron_cribroom_id")
 
