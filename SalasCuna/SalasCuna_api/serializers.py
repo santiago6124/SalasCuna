@@ -16,6 +16,7 @@ from .models import (
     Role,
     Payout,
     Zone,
+    UserAccount,
 )
 
 
@@ -137,4 +138,10 @@ class PayoutSerializer(serializers.ModelSerializer):
 class ZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zone
+        fields = "__all__"
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
         fields = "__all__"

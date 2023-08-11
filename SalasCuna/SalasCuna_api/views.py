@@ -22,6 +22,7 @@ from .models import (
     Role,
     Payout,
     Zone,
+    UserAccount,
 )
 from .serializers import (
     ChildSerializer,
@@ -39,6 +40,7 @@ from .serializers import (
     ChildStateSerializer,
     PayoutSerializer,
     ZoneSerializer,
+    UserSerializer,
 )
 
 from datetime import datetime
@@ -68,8 +70,26 @@ class PayoutViewSet(viewsets.ModelViewSet):
 
 class RoleViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
-    queryset = Role.objects.all()
     serializer_class = RoleSerializer
+    queryset = Role.objects.all()
+
+    def get_queryset(self):
+        exclude_directora = self.request.query_params.get("exclude_directora")
+
+        if exclude_directora != None:
+            self.queryset = Role.objects.exclude(name="Directora")
+
+        return super().get_queryset()
+
+    def exclude_directora(self):
+        queryset = Role.objects.all().exclude(name="Directora")
+        return super().get_queryset()
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = UserAccount.objects.all()
+    serializer_class = UserSerializer
 
 
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):

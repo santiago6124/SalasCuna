@@ -177,7 +177,7 @@ class Cribroom(models.Model):
     )
 
     def __str__(self):
-        return f"Zone:{self.name}, Max:{self.max_capacity}"
+        return f"Zone: {self.name}, Max: {self.max_capacity}"
 
 
 class CribroomUser(models.Model):

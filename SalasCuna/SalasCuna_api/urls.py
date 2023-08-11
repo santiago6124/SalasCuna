@@ -15,6 +15,7 @@ from .views import (
     GuardianTypeListView,
     PayoutViewSet,
     ZoneReadOnlyModelViewSet,
+    UserViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -23,6 +24,7 @@ router.register(r"child", ChildModelViewSet)
 router.register(r"cribroom", CribroomModelViewSet)
 router.register(r"payout", PayoutViewSet)
 router.register(r"zone", ZoneReadOnlyModelViewSet)
+router.register(r"user", UserViewSet)
 
 urlpatterns = router.urls + [
     path(
@@ -71,5 +73,9 @@ urlpatterns = router.urls + [
         name="GuardianTypeListView",
     ),
     path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
-    path("ZoneReadOnlyModelViewSet/", ZoneReadOnlyModelViewSet.as_view({"get": "list"}), name="ZoneReadOnlyModelViewSet"),
+    path(
+        "ZoneReadOnlyModelViewSet/",
+        ZoneReadOnlyModelViewSet.as_view({"get": "list"}),
+        name="ZoneReadOnlyModelViewSet",
+    ),
 ]
