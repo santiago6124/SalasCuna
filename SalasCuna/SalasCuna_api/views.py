@@ -59,11 +59,14 @@ class PayoutViewSet(viewsets.ModelViewSet):
     serializer_class = PayoutSerializer
 
     def get_queryset(self):
-        zone_filter_id = self.request.query_params.get("zone_filter_id")
+        zone_id_filter = self.request.query_params.get("zone_id_filter")
+        id_filter = self.request.query_params.get("id_filter")
 
-        if zone_filter_id != None:
-            self.queryset = Payout.objects.filter(zone_id=zone_filter_id)
-            self.serializer_class = PayoutSerializer
+        if zone_id_filter != None:
+            self.queryset = Payout.objects.filter(zone_id=zone_id_filter)
+
+        if id_filter != None:
+            self.queryset = Payout.objects.filter(id=id_filter)
 
         return super().get_queryset()
 
