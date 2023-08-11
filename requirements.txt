@@ -6,6 +6,7 @@ cryptography==40.0.2
 defusedxml==0.7.1
 Django==4.2
 django-cors-headers==4.1.0
+django-filter==23.2
 django-jazzmin==2.6.0
 django-simple-history==3.3.0
 django-templated-mail==1.1.1
