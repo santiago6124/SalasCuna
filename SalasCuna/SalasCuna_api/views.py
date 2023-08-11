@@ -84,10 +84,6 @@ class RoleViewSet(viewsets.ReadOnlyModelViewSet):
 
         return super().get_queryset()
 
-    def exclude_directora(self):
-        queryset = Role.objects.all().exclude(name="Directora")
-        return super().get_queryset()
-
 
 class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
