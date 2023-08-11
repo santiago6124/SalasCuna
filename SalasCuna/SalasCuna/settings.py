@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from datetime import timedelta
+from .jazzmin import JAZZMIN_SETTINGS, JAZZMIN_UI_TWEAKS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,111 +37,12 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "simple_history",
+    "django_filters",
 ]
 
-JAZZMIN_SETTINGS = {
-    "copyright": "ITSVillada 7C [Proyecto Salas Cunas]",
-    "welcome_sign": "Bienvenido a las Salas Cunas [AdminSite]",
-    "show-sidebar": True,
-    "navigation_expanded": True,
-    "topmenu_links": [
-        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "-", "url": ""},
-        {
-            "name": "Jazzmin",
-            "url": "https://github.com/farridav/django-jazzmin",
-            "new_window": True,
-        },
-        {"name": "-", "url": ""},
-        {
-            "name": "Repository (Backend)",
-            "url": "https://github.com/santiago6124/SalasCuna",
-            "new_window": True,
-        },
-        {"name": "-", "url": ""},
-        {
-            "name": "Repository (Frontend)",
-            "url": "https://github.com/santiago6124/SalasCuna-FE-",
-            "new_window": True,
-        },
-        {"name": "-", "url": ""},
-        {"app": "SalasCuna_api"},
-    ],
-    "hide_apps": ["auth", "token_blacklist"],
-    "icons": {
-        "SalasCuna_api.Adress": "fas fa-font",
-        "SalasCuna_api.Child": "fas fa-baby",
-        "SalasCuna_api.ChildState": "fas fa-check",
-        "SalasCuna_api.Company": "fas fa-landmark",
-        "SalasCuna_api.Cribroom": "far fa-building",
-        "SalasCuna_api.CribroomUser": "fas fa-vest",
-        "SalasCuna_api.Desinfection": "fas fa-soap",
-        "SalasCuna_api.Form": "fas fa-info",
-        "SalasCuna_api.Gender": "fas fa-restroom",
-        "SalasCuna_api.Locality": "fas fa-vihara",
-        "SalasCuna_api.Neighborhood": "fas fa-road",
-        "SalasCuna_api.PhoneFeature": "fas fa-phone",
-        "SalasCuna_api.GuardianType": "fas fa-people-arrows",
-        "SalasCuna_api.Guardian": "fas fa-user-secret",
-        "SalasCuna_api.Payout": "fas fa-money-bill",
-        "SalasCuna_api.Role": "fas fa-user-tie",
-        "SalasCuna_api.Shift": "far fa-address-card",
-        "SalasCuna_api.UserAccount": "fas fa-user-secret",
-        "SalasCuna_api.Zone": "far fa-square",
-    },
-    "order_with_respect_to": [
-        "SalasCuna_api.UserAccount",
-        "SalasCuna_api.PhoneFeature",
-        "SalasCuna_api.Role",
-        "SalasCuna_api.Child",
-        "SalasCuna_api.ChildState",
-        "SalasCuna_api.Gender",
-        "SalasCuna_api.GuardianType",
-        "SalasCuna_api.Guardian",
-        "SalasCuna_api.Shift",
-        "SalasCuna_api.Cribroom",
-        "SalasCuna_api.CribroomUser",
-        "SalasCuna_api.Desinfection",
-        "SalasCuna_api.Company",
-        "SalasCuna_api.Payout",
-        "SalasCuna_api.Locality",
-        "SalasCuna_api.Zone",
-        "SalasCuna_api.Neighborhood",
-        "SalasCuna_api.Adress",
-        "SalasCuna_api.Form",
-    ],
-}
+JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
 
-JAZZMIN_UI_TWEAKS = {
-    "navbar_small_text": False,
-    "footer_small_text": True,
-    "body_small_text": False,
-    "brand_small_text": False,
-    "brand_colour": "navbar-cyan",
-    "accent": "accent-teal",
-    "navbar": "navbar-success navbar-dark",
-    "no_navbar_border": True,
-    "navbar_fixed": True,
-    "layout_boxed": False,
-    "footer_fixed": True,
-    "sidebar_fixed": False,
-    "sidebar": "sidebar-dark-teal",
-    "sidebar_nav_small_text": True,
-    "sidebar_disable_expand": False,
-    "sidebar_nav_child_indent": False,
-    "sidebar_nav_compact_style": False,
-    "sidebar_nav_legacy_style": False,
-    "sidebar_nav_flat_style": True,
-    "theme": "cyborg",
-    "button_classes": {
-        "primary": "btn-primary",
-        "secondary": "btn-secondary",
-        "info": "btn-info",
-        "warning": "btn-warning",
-        "danger": "btn-danger",
-        "success": "btn-success",
-    },
-}
+JAZZMIN_UI_TWEAKS = JAZZMIN_UI_TWEAKS
 
 
 MIDDLEWARE = [
@@ -232,6 +134,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 # JWT

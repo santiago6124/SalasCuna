@@ -7,6 +7,8 @@ from rest_framework.permissions import (
 )
 from rest_framework import mixins, generics, views
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
 
 from .models import (
     Child,
@@ -22,6 +24,7 @@ from .models import (
     Role,
     Payout,
     Zone,
+    UserAccount,
 )
 from .serializers import (
     ChildSerializer,
@@ -39,36 +42,42 @@ from .serializers import (
     ChildStateSerializer,
     PayoutSerializer,
     ZoneSerializer,
+    UserSerializer,
 )
 
 from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
-
-class ZoneReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [AllowAny]
-    queryset = Zone.objects.all()
-    serializer_class = ZoneSerializer
 
 
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Payout.objects.all()
     serializer_class = PayoutSerializer
-
-    def get_queryset(self):
-        zone_filter_id = self.request.query_params.get("zone_filter_id")
-            
-        if zone_filter_id != None:
-            self.queryset = Payout.objects.filter(zone_id=zone_filter_id)
-            self.serializer_class = ZoneSerializer
-
-        return super().get_queryset()
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["amount", "zone"]  # fields to filter
 
 
 class RoleViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
-    queryset = Role.objects.all()
     serializer_class = RoleSerializer
+    queryset = Role.objects.all()
+
+    def get_queryset(self):
+        exclude_directora = self.request.query_params.get("exclude_directora")
+
+        if exclude_directora != None:
+            self.queryset = Role.objects.exclude(name="Directora")
+
+        return super().get_queryset()
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = UserAccount.objects.all()
+    serializer_class = UserSerializer
 
 
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
@@ -107,35 +116,42 @@ class LocalityListView(generics.ListAPIView):
     serializer_class = LocalitySerializer
     permission_classes = [AllowAny]
 
+
 class NeighborhoodListView(generics.ListAPIView):
     queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodSerializer
     permission_classes = [AllowAny]
+
 
 class GenderListView(generics.ListAPIView):
     queryset = Gender.objects.all()
     serializer_class = GenderSerializer
     permission_classes = [AllowAny]
 
+
 class CribroomListView(generics.ListAPIView):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
     permission_classes = [AllowAny]
+
 
 class ShiftListView(generics.ListAPIView):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
     permission_classes = [AllowAny]
 
+
 class ChildStateListView(generics.ListAPIView):
     queryset = ChildState.objects.all()
     serializer_class = ChildStateSerializer
     permission_classes = [AllowAny]
 
+
 class PhoneFeatureListView(generics.ListAPIView):
     queryset = PhoneFeature.objects.all()
     serializer_class = PhoneFeatureSerializer
     permission_classes = [AllowAny]
+
 
 class GuardianTypeListView(generics.ListAPIView):
     queryset = GuardianType.objects.all()
@@ -147,7 +163,10 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
     permission_classes = [AllowAny]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "locality"]  # fields to filter
 
+    # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
         padron_cribroom_id = self.request.query_params.get("padron_cribroom_id")
 
@@ -156,7 +175,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
             self.serializer_class = DepthChildSerializer
 
         return super().get_queryset()
-
 
     def perform_create(self, serializer):
         # First, create the Child object
@@ -224,9 +242,9 @@ class ChildModelViewSet(viewsets.ModelViewSet):
         if disenroll == True:
             print(f"disenroll: {disenroll}")
             instance.disenroll_date = datetime.now()
-            instance.child_state = ChildState.objects.get(name = 'Inactive')
+            instance.child_state = ChildState.objects.get(name="Inactive")
             print(instance)
-            print(ChildState.objects.get(name = 'Inactive'))
+            print(ChildState.objects.get(name="Inactive"))
             # instance.user=self.request.user
             instance.save()
 
@@ -250,11 +268,11 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
 
-
 class ShiftModelViewSet(viewsets.ModelViewSet):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
     permission_classes = [AllowAny]
+
 
 class ZoneModelViewSet(viewsets.ModelViewSet):
     queryset = Zone.objects.all()
