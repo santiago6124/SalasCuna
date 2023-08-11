@@ -44,6 +44,7 @@ from .serializers import (
 from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
+
 class ZoneReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     queryset = Zone.objects.all()
@@ -57,10 +58,10 @@ class PayoutViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         zone_filter_id = self.request.query_params.get("zone_filter_id")
-            
+
         if zone_filter_id != None:
             self.queryset = Payout.objects.filter(zone_id=zone_filter_id)
-            self.serializer_class = ZoneSerializer
+            self.serializer_class = PayoutSerializer
 
         return super().get_queryset()
 
@@ -107,35 +108,42 @@ class LocalityListView(generics.ListAPIView):
     serializer_class = LocalitySerializer
     permission_classes = [AllowAny]
 
+
 class NeighborhoodListView(generics.ListAPIView):
     queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodSerializer
     permission_classes = [AllowAny]
+
 
 class GenderListView(generics.ListAPIView):
     queryset = Gender.objects.all()
     serializer_class = GenderSerializer
     permission_classes = [AllowAny]
 
+
 class CribroomListView(generics.ListAPIView):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
     permission_classes = [AllowAny]
+
 
 class ShiftListView(generics.ListAPIView):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
     permission_classes = [AllowAny]
 
+
 class ChildStateListView(generics.ListAPIView):
     queryset = ChildState.objects.all()
     serializer_class = ChildStateSerializer
     permission_classes = [AllowAny]
 
+
 class PhoneFeatureListView(generics.ListAPIView):
     queryset = PhoneFeature.objects.all()
     serializer_class = PhoneFeatureSerializer
     permission_classes = [AllowAny]
+
 
 class GuardianTypeListView(generics.ListAPIView):
     queryset = GuardianType.objects.all()
@@ -156,7 +164,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
             self.serializer_class = DepthChildSerializer
 
         return super().get_queryset()
-
 
     def perform_create(self, serializer):
         # First, create the Child object
@@ -224,9 +231,9 @@ class ChildModelViewSet(viewsets.ModelViewSet):
         if disenroll == True:
             print(f"disenroll: {disenroll}")
             instance.disenroll_date = datetime.now()
-            instance.child_state = ChildState.objects.get(name = 'Inactive')
+            instance.child_state = ChildState.objects.get(name="Inactive")
             print(instance)
-            print(ChildState.objects.get(name = 'Inactive'))
+            print(ChildState.objects.get(name="Inactive"))
             # instance.user=self.request.user
             instance.save()
 
@@ -250,11 +257,11 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
 
-
 class ShiftModelViewSet(viewsets.ModelViewSet):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
     permission_classes = [AllowAny]
+
 
 class ZoneModelViewSet(viewsets.ModelViewSet):
     queryset = Zone.objects.all()
