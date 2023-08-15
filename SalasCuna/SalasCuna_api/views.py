@@ -43,6 +43,7 @@ from .serializers import (
     PayoutSerializer,
     ZoneSerializer,
     UserSerializer,
+    DepthCribroomSerializer,
 )
 
 from datetime import datetime
@@ -276,6 +277,11 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "zone",
         "shift",
     ]  # fields to filter
+
+    def get_queryset(self):
+        self.queryset = Cribroom.objects.all()
+        self.serializer_class = DepthCribroomSerializer
+        return super().get_queryset()
 
 
 class ShiftModelViewSet(viewsets.ModelViewSet):

@@ -41,7 +41,6 @@ class GenderSerializer(serializers.ModelSerializer):
 class CribroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cribroom
-        depth = 1
         fields = "__all__"
 
     """
@@ -109,6 +108,13 @@ class ChildSerializer(serializers.ModelSerializer):
 class DepthGuardianSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guardian
+        depth = 1
+        fields = "__all__"
+
+
+class DepthCribroomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cribroom
         depth = 1
         fields = "__all__"
 
