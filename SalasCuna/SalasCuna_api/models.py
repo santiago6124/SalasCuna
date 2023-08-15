@@ -154,7 +154,7 @@ class Company(models.Model):
 class Cribroom(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     entity = models.CharField(max_length=255, blank=True, null=True)
-    CUIT = models.BigIntegerField(blank=True, null=True)
+    CUIT = models.BigIntegerField(blank=True, null=True)  # nuevos campos
     code = models.IntegerField(blank=True, null=True)
     max_capacity = models.IntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
