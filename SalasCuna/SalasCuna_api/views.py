@@ -266,6 +266,16 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
     permission_classes = [AllowAny]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = [
+        "max_capacity",
+        "is_active",
+        "zone",
+        "shift",
+    ]  # fields to filter
 
 
 class ShiftModelViewSet(viewsets.ModelViewSet):
