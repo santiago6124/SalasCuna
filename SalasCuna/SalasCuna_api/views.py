@@ -165,15 +165,12 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     serializer_class = ChildSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend]  # This makes django-filters works
-    filterset_fields = ["id", "locality"]  # fields to filter
+    filterset_fields = ["id", "locality", "cribroom_id"]  # fields to filter
 
     # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
-        padron_cribroom_id = self.request.query_params.get("padron_cribroom_id")
-
-        if padron_cribroom_id != None:
-            self.queryset = Child.objects.filter(cribroom_id=padron_cribroom_id)
-            self.serializer_class = DepthChildSerializer
+        self.queryset = Child.objects.all()
+        self.serializer_class = DepthChildSerializer
 
         return super().get_queryset()
 
