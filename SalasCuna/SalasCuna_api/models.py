@@ -178,6 +178,37 @@ class Cribroom(models.Model):
 
     def __str__(self):
         return f"Zone: {self.name}, Max: {self.max_capacity}"
+    
+    def totalImport(self):
+        '''
+        calcular en base a maximo de chico x valor por mes durante los siguientes 12 meses
+        
+        for n in 12_months:
+            month_import_n = max_capacity * amount
+        '''
+        try:
+            payouts = Payout.objects.filter(zone = self.zone.id)
+           
+            pays = {}
+            for payout in payouts:
+                pays[str(payout.date)] = payout.amount * self.max_capacity
+
+                try:
+                    pays[str(payout.date.year)] += payout.amount * self.max_capacity
+                except:
+                    pays[str(payout.date.year)] = payout.amount * self.max_capacity
+                    
+                try:
+                    pays['total'] += payout.amount * self.max_capacity
+                except:
+                    pays['total'] = payout.amount * self.max_capacity
+
+        except Exception as e:
+            return f'An error ocurred: {e}'
+        
+        # monthl_import = self.max_capacity * 
+
+        return pays
 
 
 class CribroomUser(models.Model):
