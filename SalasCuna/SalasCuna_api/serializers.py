@@ -113,11 +113,15 @@ class DepthGuardianSerializer(serializers.ModelSerializer):
 
 
 class DepthCribroomSerializer(serializers.ModelSerializer):
+    pays = serializers.SerializerMethodField()
+
     class Meta:
         model = Cribroom
         depth = 1
         fields = "__all__"
 
+    def get_pays(self, obj):
+        return obj.totalImport()
 
 class DepthChildSerializer(serializers.ModelSerializer):
     guardian = DepthGuardianSerializer()
