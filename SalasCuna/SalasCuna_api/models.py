@@ -43,7 +43,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     dni = models.CharField(max_length=11)
-    role = models.ForeignKey("Role", on_delete=models.CASCADE, blank=True, null=True)
+    role = models.ForeignKey("Role", on_delete=models.CASCADE,db_column="Role_id", blank=True, null=True)
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
     department = models.CharField(max_length=255)
