@@ -179,7 +179,7 @@ class Cribroom(models.Model):
     def __str__(self):
         return f"Zone: {self.name}, Max: {self.max_capacity}"
     
-    def totalImport(self):
+    def totalImport(self, init_date, end_date):
         '''
         calcular en base a maximo de chico x valor por mes durante los siguientes 12 meses
         
@@ -187,7 +187,7 @@ class Cribroom(models.Model):
             month_import_n = max_capacity * amount
         '''
         try:
-            payouts = Payout.objects.filter(zone = self.zone.id)
+            payouts = Payout.objects.filter(zone = self.zone.id, date__range=[init_date, end_date])
            
             pays = {}
             for payout in payouts:
