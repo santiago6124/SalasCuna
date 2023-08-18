@@ -117,6 +117,12 @@ class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Cribroom.objects.all()
     serializer_class = TechnicalReportSerializer
     
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['initial_date'] = self.kwargs.get('initial_date')
+        context['end_date'] = self.kwargs.get('end_date')
+        return context
+    
 
 class LocalityListView(generics.ListAPIView):
     queryset = Locality.objects.all()

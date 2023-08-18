@@ -130,7 +130,9 @@ class TechnicalReportSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_pays(self, obj):
-            return obj.totalImport()
+        initial_date = self.context.get('initial_date')
+        end_date = self.context.get('end_date')
+        return obj.totalImport(initial_date, end_date)
     
 
 class DepthChildSerializer(serializers.ModelSerializer):

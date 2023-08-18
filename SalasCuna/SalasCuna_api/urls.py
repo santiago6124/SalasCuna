@@ -28,7 +28,7 @@ router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
 
 urlpatterns = router.urls + [
-    path('technical-report/<pk>/<str:initial_data>/<str:end_data>/', TechnicalReportRetrieveAPIView.as_view()),
+    path('technical-report/<pk>/<str:initial_date>/<str:end_date>/', TechnicalReportRetrieveAPIView.as_view()),
     path(
         "ChildRelatedObjectsView/",
         ChildAndGuardian_RelatedObjectsView.as_view(),
