@@ -44,6 +44,7 @@ from .serializers import (
     ZoneSerializer,
     UserSerializer,
     DepthCribroomSerializer,
+    TechnicalReportSerializer,
 )
 
 from datetime import datetime
@@ -111,6 +112,11 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
 
         return Response(serializer.data)
 
+class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
+    permission_classes = [AllowAny]
+    queryset = Cribroom.objects.all()
+    serializer_class = TechnicalReportSerializer
+    
 
 class LocalityListView(generics.ListAPIView):
     queryset = Locality.objects.all()

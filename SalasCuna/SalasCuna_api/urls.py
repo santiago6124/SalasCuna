@@ -16,6 +16,7 @@ from .views import (
     PayoutViewSet,
     UserViewSet,
     ZoneModelViewSet,
+    TechnicalReportRetrieveAPIView,
 )
 
 router = routers.DefaultRouter()
@@ -27,6 +28,7 @@ router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
 
 urlpatterns = router.urls + [
+    path('technical-report/<pk>/', TechnicalReportRetrieveAPIView.as_view()),
     path(
         "ChildRelatedObjectsView/",
         ChildAndGuardian_RelatedObjectsView.as_view(),
