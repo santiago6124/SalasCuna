@@ -11,7 +11,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from simple_history.models import HistoricalRecords
-
+from num2words import num2words
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -221,6 +221,9 @@ class Cribroom(models.Model):
         # monthl_import = self.max_capacity * 
 
         return pays
+    
+    def maxCapacityStr(self):
+        return num2words(self.max_capacity, lang='es')
 
 
 class CribroomUser(models.Model):

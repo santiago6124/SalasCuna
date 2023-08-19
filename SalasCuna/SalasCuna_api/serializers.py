@@ -123,6 +123,7 @@ class DepthCribroomSerializer(serializers.ModelSerializer):
 
 class TechnicalReportSerializer(serializers.ModelSerializer):
     pays = serializers.SerializerMethodField()
+    maxCapacityStr = serializers.SerializerMethodField()
 
     class Meta:
         model = Cribroom
@@ -133,6 +134,9 @@ class TechnicalReportSerializer(serializers.ModelSerializer):
         initial_date = self.context.get('initial_date')
         end_date = self.context.get('end_date')
         return obj.totalImport(initial_date, end_date)
+
+    def get_maxCapacityStr(self, obj):
+        return obj.maxCapacityStr()
     
 
 class DepthChildSerializer(serializers.ModelSerializer):
