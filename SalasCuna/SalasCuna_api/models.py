@@ -79,6 +79,13 @@ class Locality(models.Model):
         return f"{self.locality}"
 
 
+class Department(models.Model):
+    department = models.CharField(max_length=255, blank=True, null=True)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return f"{self.department}"
+
 class Neighborhood(models.Model):
     neighborhood = models.CharField(max_length=255, blank=True, null=True)
     history = HistoricalRecords()
@@ -154,6 +161,8 @@ class Company(models.Model):
 class Cribroom(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
     code = models.IntegerField(blank=True, null=True)
+    entity = models.CharField(max_length=255, blank=True, null=True)
+
     max_capacity = models.IntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
 
@@ -162,6 +171,9 @@ class Cribroom(models.Model):
 
     locality = models.ForeignKey(
         Locality, on_delete=models.CASCADE, blank=True, null=True
+    )
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, blank=True, null=True
     )
     neighborhood = models.ForeignKey(
         Neighborhood, on_delete=models.CASCADE, blank=True, null=True
