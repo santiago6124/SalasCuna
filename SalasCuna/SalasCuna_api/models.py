@@ -200,8 +200,17 @@ class Cribroom(models.Model):
         '''
         try:
             payouts = Payout.objects.filter(zone = self.zone.id, date__range=[init_date, end_date])
+            print(f'payouts: {payouts}')
+            min_date = min(payouts, key=lambda payout: payout.date).date
+            max_date = max(payouts, key=lambda payout: payout.date).date
            
             pays = {}
+            
+            pays['totalSumEndMonth'] = max_date.month
+            pays['totalSumEndYear'] = max_date.year
+            pays['totalSumInitMonth'] = min_date.month
+            pays['totalSumInitYear'] = min_date.year
+
             for payout in payouts:
                 pays[str(payout.date)] = payout.amount * self.max_capacity
 
@@ -211,14 +220,27 @@ class Cribroom(models.Model):
                     pays[str(payout.date.year)] = payout.amount * self.max_capacity
                     
                 try:
-                    pays['total'] += payout.amount * self.max_capacity
+                    pays['totalSumFloat'] += payout.amount * self.max_capacity
+                    pays['totalSumStr'] = num2words(pays['totalSumFloat'], lang='es')
                 except:
-                    pays['total'] = payout.amount * self.max_capacity
+                    pays['totalSumFloat'] = payout.amount * self.max_capacity
+                    pays['totalSumStr'] = num2words(pays['totalSumFloat'], lang='es')
+
+                try:
+                    pays['firstSubTotalSumFloat'] += payout.amount * self.max_capacity if payout.date.year <= pays['totalSumInitYear'] else 0
+                    pays['SecSubTotalSumFloat'] += payout.amount * self.max_capacity if payout.date.year >= pays['totalSumEndYear'] else 0
+                    pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] and payout.date.month >= pays['firstSubTotalSumEndMonth'] else pays['firstSubTotalSumEndMonth'] 
+                    pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] and payout.date.month <= pays['SecSubTotalSumInitMonth'] else pays['SecSubTotalSumInitMonth'] 
+                except:
+                    pays['firstSubTotalSumFloat'] = payout.amount * self.max_capacity if payout.date.year <= pays['totalSumInitYear'] else 0
+                    pays['SecSubTotalSumFloat'] = payout.amount * self.max_capacity if payout.date.year >= pays['totalSumEndYear'] else 0
+                    pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] else 0
+                    pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] else pays['SecSubTotalSumInitMonth'] 
+
+                    
 
         except Exception as e:
             return f'An error ocurred: {e}'
-        
-        # monthl_import = self.max_capacity * 
 
         return pays
     
@@ -328,7 +350,7 @@ class Payout(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return f"{self.id}, {self.amount}"
+        return f"{self.id}, {self.amount}, {self.date}"
 
 
 class Role(models.Model):
