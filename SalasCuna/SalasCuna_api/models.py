@@ -228,14 +228,24 @@ class Cribroom(models.Model):
 
                 try:
                     pays['firstSubTotalSumFloat'] += payout.amount * self.max_capacity if payout.date.year <= pays['totalSumInitYear'] else 0
-                    pays['SecSubTotalSumFloat'] += payout.amount * self.max_capacity if payout.date.year >= pays['totalSumEndYear'] else 0
-                    pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] and payout.date.month >= pays['firstSubTotalSumEndMonth'] else pays['firstSubTotalSumEndMonth'] 
-                    pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] and payout.date.month <= pays['SecSubTotalSumInitMonth'] else pays['SecSubTotalSumInitMonth'] 
+                    
                 except:
                     pays['firstSubTotalSumFloat'] = payout.amount * self.max_capacity if payout.date.year <= pays['totalSumInitYear'] else 0
+                    
+                try:
+                    pays['SecSubTotalSumFloat'] += payout.amount * self.max_capacity if payout.date.year >= pays['totalSumEndYear'] else 0
+                except:
                     pays['SecSubTotalSumFloat'] = payout.amount * self.max_capacity if payout.date.year >= pays['totalSumEndYear'] else 0
-                    pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] else 0
-                    pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] else pays['SecSubTotalSumInitMonth'] 
+                    
+                try:
+                    pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] and payout.date.month >= pays['firstSubTotalSumEndMonth'] else pays['firstSubTotalSumEndMonth'] 
+                except:
+                    pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] else 100
+
+                try:
+                    pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] and payout.date.month <= pays['SecSubTotalSumInitMonth'] else pays['SecSubTotalSumInitMonth'] 
+                except:
+                    pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] else 100
 
 
             month_names_spanish = {
