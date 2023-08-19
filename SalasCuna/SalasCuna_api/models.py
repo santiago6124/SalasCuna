@@ -237,7 +237,16 @@ class Cribroom(models.Model):
                     pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] else 0
                     pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] else pays['SecSubTotalSumInitMonth'] 
 
-                    
+
+            month_names_spanish = {
+                1: 'enero', 2: 'febrero', 3: 'marzo', 4: 'abril', 5: 'mayo', 6: 'junio',
+                7: 'julio', 8: 'agosto', 9: 'septiembre', 10: 'octubre', 11: 'noviembre', 12: 'diciembre'
+            }
+
+            pays['totalSumEndMonth'] = month_names_spanish[pays['totalSumEndMonth']]
+            pays['totalSumInitMonth'] = month_names_spanish[pays['totalSumInitMonth']]
+            pays['firstSubTotalSumEndMonth'] = month_names_spanish[pays['firstSubTotalSumEndMonth']]
+            pays['SecSubTotalSumInitMonth'] = month_names_spanish[pays['SecSubTotalSumInitMonth']]
 
         except Exception as e:
             return f'An error ocurred: {e}'
