@@ -273,6 +273,7 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "is_active",
         "zone",
         "shift",
+        "id",
     ]  # fields to filter
 
     def get_queryset(self):
