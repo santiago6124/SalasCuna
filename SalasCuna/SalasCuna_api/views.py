@@ -285,12 +285,20 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "is_active",
         "zone",
         "shift",
+        "id",
     ]  # fields to filter
 
     def get_queryset(self):
-        self.queryset = Cribroom.objects.all()
-        self.serializer_class = DepthCribroomSerializer
-        return super().get_queryset()
+        no_depth = self.request.query_params.get("no_depth")
+
+        if no_depth != None:
+            self.queryset = Cribroom.objects.all()
+            self.serializer_class = CribroomSerializer
+            return super().get_queryset()
+        else:
+            self.queryset = Cribroom.objects.all()
+            self.serializer_class = DepthCribroomSerializer
+            return super().get_queryset()
 
 
 class ShiftModelViewSet(viewsets.ModelViewSet):

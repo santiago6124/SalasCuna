@@ -43,7 +43,9 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     dni = models.CharField(max_length=11)
-    role = models.ForeignKey("Role", on_delete=models.CASCADE, blank=True, null=True)
+    role = models.ForeignKey(
+        "Role", on_delete=models.CASCADE, db_column="Role_id", blank=True, null=True
+    )
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
     department = models.CharField(max_length=255)
@@ -71,9 +73,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 class Locality(models.Model):
     locality = models.CharField(max_length=255, blank=True, null=True)
     history = HistoricalRecords()
-    zone = models.ForeignKey(
-        "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
-    )  # Field name made lowercase.
 
     def __str__(self):
         return f"{self.locality}"
@@ -160,12 +159,12 @@ class Company(models.Model):
 
 class Cribroom(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-    code = models.IntegerField(blank=True, null=True)
     entity = models.CharField(max_length=255, blank=True, null=True)
+    CUIT = models.BigIntegerField(blank=True, null=True)  # nuevos campos
+    code = models.IntegerField(blank=True, null=True)
 
     max_capacity = models.IntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
-
     street = models.CharField(max_length=255, blank=True, null=True)
     house_number = models.IntegerField(blank=True, null=True)
 
@@ -182,14 +181,14 @@ class Cribroom(models.Model):
     shift = models.ForeignKey(
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
-    history = HistoricalRecords()
 
     zone = models.ForeignKey(
         "Zone", models.DO_NOTHING, db_column="zone_id", blank=True, null=True
     )
+    history = HistoricalRecords()
 
     def __str__(self):
-        return f"Zone: {self.name}, Max: {self.max_capacity}"
+        return f"Zone: {self.name}, Max: {self.max_capacity}, COD: {self.code}, CUIT: {self.CUIT}"
     
     def totalImport(self, init_date, end_date):
         '''
