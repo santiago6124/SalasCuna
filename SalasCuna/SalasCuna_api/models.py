@@ -11,7 +11,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from simple_history.models import HistoricalRecords
-
+from num2words import num2words
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -77,6 +77,13 @@ class Locality(models.Model):
     def __str__(self):
         return f"{self.locality}"
 
+
+class Department(models.Model):
+    department = models.CharField(max_length=255, blank=True, null=True)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return f"{self.department}"
 
 class Neighborhood(models.Model):
     neighborhood = models.CharField(max_length=255, blank=True, null=True)
@@ -155,6 +162,7 @@ class Cribroom(models.Model):
     entity = models.CharField(max_length=255, blank=True, null=True)
     CUIT = models.BigIntegerField(blank=True, null=True)  # nuevos campos
     code = models.IntegerField(blank=True, null=True)
+
     max_capacity = models.IntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     street = models.CharField(max_length=255, blank=True, null=True)
@@ -162,6 +170,9 @@ class Cribroom(models.Model):
 
     locality = models.ForeignKey(
         Locality, on_delete=models.CASCADE, blank=True, null=True
+    )
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, blank=True, null=True
     )
     neighborhood = models.ForeignKey(
         Neighborhood, on_delete=models.CASCADE, blank=True, null=True
@@ -177,7 +188,82 @@ class Cribroom(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return f"{self.name}, COD: {self.code}, CUIT: {self.CUIT}"
+        return f"Zone: {self.name}, Max: {self.max_capacity}, COD: {self.code}, CUIT: {self.CUIT}"
+    
+    def totalImport(self, init_date, end_date):
+        '''
+        calcular en base a maximo de chico x valor por mes durante los siguientes 12 meses
+        
+        for n in 12_months:
+            month_import_n = max_capacity * amount
+        '''
+        try:
+            payouts = Payout.objects.filter(zone = self.zone.id, date__range=[init_date, end_date])
+            print(f'payouts: {payouts}')
+            min_date = min(payouts, key=lambda payout: payout.date).date
+            max_date = max(payouts, key=lambda payout: payout.date).date
+           
+            pays = {}
+            
+            pays['totalSumEndMonth'] = max_date.month
+            pays['totalSumEndYear'] = max_date.year
+            pays['totalSumInitMonth'] = min_date.month
+            pays['totalSumInitYear'] = min_date.year
+
+            for payout in payouts:
+                pays[str(payout.date)] = payout.amount * self.max_capacity
+
+                try:
+                    pays[str(payout.date.year)] += payout.amount * self.max_capacity
+                except:
+                    pays[str(payout.date.year)] = payout.amount * self.max_capacity
+                    
+                try:
+                    pays['totalSumFloat'] += payout.amount * self.max_capacity
+                    pays['totalSumStr'] = num2words(pays['totalSumFloat'], lang='es')
+                except:
+                    pays['totalSumFloat'] = payout.amount * self.max_capacity
+                    pays['totalSumStr'] = num2words(pays['totalSumFloat'], lang='es')
+
+                try:
+                    pays['firstSubTotalSumFloat'] += payout.amount * self.max_capacity if payout.date.year <= pays['totalSumInitYear'] else 0
+                    
+                except:
+                    pays['firstSubTotalSumFloat'] = payout.amount * self.max_capacity if payout.date.year <= pays['totalSumInitYear'] else 0
+                    
+                try:
+                    pays['SecSubTotalSumFloat'] += payout.amount * self.max_capacity if payout.date.year >= pays['totalSumEndYear'] else 0
+                except:
+                    pays['SecSubTotalSumFloat'] = payout.amount * self.max_capacity if payout.date.year >= pays['totalSumEndYear'] else 0
+                    
+                try:
+                    pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] and payout.date.month >= pays['firstSubTotalSumEndMonth'] else pays['firstSubTotalSumEndMonth'] 
+                except:
+                    pays['firstSubTotalSumEndMonth'] = payout.date.month if payout.date.year <= pays['totalSumInitYear'] else 100
+
+                try:
+                    pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] and payout.date.month <= pays['SecSubTotalSumInitMonth'] else pays['SecSubTotalSumInitMonth'] 
+                except:
+                    pays['SecSubTotalSumInitMonth'] = payout.date.month if payout.date.year >= pays['totalSumEndYear'] else 100
+
+
+            month_names_spanish = {
+                1: 'enero', 2: 'febrero', 3: 'marzo', 4: 'abril', 5: 'mayo', 6: 'junio',
+                7: 'julio', 8: 'agosto', 9: 'septiembre', 10: 'octubre', 11: 'noviembre', 12: 'diciembre'
+            }
+
+            pays['totalSumEndMonth'] = month_names_spanish[pays['totalSumEndMonth']]
+            pays['totalSumInitMonth'] = month_names_spanish[pays['totalSumInitMonth']]
+            pays['firstSubTotalSumEndMonth'] = month_names_spanish[pays['firstSubTotalSumEndMonth']]
+            pays['SecSubTotalSumInitMonth'] = month_names_spanish[pays['SecSubTotalSumInitMonth']]
+
+        except Exception as e:
+            return f'An error ocurred: {e}'
+
+        return pays
+    
+    def maxCapacityStr(self):
+        return num2words(self.max_capacity, lang='es')
 
 
 class CribroomUser(models.Model):
@@ -282,7 +368,7 @@ class Payout(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return f"{self.id}, {self.amount}"
+        return f"{self.id}, {self.amount}, {self.date}"
 
 
 class Role(models.Model):

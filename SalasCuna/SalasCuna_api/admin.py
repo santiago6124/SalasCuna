@@ -8,6 +8,9 @@ class LocalityAdmin(admin.ModelAdmin):
     list_display = ("id", "locality")
     list_filter = ["locality"]
 
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ("id", "department")
+    list_filter = ["department"]
 
 class NeighborhoodAdmin(admin.ModelAdmin):
     list_display = ("id", "neighborhood")
@@ -112,6 +115,7 @@ admin.site.register(Desinfection, DesinfectionAdmin)
 admin.site.register(Form, FormAdmin)
 admin.site.register(Gender, GenderAdmin)
 admin.site.register(Locality, LocalityAdmin)
+admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Neighborhood, NeighborhoodAdmin)
 admin.site.register(PhoneFeature, PhoneFeatureAdmin)
 admin.site.register(Guardian, GuardianAdmin)

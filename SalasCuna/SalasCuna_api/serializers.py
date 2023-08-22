@@ -118,6 +118,26 @@ class DepthCribroomSerializer(serializers.ModelSerializer):
         depth = 1
         fields = "__all__"
 
+    def get_pays(self, obj):
+        return obj.totalImport()
+
+class TechnicalReportSerializer(serializers.ModelSerializer):
+    pays = serializers.SerializerMethodField()
+    maxCapacityStr = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cribroom
+        depth = 1
+        fields = "__all__"
+
+    def get_pays(self, obj):
+        initial_date = self.context.get('initial_date')
+        end_date = self.context.get('end_date')
+        return obj.totalImport(initial_date, end_date)
+
+    def get_maxCapacityStr(self, obj):
+        return obj.maxCapacityStr()
+    
 
 class DepthChildSerializer(serializers.ModelSerializer):
     guardian = DepthGuardianSerializer()
