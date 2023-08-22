@@ -144,8 +144,8 @@ class DepthChildSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Child
+        fields = "__all__"
         depth = 1
-        exclude = ["cribroom"]
         read_only_fields = ["user"]
 
 
