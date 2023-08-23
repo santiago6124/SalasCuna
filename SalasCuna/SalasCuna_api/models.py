@@ -73,7 +73,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
 
 class Locality(models.Model):
-    locality = models.CharField(max_length=255, blank=True, null=True)
+    locality = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -81,7 +81,7 @@ class Locality(models.Model):
 
 
 class Department(models.Model):
-    department = models.CharField(max_length=255, blank=True, null=True)
+    department = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -89,7 +89,7 @@ class Department(models.Model):
 
 
 class Neighborhood(models.Model):
-    neighborhood = models.CharField(max_length=255, blank=True, null=True)
+    neighborhood = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -97,15 +97,13 @@ class Neighborhood(models.Model):
 
 
 class Child(models.Model):
-    first_name = models.CharField(max_length=255, blank=True, null=True)
-    last_name = models.CharField(max_length=255, blank=True, null=True)
-    dni = models.CharField(max_length=255, blank=True, null=True)
-    birthdate = models.DateField(blank=True, null=True)
-
-    street = models.CharField(max_length=255, blank=True, null=True)
+    first_name = models.CharField(max_length=255, blank=False)
+    last_name = models.CharField(max_length=255, blank=False)
+    dni = models.CharField(max_length=255, blank=False)
+    birthdate = models.DateField(blank=False)
+    street = models.CharField(max_length=255, blank=False)
     house_number = models.IntegerField(blank=True, null=True)
-
-    registration_date = models.DateField(blank=True, null=True)
+    registration_date = models.DateField(blank=False)
     disenroll_date = models.DateField(blank=True, null=True)
 
     locality = models.ForeignKey(
@@ -116,26 +114,22 @@ class Child(models.Model):
     )
 
     gender = models.ForeignKey(
-        "Gender", models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
+        "Gender", models.DO_NOTHING, db_column="Gender_id", blank=False
     )  # Field name made lowercase.
     cribroom = models.ForeignKey(
-        "Cribroom", models.DO_NOTHING, db_column="Cribroom_id", blank=True, null=True
+        "Cribroom", models.DO_NOTHING, db_column="Cribroom_id", blank=False
     )  # Field name made lowercase.
     shift = models.ForeignKey(
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
     user = models.ForeignKey(
-        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=False
     )  # Field name made lowercase.
     guardian = models.ForeignKey(
-        "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=True, null=True
+        "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=False
     )  # Field name made lowercase.
     child_state = models.ForeignKey(
-        "ChildState",
-        models.DO_NOTHING,
-        db_column="Child_state_id",
-        blank=True,
-        null=True,
+        "ChildState", models.DO_NOTHING, db_column="Child_state_id", blank=False
     )  # Field name made lowercase.
     history = HistoricalRecords()
 
@@ -154,7 +148,7 @@ class Child(models.Model):
 
 
 class ChildState(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -162,8 +156,8 @@ class ChildState(models.Model):
 
 
 class Company(models.Model):
-    title = models.CharField(max_length=255, blank=True, null=True)
-    phone = models.IntegerField(blank=True, null=True)
+    title = models.CharField(max_length=255, blank=False)
+    phone = models.IntegerField(blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -171,14 +165,14 @@ class Company(models.Model):
 
 
 class Cribroom(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
-    entity = models.CharField(max_length=255, blank=True, null=True)
-    CUIT = models.BigIntegerField(blank=True, null=True)  # nuevos campos
-    code = models.IntegerField(blank=True, null=True)
+    name = models.CharField(max_length=255, blank=False)
+    entity = models.CharField(max_length=255, blank=False)
+    CUIT = models.BigIntegerField(blank=False)  # nuevos campos
+    code = models.IntegerField(blank=False)
 
-    max_capacity = models.IntegerField(blank=True, null=True)
+    max_capacity = models.IntegerField(blank=False)
     is_active = models.BooleanField(default=True)
-    street = models.CharField(max_length=255, blank=True, null=True)
+    street = models.CharField(max_length=255, blank=False)
     house_number = models.IntegerField(blank=True, null=True)
 
     locality = models.ForeignKey(
@@ -192,7 +186,7 @@ class Cribroom(models.Model):
     )
 
     shift = models.ForeignKey(
-        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
+        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=False
     )  # Field name made lowercase.
 
     zone = models.ForeignKey(
@@ -336,10 +330,10 @@ class Cribroom(models.Model):
 
 class CribroomUser(models.Model):
     cribroom = models.ForeignKey(
-        Cribroom, models.DO_NOTHING, db_column="Cribroom_id", blank=True, null=True
+        Cribroom, models.DO_NOTHING, db_column="Cribroom_id", blank=False
     )  # Field name made lowercase.
     user = models.ForeignKey(
-        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=False
     )  # Field name made lowercase.
     history = HistoricalRecords()
 
@@ -348,13 +342,13 @@ class CribroomUser(models.Model):
 
 
 class Desinfection(models.Model):
-    date = models.DateTimeField(blank=True, null=True)
+    date = models.DateTimeField(blank=False)
     description = models.CharField(max_length=255, blank=True, null=True)
     cribroom = models.ForeignKey(
-        Cribroom, models.DO_NOTHING, db_column="Cribroom_id", blank=True, null=True
+        Cribroom, models.DO_NOTHING, db_column="Cribroom_id", blank=False
     )  # Field name made lowercase.
     company = models.ForeignKey(
-        Company, models.DO_NOTHING, db_column="Company_id", blank=True, null=True
+        Company, models.DO_NOTHING, db_column="Company_id", blank=False
     )  # Field name made lowercase.
     history = HistoricalRecords()
 
@@ -363,16 +357,12 @@ class Desinfection(models.Model):
 
 
 class Form(models.Model):
-    generation_date = models.DateField(blank=True, null=True)
+    generation_date = models.DateField(blank=False)
     cribroom_user = models.ForeignKey(
-        CribroomUser,
-        models.DO_NOTHING,
-        db_column="Cribroom_User_id",
-        blank=True,
-        null=True,
+        CribroomUser, models.DO_NOTHING, db_column="Cribroom_User_id", blank=False
     )  # Field name made lowercase.
     role = models.ForeignKey(
-        "Role", models.DO_NOTHING, db_column="Role_id", blank=True, null=True
+        "Role", models.DO_NOTHING, db_column="Role_id", blank=False
     )  # Field name made lowercase.
     history = HistoricalRecords()
 
@@ -381,7 +371,7 @@ class Form(models.Model):
 
 
 class Gender(models.Model):
-    gender = models.CharField(max_length=255, blank=True, null=True)
+    gender = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -389,7 +379,7 @@ class Gender(models.Model):
 
 
 class PhoneFeature(models.Model):
-    feature = models.IntegerField(blank=True, null=True)
+    feature = models.BigIntegerField(blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -397,7 +387,7 @@ class PhoneFeature(models.Model):
 
 
 class GuardianType(models.Model):
-    type = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -405,9 +395,9 @@ class GuardianType(models.Model):
 
 
 class Guardian(models.Model):
-    first_name = models.CharField(max_length=255, blank=True, null=True)
-    last_name = models.CharField(max_length=255, blank=True, null=True)
-    dni = models.CharField(max_length=255, blank=True, null=True)
+    first_name = models.CharField(max_length=255, blank=False)
+    last_name = models.CharField(max_length=255, blank=False)
+    dni = models.CharField(max_length=255, blank=False)
 
     phone_number = models.IntegerField(blank=True, null=True)
 
@@ -415,11 +405,11 @@ class Guardian(models.Model):
         PhoneFeature, on_delete=models.CASCADE, blank=True, null=True
     )
     guardian_Type = models.ForeignKey(
-        GuardianType, on_delete=models.CASCADE, blank=True, null=True
+        GuardianType, on_delete=models.CASCADE, blank=False
     )
 
     gender = models.ForeignKey(
-        Gender, models.DO_NOTHING, db_column="Gender_id", blank=True, null=True
+        Gender, models.DO_NOTHING, db_column="Gender_id", blank=False
     )  # Field name made lowercase.
     history = HistoricalRecords()
 
@@ -428,8 +418,8 @@ class Guardian(models.Model):
 
 
 class Payout(models.Model):
-    amount = models.FloatField(blank=True, null=True)
-    date = models.DateField(blank=True, null=True)
+    amount = models.FloatField(blank=False)
+    date = models.DateField(blank=False)
     zone = models.ForeignKey(
         "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
     )  # Field name made lowercase.
@@ -440,7 +430,7 @@ class Payout(models.Model):
 
 
 class Role(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -448,7 +438,7 @@ class Role(models.Model):
 
 
 class Shift(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -456,7 +446,7 @@ class Shift(models.Model):
 
 
 class Zone(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
