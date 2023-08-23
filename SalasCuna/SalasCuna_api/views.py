@@ -112,17 +112,18 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
 
         return Response(serializer.data)
 
+
 class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     queryset = Cribroom.objects.all()
     serializer_class = TechnicalReportSerializer
-    
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context['initial_date'] = self.kwargs.get('initial_date')
-        context['end_date'] = self.kwargs.get('end_date')
+        context["initial_date"] = self.kwargs.get("initial_date")
+        context["end_date"] = self.kwargs.get("end_date")
         return context
-    
+
 
 class LocalityListView(generics.ListAPIView):
     queryset = Locality.objects.all()
@@ -181,10 +182,16 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 
     # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
-        self.queryset = Child.objects.all()
-        self.serializer_class = DepthChildSerializer
+        no_depth = self.request.query_params.get("no_depth")
 
-        return super().get_queryset()
+        if no_depth != None:
+            self.queryset = Child.objects.all()
+            self.serializer_class = ChildSerializer
+            return super().get_queryset()
+        else:
+            self.queryset = Child.objects.all()
+            self.serializer_class = DepthChildSerializer
+            return super().get_queryset()
 
     def perform_create(self, serializer):
         # First, create the Child object

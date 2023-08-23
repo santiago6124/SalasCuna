@@ -8,9 +8,11 @@ class LocalityAdmin(admin.ModelAdmin):
     list_display = ("id", "locality")
     list_filter = ["locality"]
 
+
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ("id", "department")
     list_filter = ["department"]
+
 
 class NeighborhoodAdmin(admin.ModelAdmin):
     list_display = ("id", "neighborhood")
@@ -34,7 +36,7 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 class CribroomAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "code", "locality", "zone", "shift")
+    list_display = ("id", "name", "code", "max_capacity", "zone", "shift")
     list_filter = ["name", "code", "locality"]
 
 

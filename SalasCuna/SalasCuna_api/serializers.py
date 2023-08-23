@@ -1,4 +1,5 @@
 from rest_framework import serializers, viewsets
+from datetime import date
 
 # from django.contrib.auth.models import User
 
@@ -17,6 +18,7 @@ from .models import (
     Payout,
     Zone,
     UserAccount,
+    Desinfection,
 )
 
 
@@ -36,6 +38,12 @@ class GenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gender
         fields = "__all__"
+
+
+class DesinfectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Desinfection
+        fields = ["date"]
 
 
 class CribroomSerializer(serializers.ModelSerializer):
@@ -99,10 +107,15 @@ class ChildAndGuardian_RelatedObjectsSerializer(serializers.Serializer):
 
 
 class ChildSerializer(serializers.ModelSerializer):
+    age = serializers.SerializerMethodField()
+
     class Meta:
         model = Child
         fields = "__all__"
         read_only_fields = ["user"]
+
+    def get_age(self, obj):
+        return obj.age()
 
 
 class DepthGuardianSerializer(serializers.ModelSerializer):
@@ -113,6 +126,8 @@ class DepthGuardianSerializer(serializers.ModelSerializer):
 
 
 class DepthCribroomSerializer(serializers.ModelSerializer):
+    lastDesinfection = DesinfectionSerializer(read_only=True)
+
     class Meta:
         model = Cribroom
         depth = 1
@@ -120,6 +135,7 @@ class DepthCribroomSerializer(serializers.ModelSerializer):
 
     def get_pays(self, obj):
         return obj.totalImport()
+
 
 class TechnicalReportSerializer(serializers.ModelSerializer):
     pays = serializers.SerializerMethodField()
@@ -131,13 +147,13 @@ class TechnicalReportSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_pays(self, obj):
-        initial_date = self.context.get('initial_date')
-        end_date = self.context.get('end_date')
+        initial_date = self.context.get("initial_date")
+        end_date = self.context.get("end_date")
         return obj.totalImport(initial_date, end_date)
 
     def get_maxCapacityStr(self, obj):
         return obj.maxCapacityStr()
-    
+
 
 class DepthChildSerializer(serializers.ModelSerializer):
     guardian = DepthGuardianSerializer()
