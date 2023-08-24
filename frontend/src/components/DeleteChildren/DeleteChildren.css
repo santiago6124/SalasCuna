@@ -1,0 +1,41 @@
+.conteiner-form-delete {
+    padding: 40px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin: 100px;
+    width: 500px;
+    height: 400px;
+    border-radius: 18px;
+    box-shadow: 1px 4px 10px 0px rgba(0, 0, 0, 0.37);
+    background-color: white;
+}
+
+.titulo-delete {
+    text-align: center;
+}
+
+.contenedor-linea-delete {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.linea-delete {
+    margin-top: 1px;
+    height: 4px;
+    border: 2px solid #EF7E0E;
+    width: 350px;
+}
+
+
+.contenedor-boton-eliminar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.boton-eliminar {
+    width: 100px;
+}

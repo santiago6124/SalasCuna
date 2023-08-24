@@ -1,0 +1,55 @@
+/* UpdateRoom.css */
+/* Remove the .conteiner-form-room class styles */
+.contenedor-form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  width: 500px;
+}
+
+.modal-dialog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  width: 500px;
+  height: 300px; /* Adjust as needed to prevent modal from going off-screen */
+}
+
+.modal-content {
+  width: 500px; /* Adjust the width to your preference */
+  border-radius: 18px;
+  box-shadow: 1px 4px 10px 0px rgba(0, 0, 0, 0.37);
+  background-color: rgb(255, 255, 255);
+}
+
+
+.titulo {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.contenedor-linea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.linea {
+  margin-top: 1px;
+  height: 4px;
+  border: 2px solid #ef7e0e;
+  background-color: #ef7e0e;
+  width: 70%;
+  max-width: 250px;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.modal-footer {
+  justify-content: center;
+}
