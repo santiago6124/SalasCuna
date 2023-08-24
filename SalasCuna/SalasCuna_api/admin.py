@@ -25,11 +25,6 @@ class ChildAdmin(admin.ModelAdmin):
     search_fields = ["last_name", ""]
 
 
-class ChildStateAdmin(admin.ModelAdmin):
-    list_display = ("id", "name")
-    list_filter = ["name"]
-
-
 class CompanyAdmin(admin.ModelAdmin):
     list_display = ("id", "title", "phone")
     list_filter = ["title"]
@@ -109,7 +104,6 @@ class ZoneAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Child, ChildAdmin)
-admin.site.register(ChildState, ChildStateAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Cribroom, CribroomAdmin)
 admin.site.register(CribroomUser, CribroomUserAdmin)

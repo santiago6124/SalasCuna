@@ -2,8 +2,6 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from SalasCuna_api.models import ChildState
-
 from django.http import HttpResponse
 
 import os
@@ -28,65 +26,71 @@ import numpy
 # 'TURNO': 'MAÑANA',
 # 'ESTADO': 'SIN MODIFICAR'}
 
+
 def storage_method(request):
     rta = "todo bien"
 
     try:
-        folder_path = '..//02. FEBREROS A DATOS'
+        folder_path = "..//02. FEBREROS A DATOS"
         folders = [f for f in os.listdir(folder_path)]
-        
+
         for folder in folders:
-            files = [f for f in os.listdir(f'{folder_path}//{folder}')]
-            
+            files = [f for f in os.listdir(f"{folder_path}//{folder}")]
+
             # analize each file
             for file in files:
                 print(file)
-                
-                # file is .xslm ?
-                if file[-4:len(file)] == 'xlsm':
 
+                # file is .xslm ?
+                if file[-4 : len(file)] == "xlsm":
                     # read excel file
                     file_path = os.path.abspath(f"{folder_path}//{folder}//{file}")
-                    df = pd.read_excel(file_path, )
-                    
-                    # analize each col index until see data
-                    for num in range(len(df['Unnamed: 1'])):
+                    df = pd.read_excel(
+                        file_path,
+                    )
 
+                    # analize each col index until see data
+                    for num in range(len(df["Unnamed: 1"])):
                         # create object
                         obj = [df[col][num] for col in df.columns]
                         print(obj)
                         file_table = {
-                            'SALA CUNA': obj[1],
-                            'APELLIDO': obj[2],
-                            'NOMBRE': obj[3],
-                            'N DNI': obj[4],
-                            'FECHA DE NACIMIENTO': obj[5],
-                            'EDAD': obj[6],
-                            'SEXO': obj[7],
-                            'CALLE': obj[8],
-                            'NUMERO': obj[9],
-                            'DEPARTAMENTO': obj[10],
-                            'LOCALIDAD': obj[11],
-                            'CARACTERISTICA TELEFONICA': obj[12],
-                            'TELEFONO': obj[13],
-                            'APELLIDO Y NOMBRE': obj[14],
-                            'DNI': obj[15],
-                            'TURNO': obj[16],
-                            'ESTADO': obj[17],
+                            "SALA CUNA": obj[1],
+                            "APELLIDO": obj[2],
+                            "NOMBRE": obj[3],
+                            "N DNI": obj[4],
+                            "FECHA DE NACIMIENTO": obj[5],
+                            "EDAD": obj[6],
+                            "SEXO": obj[7],
+                            "CALLE": obj[8],
+                            "NUMERO": obj[9],
+                            "DEPARTAMENTO": obj[10],
+                            "LOCALIDAD": obj[11],
+                            "CARACTERISTICA TELEFONICA": obj[12],
+                            "TELEFONO": obj[13],
+                            "APELLIDO Y NOMBRE": obj[14],
+                            "DNI": obj[15],
+                            "TURNO": obj[16],
+                            "ESTADO": obj[17],
                         }
-                        if file_table['SALA CUNA'] != 'SALA CUNA' and not pd.isna(file_table['NOMBRE']) and not pd.isna(file_table['APELLIDO']) and not pd.isna(file_table['APELLIDO Y NOMBRE']):
-                            print(f'file_table: {file_table}')
+                        if (
+                            file_table["SALA CUNA"] != "SALA CUNA"
+                            and not pd.isna(file_table["NOMBRE"])
+                            and not pd.isna(file_table["APELLIDO"])
+                            and not pd.isna(file_table["APELLIDO Y NOMBRE"])
+                        ):
+                            print(f"file_table: {file_table}")
                             rta = str(file_table)
                             break
                     break
                 break
             break
-        
 
     except Exception as e:
         rta = f"error: {e}"
 
     return HttpResponse(rta)
+
 
 # import os
 # import pandas as pd
@@ -98,31 +102,31 @@ def storage_method(request):
 #         # obtain files
 #         folder_path = '..//02. FEBREROS A DATOS' #//COMUNAS Y MUNICIPIOS'
 #         folders = [f for f in os.listdir(folder_path)]
-        
+
 
 #         for folder in folders:
 #             files = [f for f in os.listdir(f'{folder_path}//{folder}')]
-            
+
 #             print(folder)
 #             print(f'{folder_path}//{folder}')
-            
+
 #             # analize each file
 #             for file in files:
 #                 print(file)
-                
+
 #                 # file is .xslm ?
 #                 if file[-4:len(file)] == 'xlsm':
 
 #                     # read excel file
 #                     file_path = os.path.abspath(f"{folder_path}//{folder}//{file}")
 #                     df = pd.read_excel(file_path, )
-                    
+
 #                     # check if SALA CUNA have been found
 #                     save_data = False
-                    
+
 #                     # obtain file col to init for loop
 #                     sc_col = df[df.columns[1]]
-                    
+
 #                     # analize each col index until see data
 #                     for num in range(len(df['Unnamed: 1'])):
 
@@ -152,20 +156,20 @@ def storage_method(request):
 #                         # if SALA CUNA and there is not nan values, save data into db
 #                         if save_data and not pd.isna(file_table['NOMBRE']) and not pd.isna(file_table['APELLIDO']) and not pd.isna(file_table['APELLIDO Y NOMBRE']):
 
-#                             try:                            
+#                             try:
 #                                 barrio = obj[10]
 #                                 tipBar = TipoBarrio.objects.filter(barrio = barrio)
 #                                 if not tipBar:
 #                                     tipBar = TipoBarrio.objects.create(
 #                                         barrio = barrio,
 #                                     )
-                                
+
 #                                 caracteristica = obj[12] if type(obj[12]) == int else 0
 #                                 tipCarTel = TipoCaracteristicaTel.objects.filter(caracteristica = caracteristica)
 #                                 if not tipCarTel:
 #                                     tipCarTel = TipoCaracteristicaTel.objects.create(
 #                                         caracteristica = caracteristica,
-#                                     )  
+#                                     )
 
 #                                 localidad = obj[11]
 #                                 tipLoc = TipoLocalidad.objects.filter(localidad = localidad)
@@ -187,14 +191,14 @@ def storage_method(request):
 #                                     tipTur = TipoTurno.objects.create(
 #                                         turno = turno,
 #                                     )
-                                
+
 #                                 sexo = obj[7] #
 #                                 tipSex = TipoSexo.objects.filter(sexo = sexo)
 #                                 if not tipSex:
 #                                     tipSex = TipoSexo.objects.create(
 #                                         sexo = sexo,
 #                                     )
-                    
+
 #                                 dniMad = obj[-5] if type(obj[-5]) == int else 0
 #                                 madre = Madre.objects.filter(dni = dniMad, apellido_y_nombre = obj[-6])
 #                                 if not madre:
@@ -202,7 +206,7 @@ def storage_method(request):
 #                                         dni = dniMad,
 #                                         apellido_y_nombre = obj[-6],
 #                                     )
-                                
+
 #                                 dniChi = obj[4] if type(obj[4]) == int else 0
 #                                 chico = Chico.objects.filter(dni = dniChi, fecha_nacimiento = obj[5], sexo = tipSex[0] if type(tipSex) == models.QuerySet else tipSex, apellido = file_table['APELLIDO'] )
 #                                 if not chico:
@@ -247,4 +251,3 @@ def storage_method(request):
 #         rta = f"{e} {obj}"
 
 #     return HttpResponse(rta)
-

@@ -111,14 +111,14 @@ class Child(models.Model):
     house_number = models.IntegerField(blank=True, null=True)
     registration_date = models.DateField(blank=False)
     disenroll_date = models.DateField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
 
     locality = models.ForeignKey(
-        Locality, on_delete=models.CASCADE, blank=True, null=True
+        "Locality", on_delete=models.CASCADE, blank=True, null=True
     )
     neighborhood = models.ForeignKey(
-        Neighborhood, on_delete=models.CASCADE, blank=True, null=True
+        "Neighborhood", on_delete=models.CASCADE, blank=True, null=True
     )
-
     gender = models.ForeignKey(
         "Gender", models.DO_NOTHING, db_column="Gender_id", blank=False
     )  # Field name made lowercase.
@@ -134,13 +134,15 @@ class Child(models.Model):
     guardian = models.ForeignKey(
         "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=False
     )  # Field name made lowercase.
-    child_state = models.ForeignKey(
-        "ChildState", models.DO_NOTHING, db_column="Child_state_id", blank=False
-    )  # Field name made lowercase.
     history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.last_name}, {self.first_name}"
+
+    def cribroom_isActive(self):
+        if self.cribroom and not self.cribroom.is_active:
+            self.child_state = False
+            self.save()
 
     def age(self):
         today = date.today()
@@ -151,14 +153,6 @@ class Child(models.Model):
             - ((today.month, today.day) < (birthdate.month, birthdate.day))
         )
         return age
-
-
-class ChildState(models.Model):
-    name = models.CharField(max_length=255, blank=False)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return f"{self.name}"
 
 
 class Company(models.Model):
@@ -175,7 +169,6 @@ class Cribroom(models.Model):
     entity = models.CharField(max_length=255, blank=False)
     CUIT = models.BigIntegerField(blank=False)  # nuevos campos
     code = models.IntegerField(blank=False)
-
     max_capacity = models.IntegerField(blank=False)
     is_active = models.BooleanField(default=True)
     street = models.CharField(max_length=255, blank=False)

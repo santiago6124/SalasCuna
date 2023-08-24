@@ -10,7 +10,6 @@ from .views import (
     GenderListView,
     CribroomListView,
     ShiftListView,
-    ChildStateListView,
     PhoneFeatureListView,
     GuardianTypeListView,
     PayoutViewSet,
@@ -28,7 +27,10 @@ router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
 
 urlpatterns = router.urls + [
-    path('technical-report/<pk>/<str:initial_date>/<str:end_date>/', TechnicalReportRetrieveAPIView.as_view()),
+    path(
+        "technical-report/<pk>/<str:initial_date>/<str:end_date>/",
+        TechnicalReportRetrieveAPIView.as_view(),
+    ),
     path(
         "ChildRelatedObjectsView/",
         ChildAndGuardian_RelatedObjectsView.as_view(),
@@ -58,11 +60,6 @@ urlpatterns = router.urls + [
         "ShiftListView/",
         ShiftListView.as_view(),
         name="ShiftListView",
-    ),
-    path(
-        "ChildStateListView/",
-        ChildStateListView.as_view(),
-        name="ChildStateListView",
     ),
     path(
         "PhoneFeatureListView/",

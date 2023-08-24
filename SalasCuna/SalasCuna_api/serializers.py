@@ -11,7 +11,6 @@ from .models import (
     Cribroom,
     Shift,
     Guardian,
-    ChildState,
     PhoneFeature,
     GuardianType,
     Role,
@@ -76,12 +75,6 @@ class GuardianSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ChildStateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChildState
-        fields = "__all__"
-
-
 class PhoneFeatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhoneFeature
@@ -101,7 +94,6 @@ class ChildAndGuardian_RelatedObjectsSerializer(serializers.Serializer):
     cribroom = CribroomSerializer(many=True)
     shift = ShiftSerializer(many=True)
     guardian = GuardianSerializer(many=True)
-    child_state = ChildStateSerializer(many=True)
     phone_Feature = PhoneFeatureSerializer(many=True)
     guardian_Type = GuardianTypeSerializer(many=True)
 

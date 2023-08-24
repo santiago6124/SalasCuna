@@ -17,7 +17,6 @@ from SalasCuna_api.models import (
     Locality,
     Neighborhood,
     Child,
-    ChildState,
     Company,
     Cribroom,
     CribroomUser,
@@ -59,11 +58,6 @@ def create_neighborhoods(num_neighborhoods):
     for _ in range(num_neighborhoods):
         neighborhood = fake.city_suffix()
         Neighborhood.objects.create(neighborhood=neighborhood)
-
-
-def create_child_states():
-    ChildState.objects.create(name="Active")
-    ChildState.objects.create(name="Inactive")
 
 
 def create_roles(num_roles):
@@ -140,7 +134,6 @@ def create_cribroom(num_features):
 def create_children(num_children):
     localities = Locality.objects.all()
     neighborhoods = Neighborhood.objects.all()
-    child_states = ChildState.objects.all()
     shifts = Shift.objects.all()
     cribrooms = Cribroom.objects.all()
     guardians = Guardian.objects.all()
@@ -163,7 +156,6 @@ def create_children(num_children):
         shift = random.choice(shifts)
         user = User.objects.order_by("?").first()
         guardian = random.choice(guardians)
-        child_state = random.choice(child_states)
 
         Child.objects.create(
             first_name=first_name,
@@ -181,7 +173,6 @@ def create_children(num_children):
             shift=shift,
             user=user,
             guardian=guardian,
-            child_state=child_state,
         )
 
 
@@ -277,7 +268,6 @@ num_zones = 25
 # Call the functions to create the mock data
 create_localities(num_localities)
 create_neighborhoods(num_neighborhoods)
-create_child_states()
 create_companies(num_companies)
 create_genders()
 create_phone_features(num_phone_features)
