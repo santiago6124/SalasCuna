@@ -1,0 +1,63 @@
+En es este test lo que buscamos poner a prueba el correcto ingreso de usuarios
+ingresamos los distintos campos de de identitad en la funcion test_userAccount
+este test esta hecho en Unittest
+
+import unittest
+import os
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SalasCuna.settings")
+
+django.setup()
+
+from SalasCuna_api.models import (
+    Locality,
+    Neighborhood,
+    Child,
+    ChildState,
+    Company,
+    Cribroom,
+    CribroomUser,
+    Desinfection,
+    Form,
+    Gender,
+    PhoneFeature,
+    GuardianType,
+    Guardian,
+    Payout,
+    Role,
+    Shift,
+    Zone,
+    UserAccount,
+)
+
+class Testuser(unittest.TestCase):
+
+    def test_userAccount(self):
+        useraccount = UserAccount.objects.create_user(
+            email='juanxito30@hotmail.com',
+            first_name='juanxito',
+            last_name='perex',
+            dni='12123323',
+            phone_number='351688939',
+            city='cordoba',
+            is_active=True,
+            is_staff=False,
+            is_superuser=True
+        )
+        
+        assert useraccount.first_name == 'juanxito'
+
+
+if __name__ == '__main__':
+    unittest.main()
+    
+
+luego corro este test en la terminal con el comando:
+
+python test_user.py 
+
+luego de asegurarse que este test funciona damos por positivo el ingreso de Usuarios
+
+
+
