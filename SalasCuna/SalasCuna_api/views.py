@@ -18,7 +18,6 @@ from .models import (
     Cribroom,
     Shift,
     Guardian,
-    ChildState,
     PhoneFeature,
     GuardianType,
     Role,
@@ -39,7 +38,6 @@ from .serializers import (
     ShiftSerializer,
     PhoneFeatureSerializer,
     GuardianTypeSerializer,
-    ChildStateSerializer,
     PayoutSerializer,
     ZoneSerializer,
     UserSerializer,
@@ -92,7 +90,6 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
         cribrooms = Cribroom.objects.all()
         shifts = Shift.objects.all()
         guardians = Guardian.objects.all()
-        child_states = ChildState.objects.all()
         phone_Features = PhoneFeature.objects.all()
         guardian_Types = GuardianType.objects.all()
 
@@ -104,7 +101,6 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
                 "cribroom": cribrooms,
                 "shift": shifts,
                 "guardian": guardians,
-                "child_state": child_states,
                 "phone_Feature": phone_Features,
                 "guardian_Type": guardian_Types,
             }
@@ -152,12 +148,6 @@ class CribroomListView(generics.ListAPIView):
 class ShiftListView(generics.ListAPIView):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
-    permission_classes = [AllowAny]
-
-
-class ChildStateListView(generics.ListAPIView):
-    queryset = ChildState.objects.all()
-    serializer_class = ChildStateSerializer
     permission_classes = [AllowAny]
 
 
@@ -256,12 +246,12 @@ class ChildModelViewSet(viewsets.ModelViewSet):
         # disenroll_date
         print(f"paramter: {disenroll}")
 
-        if disenroll == True:
+        if disenroll:
             print(f"disenroll: {disenroll}")
             instance.disenroll_date = datetime.now()
-            instance.child_state = ChildState.objects.get(name="Inactive")
+            instance.is_active = False
             print(instance)
-            print(ChildState.objects.get(name="Inactive"))
+            print("Inactive")
             # instance.user=self.request.user
             instance.save()
 
@@ -294,6 +284,34 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "shift",
         "id",
     ]  # fields to filter
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        print(serializer)
+        if serializer.is_valid():
+            updated_instance = serializer.save()
+
+            if not updated_instance.is_active:
+                print("updated to false")
+            else:
+                print("updated to true")
+
+            children = Child.objects.all().filter(cribroom_id=instance.id)
+            print(children)
+            for child in children:
+                param = True
+                if updated_instance.is_active:
+                    param = True
+                else:
+                    param= False
+                
+                print(child)
+                child.cribroom_isActive(param)
+                child.save()  # Guarda los cambios en la base de datos
+
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
         no_depth = self.request.query_params.get("no_depth")

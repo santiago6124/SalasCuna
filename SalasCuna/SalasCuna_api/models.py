@@ -139,9 +139,12 @@ class Child(models.Model):
     def __str__(self):
         return f"{self.last_name}, {self.first_name}"
 
-    def cribroom_isActive(self):
-        if self.cribroom and not self.cribroom.is_active:
-            self.child_state = False
+    def cribroom_isActive(self, param):
+        if not param:
+            self.is_active = False
+            self.save()
+        else:
+            self.is_active = True
             self.save()
 
     def age(self):
