@@ -50,7 +50,13 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     )
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
-    department = models.CharField(max_length=255)
+    department = models.ForeignKey(
+        "Department",
+        on_delete=models.CASCADE,
+        db_column="Department_id",
+        blank=True,
+        null=True,
+    )
     city = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
@@ -186,7 +192,7 @@ class Cribroom(models.Model):
     )
 
     shift = models.ForeignKey(
-        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=False
+        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
 
     zone = models.ForeignKey(
