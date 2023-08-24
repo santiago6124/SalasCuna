@@ -1,0 +1,15 @@
+.body {
+    background-image: url('./media/fondo.png');
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+.contenedor-boton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

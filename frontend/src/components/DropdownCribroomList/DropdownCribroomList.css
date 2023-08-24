@@ -1,0 +1,49 @@
+.CRUD{
+    background-color: rgb(255, 255, 255);
+    margin-top: 45px;
+    margin-bottom: 9px;
+    padding: 20px;
+    padding-left: 23px;
+    height: 550px;
+    width: 800px;
+
+    border-radius: 18px;
+    box-shadow: 1px 4px 10px 0px rgba(0, 0, 0, 0.37);
+}
+
+.container {
+    display: flex;
+    align-items: center; 
+  }
+  
+.dropdown-container {
+   flex: 1; 
+   margin-right: 10px; 
+}
+
+.button-container {
+    margin-top: 29px;
+    margin-left: 10px;
+}
+
+.child-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+.child-buttons {
+   display: flex;
+   gap: 10px; 
+}
+
+.contenedor-boton-new {
+  margin-top: 29px;
+  margin-left: 295px;
+}
+
+.inactive-row {
+  background-color: #f3f3f3; 
+}

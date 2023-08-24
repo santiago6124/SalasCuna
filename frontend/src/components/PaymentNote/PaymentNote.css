@@ -1,0 +1,39 @@
+.container-note {
+    width: 800px;
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 1px 4px 10px 0px rgba(0, 0, 0, 0.37);
+    background-color: rgb(255, 255, 255);
+}
+
+.container-titulo-note {
+    text-align: center;
+}
+
+.contenedor-linea-note {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.linea-note {
+    margin-top: 1px;
+    height: 4px;
+    border: 2px solid #EF7E0E;
+    width: 500px;
+}
+
+.input-select {
+    width: 200px;
+}
+
+.container-botones-payment {
+    margin-left: 220px;
+    display: flex;
+}
+
+.btn-1 {
+    margin-right: 15px;
+}
+

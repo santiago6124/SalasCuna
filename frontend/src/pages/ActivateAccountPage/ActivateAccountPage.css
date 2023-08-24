@@ -1,0 +1,30 @@
+.containerActivate {
+    width: 500px;
+    height: 400px;
+    border-radius: 18px;
+    box-shadow: 1px 4px 10px 0px rgba(0, 0, 0, 0.37);
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    padding-top: 100px;
+}
+
+.divActivate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.body {
+    background-image: url('../../media/fondo.png');
+    width: 100%;
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.titulo {
+    margin-top: 20px;
+}
