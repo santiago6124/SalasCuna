@@ -10,6 +10,12 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 
+# Custom permissions in permissions.py
+from .permissions import (
+    DirectorPerms,
+    TrabajadoraSocialPerms,
+)
+
 from .models import (
     Child,
     Locality,
@@ -272,7 +278,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 class CribroomModelViewSet(viewsets.ModelViewSet):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [TrabajadoraSocialPerms]
     filter_backends = [
         DjangoFilterBackend,
         OrderingFilter,
@@ -284,6 +290,10 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "shift",
         "id",
     ]  # fields to filter
+
+    def get(self, request, format=None):
+        content = {"status": "request was permitted"}
+        return Response(content)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -304,8 +314,8 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
                 if updated_instance.is_active:
                     param = True
                 else:
-                    param= False
-                
+                    param = False
+
                 print(child)
                 child.cribroom_isActive(param)
                 child.save()  # Guarda los cambios en la base de datos
