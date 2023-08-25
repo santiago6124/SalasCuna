@@ -16,6 +16,7 @@ from .views import (
     UserViewSet,
     ZoneModelViewSet,
     TechnicalReportRetrieveAPIView,
+    DepartmentModelViewSet
 )
 
 router = routers.DefaultRouter()
@@ -25,6 +26,7 @@ router.register(r"cribroom", CribroomModelViewSet)
 router.register(r"payout", PayoutViewSet)
 router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
+router.register(r"department", DepartmentModelViewSet)
 
 urlpatterns = router.urls + [
     path(

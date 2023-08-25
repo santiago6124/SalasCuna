@@ -24,6 +24,7 @@ from .models import (
     Payout,
     Zone,
     UserAccount,
+    Department,
 )
 from .serializers import (
     ChildSerializer,
@@ -43,6 +44,7 @@ from .serializers import (
     UserSerializer,
     DepthCribroomSerializer,
     TechnicalReportSerializer,
+    DepartmentSerializer,
 )
 
 from datetime import datetime
@@ -335,4 +337,10 @@ class ShiftModelViewSet(viewsets.ModelViewSet):
 class ZoneModelViewSet(viewsets.ModelViewSet):
     queryset = Zone.objects.all()
     serializer_class = ZoneSerializer
+    permission_classes = [AllowAny]
+
+
+class DepartmentModelViewSet(viewsets.ModelViewSet):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
     permission_classes = [AllowAny]

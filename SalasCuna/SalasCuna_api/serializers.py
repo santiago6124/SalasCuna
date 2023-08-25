@@ -18,12 +18,19 @@ from .models import (
     Zone,
     UserAccount,
     Desinfection,
+    Department,
 )
 
 
 class LocalitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Locality
+        fields = "__all__"
+
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
         fields = "__all__"
 
 
