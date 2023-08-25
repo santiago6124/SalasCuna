@@ -16,6 +16,7 @@ from .permissions import (
     TrabajadorSocialPerms,
 )
 
+from django.contrib.auth.models import Group
 from .models import (
     Child,
     Locality,
@@ -26,7 +27,6 @@ from .models import (
     Guardian,
     PhoneFeature,
     GuardianType,
-    Role,
     Payout,
     Zone,
     UserAccount,
@@ -34,11 +34,11 @@ from .models import (
 from .serializers import (
     ChildSerializer,
     ChildAndGuardian_RelatedObjectsSerializer,
+    GroupSerializer,
     GuardianSerializer,
     NeighborhoodSerializer,
     CribroomSerializer,
     DepthChildSerializer,
-    RoleSerializer,
     LocalitySerializer,
     GenderSerializer,
     ShiftSerializer,
@@ -66,16 +66,16 @@ class PayoutViewSet(viewsets.ModelViewSet):
     filterset_fields = ["amount", "zone"]  # fields to filter
 
 
-class RoleViewSet(viewsets.ReadOnlyModelViewSet):
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
-    serializer_class = RoleSerializer
-    queryset = Role.objects.all()
+    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
 
     def get_queryset(self):
         exclude_directora = self.request.query_params.get("exclude_directora")
 
         if exclude_directora != None:
-            self.queryset = Role.objects.exclude(name="Directora")
+            self.queryset = Group.objects.exclude(name="Director")
 
         return super().get_queryset()
 

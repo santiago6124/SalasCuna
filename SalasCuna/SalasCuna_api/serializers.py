@@ -3,6 +3,7 @@ from datetime import date
 
 # from django.contrib.auth.models import User
 
+from django.contrib.auth.models import Group
 from .models import (
     Child,
     Locality,
@@ -13,7 +14,6 @@ from .models import (
     Guardian,
     PhoneFeature,
     GuardianType,
-    Role,
     Payout,
     Zone,
     UserAccount,
@@ -157,10 +157,10 @@ class DepthChildSerializer(serializers.ModelSerializer):
         read_only_fields = ["user"]
 
 
-class RoleSerializer(serializers.ModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Role
-        fields = "__all__"
+        model = Group
+        fields = ["id", "name"]
 
 
 class PayoutSerializer(serializers.ModelSerializer):

@@ -4,7 +4,7 @@ from .views import (
     ChildModelViewSet,
     ChildAndGuardian_RelatedObjectsView,
     CribroomModelViewSet,
-    RoleViewSet,
+    GroupViewSet,
     LocalityListView,
     NeighborhoodListView,
     GenderListView,
@@ -71,5 +71,5 @@ urlpatterns = router.urls + [
         GuardianTypeListView.as_view(),
         name="GuardianTypeListView",
     ),
-    path("RoleViewSet/", RoleViewSet.as_view({"get": "list"}), name="RoleViewSet"),
+    path("GroupViewSet/", GroupViewSet.as_view({"get": "list"}), name="GroupViewSet"),
 ]

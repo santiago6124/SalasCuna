@@ -45,9 +45,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     dni = models.CharField(max_length=11)
-    role = models.ForeignKey(
-        "Role", on_delete=models.CASCADE, db_column="Role_id", blank=True, null=True
-    )
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
     department = models.ForeignKey(
@@ -363,9 +360,6 @@ class Form(models.Model):
     cribroom_user = models.ForeignKey(
         CribroomUser, models.DO_NOTHING, db_column="Cribroom_User_id", blank=False
     )  # Field name made lowercase.
-    role = models.ForeignKey(
-        "Role", models.DO_NOTHING, db_column="Role_id", blank=False
-    )  # Field name made lowercase.
     history = HistoricalRecords()
 
     def __str__(self):
@@ -429,14 +423,6 @@ class Payout(models.Model):
 
     def __str__(self):
         return f"{self.id}, {self.amount}, {self.date}"
-
-
-class Role(models.Model):
-    name = models.CharField(max_length=255, blank=False)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return self.name
 
 
 class Shift(models.Model):
