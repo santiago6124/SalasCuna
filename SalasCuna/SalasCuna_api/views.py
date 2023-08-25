@@ -13,7 +13,7 @@ from rest_framework.filters import OrderingFilter
 # Custom permissions in permissions.py
 from .permissions import (
     DirectorPerms,
-    TrabajadoraSocialPerms,
+    TrabajadorSocialPerms,
 )
 
 from .models import (
@@ -278,7 +278,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 class CribroomModelViewSet(viewsets.ModelViewSet):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
-    permission_classes = [TrabajadoraSocialPerms]
+    permission_classes = [TrabajadorSocialPerms]
     filter_backends = [
         DjangoFilterBackend,
         OrderingFilter,

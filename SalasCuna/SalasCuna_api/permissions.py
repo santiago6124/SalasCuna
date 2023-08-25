@@ -19,13 +19,13 @@ class DirectorPerms(permissions.BasePermission):
             return False
 
 
-class TrabajadoraSocialPerms(permissions.BasePermission):
+class TrabajadorSocialPerms(permissions.BasePermission):
     message = (
-        "Solo las personas con rol Trabajadora Social pueden acceder a esta información"
+        "Solo las personas con rol Trabajador Social pueden acceder a esta información"
     )
 
     def has_permission(self, request, view):
-        if request.user.groups.filter(name="Trabajadora Social").exists():
+        if request.user.groups.filter(name="Trabajador Social").exists():
             print("Si podes entrar")
             return request.method
         else:
@@ -33,7 +33,7 @@ class TrabajadoraSocialPerms(permissions.BasePermission):
             return False
 
     def has_object_permission(self, request, view, obj):
-        if request.user.groups.filter(name="Trabajadora Social").exists():
+        if request.user.groups.filter(name="Trabajador Social").exists():
             return True
         else:
             return False
