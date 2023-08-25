@@ -13,6 +13,7 @@ django.setup()
 import random
 from faker import Faker
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from SalasCuna_api.models import (
     Locality,
     Neighborhood,
@@ -285,4 +286,7 @@ create_desinfections(num_desinfection)
 create_forms(num_forms)
 create_children(num_children)
 
+Group.objects.create(name="Director")
+Group.objects.create(name="Trabajador Social")
+Group.objects.create(name="Arquitecto")
 print("Mock data has been successfully created.")
