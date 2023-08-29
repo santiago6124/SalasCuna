@@ -6,10 +6,8 @@ class DirectorPerms(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.user.groups.filter(name="Director").exists():
-            print("Si podes entrar")
             return request.method
         else:
-            print("No flaco, cagate")
             return False
 
     def has_object_permission(self, request, view, obj):
@@ -26,10 +24,8 @@ class TrabajadorSocialPerms(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if request.user.groups.filter(name="Trabajador Social").exists():
-            print("Si podes entrar")
             return request.method
         else:
-            print("No flaco, cagate")
             return False
 
     def has_object_permission(self, request, view, obj):

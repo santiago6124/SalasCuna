@@ -74,7 +74,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         exclude_directora = self.request.query_params.get("exclude_directora")
 
-        if exclude_directora != None:
+        if exclude_directora is not None:
             self.queryset = Group.objects.exclude(name="Director")
 
         return super().get_queryset()
@@ -180,7 +180,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         no_depth = self.request.query_params.get("no_depth")
 
-        if no_depth != None:
+        if no_depth is not None:
             self.queryset = Child.objects.all()
             self.serializer_class = ChildSerializer
             return super().get_queryset()
@@ -278,7 +278,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 class CribroomModelViewSet(viewsets.ModelViewSet):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
-    permission_classes = [TrabajadorSocialPerms]
+    permission_classes = [AllowAny]
     filter_backends = [
         DjangoFilterBackend,
         OrderingFilter,
@@ -326,7 +326,7 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         no_depth = self.request.query_params.get("no_depth")
 
-        if no_depth != None:
+        if no_depth is not None:
             self.queryset = Cribroom.objects.all()
             self.serializer_class = CribroomSerializer
             return super().get_queryset()
