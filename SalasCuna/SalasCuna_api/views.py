@@ -45,6 +45,7 @@ from .serializers import (
     DepthCribroomSerializer,
     TechnicalReportSerializer,
     DepartmentSerializer,
+    DeleteCribroomSerializer,
 )
 
 from datetime import datetime
@@ -141,9 +142,9 @@ class GenderListView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
 
-class CribroomListView(generics.ListAPIView):
+class DeleteCribroom(viewsets.ModelViewSet):
     queryset = Cribroom.objects.all()
-    serializer_class = CribroomSerializer
+    serializer_class = DeleteCribroomSerializer
     permission_classes = [AllowAny]
 
 

@@ -186,3 +186,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
         fields = "__all__"
+
+class DeleteCribroomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cribroom
+        fields = "__all__"
+        extra_kwargs = {'name' : {'required' : False}, 'entity' : {'required' : False}, 'CUIT' : {'required' : False}, 'code' : {'required' : False}, 'max_capacity' : {'required' : False}, 'street' : {'required' : False}}
