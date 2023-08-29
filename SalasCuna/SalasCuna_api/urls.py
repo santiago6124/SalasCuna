@@ -8,7 +8,6 @@ from .views import (
     LocalityListView,
     NeighborhoodListView,
     GenderListView,
-    CribroomListView,
     ShiftListView,
     PhoneFeatureListView,
     GuardianTypeListView,
@@ -50,11 +49,6 @@ urlpatterns = router.urls + [
         "GenderListView/",
         GenderListView.as_view(),
         name="GenderListView",
-    ),
-    path(
-        "CribroomListView/",
-        CribroomListView.as_view(),
-        name="CribroomListView",
     ),
     path(
         "ShiftListView/",

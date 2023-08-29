@@ -145,12 +145,6 @@ class GenderListView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
 
-class CribroomListView(generics.ListAPIView):
-    queryset = Cribroom.objects.all()
-    serializer_class = CribroomSerializer
-    permission_classes = [AllowAny]
-
-
 class ShiftListView(generics.ListAPIView):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
