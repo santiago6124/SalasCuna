@@ -8,7 +8,7 @@ from .views import (
     LocalityListView,
     NeighborhoodListView,
     GenderListView,
-    CribroomListView,
+    DeleteCribroom,
     ShiftListView,
     PhoneFeatureListView,
     GuardianTypeListView,
@@ -27,6 +27,7 @@ router.register(r"payout", PayoutViewSet)
 router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
 router.register(r"department", DepartmentModelViewSet)
+router.register(r"deleteCR", DeleteCribroom)
 
 urlpatterns = router.urls + [
     path(
@@ -52,11 +53,6 @@ urlpatterns = router.urls + [
         "GenderListView/",
         GenderListView.as_view(),
         name="GenderListView",
-    ),
-    path(
-        "CribroomListView/",
-        CribroomListView.as_view(),
-        name="CribroomListView",
     ),
     path(
         "ShiftListView/",
