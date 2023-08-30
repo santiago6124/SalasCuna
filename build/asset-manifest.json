@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b311601e.css",
+    "main.js": "/static/js/main.73b1cbeb.js",
+    "static/media/Sala-cuna_x4.png": "/static/media/Sala-cuna_x4.475a44c3a7794bcb9db7.png",
+    "static/media/fondo.png": "/static/media/fondo.ebf6df0fc3a2e1dc3faa.png",
+    "index.html": "/index.html",
+    "main.b311601e.css.map": "/static/css/main.b311601e.css.map",
+    "main.73b1cbeb.js.map": "/static/js/main.73b1cbeb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b311601e.css",
+    "static/js/main.73b1cbeb.js"
+  ]
+}
