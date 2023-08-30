@@ -264,7 +264,7 @@ num_companies = 10
 num_cribroom = 15
 num_cribroom_users = 10
 num_departments = 20
-num_desinfection = 8
+num_desinfection = 5
 num_forms = 10
 num_phone_features = 20
 num_guardians = 15
@@ -282,14 +282,17 @@ create_guardian_types()
 create_guardians(num_guardians)
 create_zones(num_zones)
 create_departments(num_departments)
-create_payouts(num_payouts)
+for i in range(15):
+    create_payouts(num_payouts)
 create_groups()
 create_users(num_users)
 create_shifts(num_shifts)
 create_cribroom(num_cribroom)
 create_cribroom_users(num_cribroom_users)
-create_desinfections(num_desinfection)
+for i in range(20):
+    create_desinfections(num_desinfection)
 create_forms(num_forms)
-create_children(num_children)
+for i in range(50):
+    create_children(num_children)
 
 print("Mock data has been successfully created.")
