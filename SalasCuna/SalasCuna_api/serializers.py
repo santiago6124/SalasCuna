@@ -119,11 +119,15 @@ class DepthGuardianSerializer(serializers.ModelSerializer):
 
 class DepthCribroomSerializer(serializers.ModelSerializer):
     lastDesinfection = DesinfectionSerializer(read_only=True)
+    actualCapacity = serializers.SerializerMethodField()
 
     class Meta:
         model = Cribroom
         depth = 1
         fields = "__all__"
+
+    def get_actualCapacity(self, obj):
+        return obj.actualCapacity()
 
     def get_pays(self, obj):
         return obj.totalImport()

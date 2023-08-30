@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 from datetime import date
 from django.db import models
+from django.db.models import Count
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -201,6 +202,9 @@ class Cribroom(models.Model):
         # a esta cribroom, y ordena los resultados por la fecha en orden descendente para obtener la última.
         lastDesinfection = self.desinfection_set.order_by("-date").first()
         return lastDesinfection
+
+    def actualCapacity(self):
+        return self.child_set.filter(is_active=True).count()
 
     def totalImport(self, init_date, end_date):
         """
