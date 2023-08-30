@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'deploySalas'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_66B4D766DA35443E8234918ABD5B5215 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3E8313E77ECE4F66BD9CF1956C900D11 }}
