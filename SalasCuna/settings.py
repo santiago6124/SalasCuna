@@ -18,7 +18,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['salascuna.azurewebsites.net/']
+ALLOWED_HOSTS = ['salascuna.azurewebsites.net']
 
 
 # Application definition
@@ -205,7 +205,7 @@ SITE_NAME = "Salas Cuna"
 CORS_ALLOW_ALL_ORIGINS = True
 
 
-CSRF_TRUSTED_ORIGINS = ['https://salascuna.azurewebsites.net/']
+CSRF_TRUSTED_ORIGINS = ['https://salascuna.azurewebsites.net']
 
 SECURE_SSL_REDIRECT = \
     os.getenv('SECURE_SSL_REDIRECT', '0').lower() in ['true', 't', '1']
