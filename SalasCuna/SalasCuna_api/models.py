@@ -141,9 +141,6 @@ class Child(models.Model):
         if not param:
             self.is_active = False
             self.save()
-        else:
-            self.is_active = True
-            self.save()
 
     def age(self):
         today = date.today()
