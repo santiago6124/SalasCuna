@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 from datetime import date
 from django.db import models
+from django.db.models import Count
 from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
@@ -45,9 +46,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     dni = models.CharField(max_length=11)
-    role = models.ForeignKey(
-        "Role", on_delete=models.CASCADE, db_column="Role_id", blank=True, null=True
-    )
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
     department = models.ForeignKey(
@@ -143,9 +141,6 @@ class Child(models.Model):
         if not param:
             self.is_active = False
             self.save()
-        else:
-            self.is_active = True
-            self.save()
 
     def age(self):
         today = date.today()
@@ -204,6 +199,15 @@ class Cribroom(models.Model):
         # a esta cribroom, y ordena los resultados por la fecha en orden descendente para obtener la última.
         lastDesinfection = self.desinfection_set.order_by("-date").first()
         return lastDesinfection
+
+    def actualCapacity(self):
+        return self.child_set.filter(is_active=True).count()
+
+    def reachMax(self):
+        if self.actualCapacity() == self.max_capacity:
+            return True
+        else:
+            return False
 
     def totalImport(self, init_date, end_date):
         """
@@ -363,9 +367,6 @@ class Form(models.Model):
     cribroom_user = models.ForeignKey(
         CribroomUser, models.DO_NOTHING, db_column="Cribroom_User_id", blank=False
     )  # Field name made lowercase.
-    role = models.ForeignKey(
-        "Role", models.DO_NOTHING, db_column="Role_id", blank=False
-    )  # Field name made lowercase.
     history = HistoricalRecords()
 
     def __str__(self):
@@ -429,14 +430,6 @@ class Payout(models.Model):
 
     def __str__(self):
         return f"{self.id}, {self.amount}, {self.date}"
-
-
-class Role(models.Model):
-    name = models.CharField(max_length=255, blank=False)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return self.name
 
 
 class Shift(models.Model):

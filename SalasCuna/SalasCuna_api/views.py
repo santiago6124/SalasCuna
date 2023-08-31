@@ -10,6 +10,13 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 
+# Custom permissions in permissions.py
+from .permissions import (
+    DirectorPerms,
+    TrabajadorSocialPerms,
+)
+
+from django.contrib.auth.models import Group
 from .models import (
     Child,
     Locality,
@@ -20,7 +27,6 @@ from .models import (
     Guardian,
     PhoneFeature,
     GuardianType,
-    Role,
     Payout,
     Zone,
     UserAccount,
@@ -29,11 +35,11 @@ from .models import (
 from .serializers import (
     ChildSerializer,
     ChildAndGuardian_RelatedObjectsSerializer,
+    GroupSerializer,
     GuardianSerializer,
     NeighborhoodSerializer,
     CribroomSerializer,
     DepthChildSerializer,
-    RoleSerializer,
     LocalitySerializer,
     GenderSerializer,
     ShiftSerializer,
@@ -63,16 +69,16 @@ class PayoutViewSet(viewsets.ModelViewSet):
     filterset_fields = ["amount", "zone"]  # fields to filter
 
 
-class RoleViewSet(viewsets.ReadOnlyModelViewSet):
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
-    serializer_class = RoleSerializer
-    queryset = Role.objects.all()
+    serializer_class = GroupSerializer
+    queryset = Group.objects.all()
 
     def get_queryset(self):
         exclude_directora = self.request.query_params.get("exclude_directora")
 
-        if exclude_directora != None:
-            self.queryset = Role.objects.exclude(name="Directora")
+        if exclude_directora is not None:
+            self.queryset = Group.objects.exclude(name="Director")
 
         return super().get_queryset()
 
@@ -177,7 +183,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         no_depth = self.request.query_params.get("no_depth")
 
-        if no_depth != None:
+        if no_depth is not None:
             self.queryset = Child.objects.all()
             self.serializer_class = ChildSerializer
             return super().get_queryset()
@@ -288,6 +294,10 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "id",
     ]  # fields to filter
 
+    def get(self, request, format=None):
+        content = {"status": "request was permitted"}
+        return Response(content)
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -295,23 +305,11 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             updated_instance = serializer.save()
 
-            if not updated_instance.is_active:
-                print("updated to false")
-            else:
-                print("updated to true")
-
             children = Child.objects.all().filter(cribroom_id=instance.id)
-            print(children)
-            for child in children:
-                param = True
-                if updated_instance.is_active:
-                    param = True
-                else:
-                    param= False
-                
-                print(child)
-                child.cribroom_isActive(param)
-                child.save()  # Guarda los cambios en la base de datos
+            if not updated_instance.is_active:
+                for child in children:
+                    child.cribroom_isActive(False)
+                    child.save()  # Guarda los cambios en la base de datos
 
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -319,7 +317,7 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         no_depth = self.request.query_params.get("no_depth")
 
-        if no_depth != None:
+        if no_depth is not None:
             self.queryset = Cribroom.objects.all()
             self.serializer_class = CribroomSerializer
             return super().get_queryset()
