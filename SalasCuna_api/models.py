@@ -49,11 +49,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
     department = models.ForeignKey(
-        "Department",
-        on_delete=models.CASCADE,
-        db_column="Department_id",
-        blank=True,
-        null=True,
+        "Department", on_delete=models.CASCADE, blank=True, null=True
     )
     city = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
