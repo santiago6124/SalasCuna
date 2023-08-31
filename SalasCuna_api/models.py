@@ -40,6 +40,7 @@ class UserAccountManager(BaseUserManager):
             email, password, is_staff=True, is_superuser=True, **extra_fields
         )
 
+
 class Department(models.Model):
     department = models.CharField(max_length=255, blank=False)
     history = HistoricalRecords()
@@ -47,17 +48,18 @@ class Department(models.Model):
     def __str__(self):
         return f"{self.department}"
 
+
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    dni = models.CharField(max_length=11)
-    phone_number = models.CharField(max_length=15)
-    address = models.CharField(max_length=255)
+    dni = models.CharField(max_length=11, blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE, blank=True, null=True
     )
-    city = models.CharField(max_length=255)
+    city = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=True)
