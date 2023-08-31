@@ -304,12 +304,12 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         print(serializer)
         if serializer.is_valid():
             updated_instance = serializer.save()
-
-            children = Child.objects.all().filter(cribroom_id=instance.id)
             if not updated_instance.is_active:
+                children = Child.objects.all().filter(cribroom_id=instance.id)
                 for child in children:
-                    child.cribroom_isActive(False)
-                    child.save()  # Guarda los cambios en la base de datos
+                    if child.is_active:
+                        child.cribroom_isActive(False)
+                        child.save()  # Guarda los cambios en la base de datos
 
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
