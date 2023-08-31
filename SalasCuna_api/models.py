@@ -48,7 +48,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     dni = models.CharField(max_length=11)
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
-    department = models.ForeignKey(
+    department_id = models.ForeignKey(
         "Department", on_delete=models.CASCADE, blank=True, null=True
     )
     city = models.CharField(max_length=255)
