@@ -120,6 +120,7 @@ class DepthGuardianSerializer(serializers.ModelSerializer):
 class DepthCribroomSerializer(serializers.ModelSerializer):
     lastDesinfection = DesinfectionSerializer(read_only=True)
     actualCapacity = serializers.SerializerMethodField()
+    reachMax = serializers.SerializerMethodField()
 
     class Meta:
         model = Cribroom
@@ -131,6 +132,9 @@ class DepthCribroomSerializer(serializers.ModelSerializer):
 
     def get_pays(self, obj):
         return obj.totalImport()
+
+    def get_reachMax(self, obj):
+        return obj.reachMax()
 
 
 class TechnicalReportSerializer(serializers.ModelSerializer):

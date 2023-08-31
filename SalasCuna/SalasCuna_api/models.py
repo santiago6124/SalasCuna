@@ -203,6 +203,12 @@ class Cribroom(models.Model):
     def actualCapacity(self):
         return self.child_set.filter(is_active=True).count()
 
+    def reachMax(self):
+        if self.actualCapacity() == self.max_capacity:
+            return True
+        else:
+            return False
+
     def totalImport(self, init_date, end_date):
         """
         calcular en base a maximo de chico x valor por mes durante los siguientes 12 meses
