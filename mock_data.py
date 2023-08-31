@@ -13,6 +13,7 @@ django.setup()
 import random
 from faker import Faker
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from SalasCuna_api.models import (
     Locality,
     Neighborhood,
@@ -27,7 +28,6 @@ from SalasCuna_api.models import (
     GuardianType,
     Guardian,
     Payout,
-    Role,
     Shift,
     Zone,
     Department,
@@ -38,13 +38,27 @@ User = get_user_model()
 
 
 def create_users(num_users):
+    departments = Department.objects.all()
     for _ in range(num_users):
         first_name = fake.first_name()
         last_name = fake.last_name()
         email = fake.email()
+        dni = fake.unique.random_number(digits=7)
+        phone_number = fake.random_int(min=0, max=9999999)
+        address = fake.street_name()
+        department = random.choice(departments)
+        city = fake.city()
         password = "12345678"  # You can set a common password for all users
         User.objects.create_user(
-            email=email, password=password, first_name=first_name, last_name=last_name
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            dni=dni,
+            phone_number=phone_number,
+            address=address,
+            department=department,
+            city=city,
         )
 
 
@@ -60,10 +74,10 @@ def create_neighborhoods(num_neighborhoods):
         Neighborhood.objects.create(neighborhood=neighborhood)
 
 
-def create_roles(num_roles):
-    for _ in range(num_roles):
-        name = fake.word()
-        Role.objects.create(name=name)
+def create_groups():
+    grupos = ["Director", "Trabajador Social", "Arquitecto"]
+    for grupo in grupos:
+        Group.objects.create(name=grupo)
 
 
 def create_shifts(num_shifts):
@@ -201,16 +215,10 @@ def create_desinfections(num_desinfections):
 def create_forms(num_forms):
     forms = []
     cribroom_users = CribroomUser.objects.all()
-    roles = Role.objects.all()
     for _ in range(num_forms):
         generation_date = fake.date_between(start_date="-2y", end_date="today")
         cribroom_user = random.choice(cribroom_users)
-        role = random.choice(roles)
-        forms.append(
-            Form(
-                generation_date=generation_date, cribroom_user=cribroom_user, role=role
-            )
-        )
+        forms.append(Form(generation_date=generation_date, cribroom_user=cribroom_user))
     Form.objects.bulk_create(forms)
 
 
@@ -248,22 +256,21 @@ def create_payouts(num_payouts):
 
 
 # Set the number of instances you want to create for each model
-num_users = 20
-num_localities = 25
-num_neighborhoods = 25
+num_users = 9
+num_localities = 20
+num_neighborhoods = 20
 num_children = 10
 num_companies = 10
 num_cribroom = 15
 num_cribroom_users = 10
-num_departments = 25
+num_departments = 20
 num_desinfection = 5
 num_forms = 10
-num_phone_features = 25
+num_phone_features = 20
 num_guardians = 15
 num_payouts = 10
-num_roles = 25
-num_shifts = 25
-num_zones = 25
+num_shifts = 20
+num_zones = 20
 
 # Call the functions to create the mock data
 create_localities(num_localities)
@@ -275,14 +282,17 @@ create_guardian_types()
 create_guardians(num_guardians)
 create_zones(num_zones)
 create_departments(num_departments)
-create_payouts(num_payouts)
-create_roles(num_roles)
+for i in range(15):
+    create_payouts(num_payouts)
+create_groups()
 create_users(num_users)
 create_shifts(num_shifts)
 create_cribroom(num_cribroom)
 create_cribroom_users(num_cribroom_users)
-create_desinfections(num_desinfection)
+for i in range(20):
+    create_desinfections(num_desinfection)
 create_forms(num_forms)
-create_children(num_children)
+for i in range(50):
+    create_children(num_children)
 
 print("Mock data has been successfully created.")

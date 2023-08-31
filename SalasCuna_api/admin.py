@@ -46,7 +46,7 @@ class DesinfectionAdmin(admin.ModelAdmin):
 
 
 class FormAdmin(admin.ModelAdmin):
-    list_display = ("id", "cribroom_user", "role")
+    list_display = ("id", "cribroom_user")
     list_filter = ["cribroom_user"]
 
 
@@ -80,20 +80,14 @@ class GenderAdmin(admin.ModelAdmin):
     list_filter = ["gender"]
 
 
-class RoleAdmin(admin.ModelAdmin):
-    list_display = ("id", "name")
-    list_filter = ["name"]
-
-
 class ShiftAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
     list_filter = ["name"]
 
 
 class UserAccountAdmin(admin.ModelAdmin):
-    list_display = ("id", "__str__", "email", "role")
+    list_display = ("id", "__str__", "email")
     list_filter = [
-        "role",
         "email",
     ]
 
@@ -117,7 +111,6 @@ admin.site.register(PhoneFeature, PhoneFeatureAdmin)
 admin.site.register(Guardian, GuardianAdmin)
 admin.site.register(GuardianType, GuardianTypeAdmin)
 admin.site.register(Payout, PayoutAdmin)
-admin.site.register(Role, RoleAdmin)
 admin.site.register(Shift, ShiftAdmin)
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(Zone, ZoneAdmin)

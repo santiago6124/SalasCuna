@@ -3,6 +3,7 @@ from datetime import date
 
 # from django.contrib.auth.models import User
 
+from django.contrib.auth.models import Group
 from .models import (
     Child,
     Locality,
@@ -13,7 +14,6 @@ from .models import (
     Guardian,
     PhoneFeature,
     GuardianType,
-    Role,
     Payout,
     Zone,
     UserAccount,
@@ -126,14 +126,22 @@ class DepthGuardianSerializer(serializers.ModelSerializer):
 
 class DepthCribroomSerializer(serializers.ModelSerializer):
     lastDesinfection = DesinfectionSerializer(read_only=True)
+    actualCapacity = serializers.SerializerMethodField()
+    reachMax = serializers.SerializerMethodField()
 
     class Meta:
         model = Cribroom
         depth = 1
         fields = "__all__"
 
+    def get_actualCapacity(self, obj):
+        return obj.actualCapacity()
+
     def get_pays(self, obj):
         return obj.totalImport()
+
+    def get_reachMax(self, obj):
+        return obj.reachMax()
 
 
 class TechnicalReportSerializer(serializers.ModelSerializer):
@@ -164,10 +172,10 @@ class DepthChildSerializer(serializers.ModelSerializer):
         read_only_fields = ["user"]
 
 
-class RoleSerializer(serializers.ModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Role
-        fields = "__all__"
+        model = Group
+        fields = ["id", "name"]
 
 
 class PayoutSerializer(serializers.ModelSerializer):
