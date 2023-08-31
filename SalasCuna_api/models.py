@@ -40,6 +40,12 @@ class UserAccountManager(BaseUserManager):
             email, password, is_staff=True, is_superuser=True, **extra_fields
         )
 
+class Department(models.Model):
+    department = models.CharField(max_length=255, blank=False)
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return f"{self.department}"
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
@@ -48,8 +54,8 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     dni = models.CharField(max_length=11)
     phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
-    department_id = models.ForeignKey(
-        "Department", on_delete=models.CASCADE, blank=True, null=True
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, blank=True, null=True
     )
     city = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -78,14 +84,6 @@ class Locality(models.Model):
 
     def __str__(self):
         return f"{self.locality}"
-
-
-class Department(models.Model):
-    department = models.CharField(max_length=255, blank=False)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return f"{self.department}"
 
 
 class Neighborhood(models.Model):
