@@ -148,12 +148,6 @@ class GenderListView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
 
-class DeleteCribroom(viewsets.ModelViewSet):
-    queryset = Cribroom.objects.all()
-    serializer_class = DeleteCribroomSerializer
-    permission_classes = [AllowAny]
-
-
 class ShiftListView(generics.ListAPIView):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
@@ -316,10 +310,15 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         no_depth = self.request.query_params.get("no_depth")
+        delete = self.request.query_params.get("delete")
 
         if no_depth is not None:
             self.queryset = Cribroom.objects.all()
             self.serializer_class = CribroomSerializer
+            return super().get_queryset()
+        elif delete is not None:
+            self.queryset = Cribroom.objects.all()
+            self.serializer_class = DeleteCribroomSerializer
             return super().get_queryset()
         else:
             self.queryset = Cribroom.objects.all()

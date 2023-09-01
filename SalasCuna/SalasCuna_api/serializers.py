@@ -53,6 +53,19 @@ class DesinfectionSerializer(serializers.ModelSerializer):
 
 
 class CribroomSerializer(serializers.ModelSerializer):
+    lastDesinfection = DesinfectionSerializer(read_only=True)
+    actualCapacity = serializers.SerializerMethodField()
+    reachMax = serializers.SerializerMethodField()
+
+    def get_actualCapacity(self, obj):
+        return obj.actualCapacity()
+
+    def get_pays(self, obj):
+        return obj.totalImport()
+
+    def get_reachMax(self, obj):
+        return obj.reachMax()
+
     class Meta:
         model = Cribroom
         fields = "__all__"
@@ -125,23 +138,10 @@ class DepthGuardianSerializer(serializers.ModelSerializer):
 
 
 class DepthCribroomSerializer(serializers.ModelSerializer):
-    lastDesinfection = DesinfectionSerializer(read_only=True)
-    actualCapacity = serializers.SerializerMethodField()
-    reachMax = serializers.SerializerMethodField()
-
     class Meta:
         model = Cribroom
         depth = 1
         fields = "__all__"
-
-    def get_actualCapacity(self, obj):
-        return obj.actualCapacity()
-
-    def get_pays(self, obj):
-        return obj.totalImport()
-
-    def get_reachMax(self, obj):
-        return obj.reachMax()
 
 
 class TechnicalReportSerializer(serializers.ModelSerializer):
@@ -195,8 +195,16 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = "__all__"
 
+
 class DeleteCribroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cribroom
         fields = "__all__"
-        extra_kwargs = {'name' : {'required' : False}, 'entity' : {'required' : False}, 'CUIT' : {'required' : False}, 'code' : {'required' : False}, 'max_capacity' : {'required' : False}, 'street' : {'required' : False}}
+        extra_kwargs = {
+            "name": {"required": False},
+            "entity": {"required": False},
+            "CUIT": {"required": False},
+            "code": {"required": False},
+            "max_capacity": {"required": False},
+            "street": {"required": False},
+        }

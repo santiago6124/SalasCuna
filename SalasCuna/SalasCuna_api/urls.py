@@ -8,7 +8,6 @@ from .views import (
     LocalityListView,
     NeighborhoodListView,
     GenderListView,
-    DeleteCribroom,
     ShiftListView,
     PhoneFeatureListView,
     GuardianTypeListView,
@@ -27,7 +26,6 @@ router.register(r"payout", PayoutViewSet)
 router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
 router.register(r"department", DepartmentModelViewSet)
-router.register(r"deleteCR", DeleteCribroom)
 
 urlpatterns = router.urls + [
     path(
