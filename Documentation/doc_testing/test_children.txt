@@ -1,0 +1,102 @@
+import unittest
+from datetime import date
+
+import os
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SalasCuna.settings")
+
+django.setup()
+
+from SalasCuna_api.models import (
+    Locality,
+    Neighborhood,
+    Child,
+    ChildState,
+    Company,
+    Cribroom,
+    CribroomUser,
+    Desinfection,
+    Form,
+    Gender,
+    PhoneFeature,
+    GuardianType,
+    Guardian,
+    Payout,
+    Role,
+    Shift,
+    Zone,
+    UserAccount,
+)
+
+
+class TestChildModel(unittest.TestCase):
+
+    def setUp(self):
+        self.locality = Locality.objects.create(locality="Test Locality")
+        self.neighborhood = Neighborhood.objects.create(neighborhood="Test Neighborhood")
+        self.gender = Gender.objects.create(gender="Male")
+        self.cribroom = Cribroom.objects.create(name="Test Cribroom")
+        self.shift = Shift.objects.create(name="Morning Shift")
+
+        # Eliminar el usuario si ya existe con la misma dirección de correo electrónico
+        UserAccount.objects.filter(email="gogadicho@gmail.com").delete()
+
+        self.user = UserAccount.objects.create_user(
+            email="gogadicho@gmail.com",
+            password="gogadicho",
+            first_name="goga",
+            last_name="chuch"
+        )
+
+        self.guardian = Guardian.objects.create(first_name="Guardian First Name", last_name="Guardian Last Name")
+        self.child_state = ChildState.objects.create(name="Active")
+
+        self.child = Child.objects.create(
+            first_name="John",
+            last_name="Doe",
+            dni="12345678",
+            birthdate="2000-01-01",
+            street="Test Street",
+            house_number=123,
+            registration_date="2023-01-01",
+            disenroll_date="2023-08-01",
+            locality=self.locality,
+            neighborhood=self.neighborhood,
+            gender=self.gender,
+            cribroom=self.cribroom,
+            shift=self.shift,
+            user=self.user,
+            guardian=self.guardian,
+            child_state=self.child_state
+        )
+
+    def test_child_str_method(self):
+        expected_str = f"{self.child.last_name}, {self.child.first_name}"
+        self.assertEqual(str(self.child), expected_str)
+
+if __name__ == '__main__':
+    unittest.main()
+    
+
+
+
+La función principal del TEST es garantizar que el modelo "Child" de tu aplicación Django funcione correctamente y cumpla con las expectativas:
+
+Asegurar la funcionalidad del modelo: 
+La prueba test_child_str_method verifica que el método __str__ del modelo Child funcione correctamente. 
+Esto es importante porque el método __str__ define cómo se debe representar el objeto cuando se convierte a un STRING, 
+como cuando se muestra en la interfaz de administración de Django o en registros de depuración.
+
+Creación de entorno controlado: 
+El método setUp se utiliza para crear un entorno controlado en el que se puedan realizar pruebas. 
+Aquí, se crean instancias de objetos relacionados, como Locality, Neighborhood, Gender, Cribroom, Shift, UserAccount, Guardian, ChildState y Child, con valores específicos para cada uno. 
+Esto garantiza que las pruebas se realicen en condiciones predecibles y no dependan de datos externos.
+
+Verificación de resultados:
+La prueba test_child_str_method verifica si la representación en cadena generada por el método __str__ del objeto Child coincide con la cadena esperada.
+Si la comparación falla, sabrás que hay un problema en la implementación del método __str__.
+
+Ejecución de pruebas: 
+Al final del archivo, la línea if __name__ == '__main__': asegura que las pruebas se ejecuten solo cuando ejecutas el archivo directamente, no cuando lo importas como un módulo en otro lugar. 
+La función unittest.main() se encarga de descubrir y ejecutar todas las pruebas definidas en la clase TestChildModel.
