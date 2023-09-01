@@ -53,7 +53,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    dni = models.CharField(max_length=11, blank=True, null=True)
+    dni = models.CharField(max_length=11, blank=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     # department = models.ForeignKey(
