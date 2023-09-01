@@ -54,12 +54,12 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     dni = models.CharField(max_length=11, blank=True)
-    phone_number = models.CharField(max_length=15, blank=True, null=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+    address = models.CharField(max_length=255, blank=True)
     # department = models.ForeignKey(
     #     Department, on_delete=models.CASCADE, blank=True, null=True
     # )
-    city = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=True)
