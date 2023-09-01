@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "simple_history",
     "django_filters",
     'django_celery_results',
+    'django_celery_beat',
 ]
 
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
