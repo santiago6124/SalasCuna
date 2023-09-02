@@ -16,6 +16,7 @@ from .views import (
     ZoneModelViewSet,
     TechnicalReportRetrieveAPIView,
     DepartmentModelViewSet,
+    LogEntryModelViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -26,6 +27,7 @@ router.register(r"payout", PayoutViewSet)
 router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
 router.register(r"department", DepartmentModelViewSet)
+router.register(r"logEntry", LogEntryModelViewSet)
 
 urlpatterns = router.urls + [
     path(

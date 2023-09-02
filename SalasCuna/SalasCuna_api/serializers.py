@@ -4,6 +4,7 @@ from datetime import date
 # from django.contrib.auth.models import User
 
 from django.contrib.auth.models import Group
+from django.contrib.admin.models import LogEntry
 from .models import (
     Child,
     Locality,
@@ -208,3 +209,16 @@ class DeleteCribroomSerializer(serializers.ModelSerializer):
             "max_capacity": {"required": False},
             "street": {"required": False},
         }
+
+
+class LogEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LogEntry
+        depth = 1
+        fields = [
+            "id",
+            "user",
+            "content_type",
+            "action_time",
+            "change_message",
+        ]
