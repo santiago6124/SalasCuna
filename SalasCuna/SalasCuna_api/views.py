@@ -74,19 +74,11 @@ class PayoutViewSet(viewsets.ModelViewSet):
     ]  # This makes django-filters works
     filterset_fields = ["amount", "zone"]  # fields to filter
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
-
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [AllowAny]
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
 
     def get_queryset(self):
         exclude_directora = self.request.query_params.get("exclude_directora")
@@ -101,10 +93,6 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = UserAccount.objects.all()
     serializer_class = UserSerializer
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
 
 
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
@@ -141,10 +129,6 @@ class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Cribroom.objects.all()
     serializer_class = TechnicalReportSerializer
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
-
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context["initial_date"] = self.kwargs.get("initial_date")
@@ -155,11 +139,7 @@ class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
 class LocalityListView(generics.ListAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer
-    permission_classes = [AllowAny]
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
+    permission_classes = [TrabajadorSocialPerms]
 
 
 class NeighborhoodListView(generics.ListAPIView):
@@ -167,19 +147,11 @@ class NeighborhoodListView(generics.ListAPIView):
     serializer_class = NeighborhoodSerializer
     permission_classes = [AllowAny]
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
-
 
 class GenderListView(generics.ListAPIView):
     queryset = Gender.objects.all()
     serializer_class = GenderSerializer
     permission_classes = [AllowAny]
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
 
 
 class ShiftListView(generics.ListAPIView):
@@ -187,29 +159,17 @@ class ShiftListView(generics.ListAPIView):
     serializer_class = ShiftSerializer
     permission_classes = [AllowAny]
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
-
 
 class PhoneFeatureListView(generics.ListAPIView):
     queryset = PhoneFeature.objects.all()
     serializer_class = PhoneFeatureSerializer
     permission_classes = [AllowAny]
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
-
 
 class GuardianTypeListView(generics.ListAPIView):
     queryset = GuardianType.objects.all()
     serializer_class = GuardianTypeSerializer
     permission_classes = [AllowAny]
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
 
 
 class ChildModelViewSet(viewsets.ModelViewSet):
@@ -218,10 +178,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend]  # This makes django-filters works
     filterset_fields = ["id", "locality", "cribroom_id"]  # fields to filter
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
 
     # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
@@ -338,10 +294,6 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "id",
     ]  # fields to filter
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
-
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -381,19 +333,11 @@ class ShiftModelViewSet(viewsets.ModelViewSet):
     serializer_class = ShiftSerializer
     permission_classes = [AllowAny]
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
-
 
 class ZoneModelViewSet(viewsets.ModelViewSet):
     queryset = Zone.objects.all()
     serializer_class = ZoneSerializer
     permission_classes = [AllowAny]
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
 
 
 class DepartmentModelViewSet(viewsets.ModelViewSet):
@@ -401,16 +345,8 @@ class DepartmentModelViewSet(viewsets.ModelViewSet):
     serializer_class = DepartmentSerializer
     permission_classes = [AllowAny]
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
-
 
 class LogEntryModelViewSet(viewsets.ModelViewSet):
     queryset = LogEntry.objects.all()
     serializer_class = LogEntrySerializer
     permission_classes = [AllowAny]
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)

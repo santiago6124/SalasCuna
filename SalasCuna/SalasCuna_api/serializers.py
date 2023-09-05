@@ -1,5 +1,4 @@
-from rest_framework import serializers, viewsets
-from datetime import date
+from rest_framework import serializers
 
 # from django.contrib.auth.models import User
 
@@ -215,10 +214,4 @@ class LogEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = LogEntry
         depth = 1
-        fields = [
-            "id",
-            "user",
-            "content_type",
-            "action_time",
-            "change_message",
-        ]
+        fields = "__all__"
