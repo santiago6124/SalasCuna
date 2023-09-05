@@ -1,27 +1,73 @@
-Run the following commands to instatiate the Celery server and schedule tasks:
+# Celery Server and Task Scheduling Setup Guide
 
-1- cd .. --> pip install -r requirements.txt
-2- install RabbitMQ --> [https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/rabbitmq.html](https://www.rabbitmq.com/install-windows.html)
-3- start rabbitmq server
-4- cd SalasCuna --> manage.py migrate
-5- manage.py runserver
-6- celery -A SalasCuna worker -l INFO -P gevent
-7- celery -A SalasCuna flower 
-8- celery -A SalasCuna beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
-9- celery -A SalasCuna worker -l INFO -P gevent
+Follow these steps to set up the Celery server and schedule tasks for your project. Make sure you have the required dependencies installed before proceeding.
 
-local routes:
--http://localhost:5555/tasks (Flower)
+## Installation
 
-(See Celery docs for deployment)
+1. Change to the project directory:
+   ```
+   cd ..
+   ```
 
-Source links:
-https://flower.readthedocs.io/en/latest/install.html
-http://127.0.0.1:8000/admin/django_celery_beat/periodictask/
-https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/rabbitmq.html
-https://docs.celeryq.dev/en/stable/getting-started/introduction.html
-https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html#django-first-steps
-https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html#beat-custom-schedulers
-https://docs.celeryq.dev/en/stable/userguide/daemonizing.html#daemonizing
-https://docs.celeryq.dev/en/stable/getting-started/next-steps.html#next-steps
-https://youtube.com/playlist?list=PLOLrQ9Pn6caz-6WpcBYxV84g9gwptoN20&si=MIYCNGCNFip6gjhn
+2. Install project dependencies using pip:
+   ```
+   pip install -r requirements.txt
+   ```
+
+3. Install RabbitMQ by following the instructions [here](https://www.rabbitmq.com/install-windows.html).
+
+## Start Celery Server
+
+4. Start the RabbitMQ server.
+
+5. Change to the project directory:
+   ```
+   cd SalasCuna
+   ```
+
+6. Apply database migrations:
+   ```
+   python manage.py migrate
+   ```
+
+7. Run the development server:
+   ```
+   python manage.py runserver
+   ```
+
+8. Start the Celery worker with gevent concurrency:
+   ```
+   celery -A SalasCuna worker -l INFO -P gevent
+   ```
+
+9. Monitor tasks with Flower (optional):
+   ```
+   celery -A SalasCuna flower
+   ```
+
+10. Schedule periodic tasks with Celery Beat:
+    ```
+    celery -A SalasCuna beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    ```
+
+## Local Routes
+
+Access these local routes for additional functionality:
+
+- Flower Dashboard: [http://localhost:5555/tasks](http://localhost:5555/tasks)
+
+## Additional Resources
+
+Refer to the following sources for more information:
+
+- [Celery Documentation](https://docs.celeryq.dev/en/stable/getting-started/introduction.html)
+- [Celery Deployment Guide](https://docs.celeryq.dev/en/stable/getting-started/next-steps.html)
+- [Flower Installation](https://flower.readthedocs.io/en/latest/install.html)
+- [Celery RabbitMQ Setup](https://docs.celeryq.dev/en/stable/getting-started/backends-and-brokers/rabbitmq.html)
+- [Django Celery Integration](https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html#django-first-steps)
+- [Celery Custom Schedulers](https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html#beat-custom-schedulers)
+- [Daemonizing Celery](https://docs.celeryq.dev/en/stable/userguide/daemonizing.html)
+
+For more in-depth tutorials, check out this [YouTube playlist](https://youtube.com/playlist?list=PLOLrQ9Pn6caz-6WpcBYxV84g9gwptoN20&si=MIYCNGCNFip6gjhn).
+
+Happy coding!
