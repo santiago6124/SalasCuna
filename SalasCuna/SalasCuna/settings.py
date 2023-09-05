@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "simple_history",
     "django_filters",
+    'django_celery_results',
+    'django_celery_beat',
 ]
 
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
@@ -196,3 +198,5 @@ SITE_NAME = "Salas Cuna"
 # Corsheaders configuration
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CELERY_RESULT_BACKEND = 'django-db'
