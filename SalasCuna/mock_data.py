@@ -75,7 +75,16 @@ def create_neighborhoods(num_neighborhoods):
 
 
 def create_groups():
-    grupos = ["Director", "Trabajador Social", "Arquitecto"]
+    grupos = [
+        "Director",
+        "Trabajador Social",
+        "Arquitecto",
+        "Dev",
+        "Psicopedagoga",
+        "Administrador",
+        "Secretario",
+        "CoordinadorTS",
+    ]
     for grupo in grupos:
         Group.objects.create(name=grupo)
 

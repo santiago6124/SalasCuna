@@ -1,8 +1,36 @@
 from rest_framework import permissions
 
 
+class AllUsersPerms(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.id is not None:
+            return request.method
+        else:
+            return False
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.id is not None:
+            return True
+        else:
+            return False
+
+
+class DevPerms(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.groups.filter(name="Dev").exists():
+            return request.method
+        else:
+            return False
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.groups.filter(name="Dev").exists():
+            return True
+        else:
+            return False
+
+
 class DirectorPerms(permissions.BasePermission):
-    message = "Solo las personas con rol Directora pueden acceder a esta información"
+    message = "Solo las personas con rol Director pueden acceder a esta información"
 
     def has_permission(self, request, view):
         if request.user.groups.filter(name="Director").exists():
@@ -98,6 +126,24 @@ class SecretarioPerms(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.user.groups.filter(name="Secretario").exists():
+            return True
+        else:
+            return False
+
+
+class CoordinadorTSPerms(permissions.BasePermission):
+    message = (
+        "Solo las personas con rol CoordinadorTS pueden acceder a esta información"
+    )
+
+    def has_permission(self, request, view):
+        if request.user.groups.filter(name="CoordinadorTS").exists():
+            return request.method
+        else:
+            return False
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.groups.filter(name="CoordinadorTS").exists():
             return True
         else:
             return False
