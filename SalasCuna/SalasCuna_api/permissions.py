@@ -2,6 +2,8 @@ from rest_framework import permissions
 
 
 class AllUsersPerms(permissions.BasePermission):
+    message = "All user has access to this information"
+
     def has_permission(self, request, view):
         if request.user.id is not None:
             return request.method
@@ -16,6 +18,8 @@ class AllUsersPerms(permissions.BasePermission):
 
 
 class DevPerms(permissions.BasePermission):
+    message = "Solo developers"
+
     def has_permission(self, request, view):
         if request.user.groups.filter(name="Dev").exists():
             return request.method

@@ -1,9 +1,4 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import (
-    IsAdminUser,
-    IsAuthenticated,
-    DjangoModelPermissionsOrAnonReadOnly,
-)
 from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -78,7 +73,7 @@ class PayoutViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [DevPerms | DirectorPerms]
+    permission_classes = [AllUsersPerms]
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
 
@@ -86,8 +81,8 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
         exclude_directora = self.request.query_params.get("exclude_directora")
 
         if exclude_directora is not None:
-            self.queryset = Group.objects.exclude(name="Director")
             self.queryset = Group.objects.exclude(name="Dev")
+            self.queryset = self.queryset.exclude(name="Director")
 
         return super().get_queryset()
 
