@@ -1,7 +1,6 @@
 amqp==5.1.1
 asgiref==3.6.0
 billiard==4.1.0
-celery==5.3.3
 certifi==2023.5.7
 cffi==1.15.1
 charset-normalizer==3.1.0
@@ -14,8 +13,6 @@ cron-descriptor==1.4.0
 cryptography==40.0.2
 defusedxml==0.7.1
 Django==4.2
-django-celery-beat==2.5.0
-django-celery-results==2.5.1
 django-cors-headers==4.1.0
 django-filter==23.2
 django-jazzmin==2.6.0
