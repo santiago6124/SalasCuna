@@ -79,10 +79,12 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         exclude_directora = self.request.query_params.get("exclude_directora")
-
+        only_ts = self.request.query_params.get("only_ts")
         if exclude_directora is not None:
             self.queryset = Group.objects.exclude(name="Dev")
             self.queryset = self.queryset.exclude(name="Director")
+        elif only_ts is not None:
+            self.queryset = Group.objects.filter(name="Trabajador Social")
 
         return super().get_queryset()
 
