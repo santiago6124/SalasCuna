@@ -134,11 +134,9 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = "static/"
-# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'build/static'), )
+STATIC_URL = "/static/"
+#STATICFILES_DIRS = (os.path.join(BASE_DIR, 'build/static'), )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_ROOT = BASE_DIR/ 'build/static'
 
 
 # JWT Authentication
