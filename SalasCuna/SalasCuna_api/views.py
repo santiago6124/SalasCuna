@@ -292,6 +292,7 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "zone",
         "shift",
         "id",
+        "user",
     ]  # fields to filter
 
     def update(self, request, *args, **kwargs):
