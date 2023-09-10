@@ -18,6 +18,7 @@ from .views import (
     DepartmentModelViewSet,
     LocalityListCreateView,
     PhoneFeatureListCreateView,
+    GuardianListCreateView,
 )
 
 router = routers.DefaultRouter()
@@ -72,4 +73,5 @@ urlpatterns = router.urls + [
     path("GroupViewSet/", GroupViewSet.as_view({"get": "list"}), name="GroupViewSet"),
     path('LocalityListCreateView/', LocalityListCreateView.as_view(), name='LocalityListCreateView'),
     path('PhoneFeatureListCreateView/', PhoneFeatureListCreateView.as_view(), name='PhoneFeatureListCreateView'),
+    path('GuardianListCreateView/', GuardianListCreateView.as_view(), name='GuardianListCreateView'),
 ]

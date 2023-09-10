@@ -70,6 +70,14 @@ class PhoneFeatureListCreateView(generics.ListCreateAPIView):
     ]  # This makes django-filters works
     filterset_fields = ["feature"]  # fields to filter
 
+class GuardianListCreateView(generics.ListCreateAPIView):
+    queryset = Guardian.objects.all()
+    serializer_class = GuardianSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["dni"]  # fields to filter
 
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
