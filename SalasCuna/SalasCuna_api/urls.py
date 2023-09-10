@@ -17,6 +17,7 @@ from .views import (
     TechnicalReportRetrieveAPIView,
     DepartmentModelViewSet,
     LocalityListCreateView,
+    PhoneFeatureListCreateView,
 )
 
 router = routers.DefaultRouter()
@@ -70,4 +71,5 @@ urlpatterns = router.urls + [
     ),
     path("GroupViewSet/", GroupViewSet.as_view({"get": "list"}), name="GroupViewSet"),
     path('LocalityListCreateView/', LocalityListCreateView.as_view(), name='LocalityListCreateView'),
+    path('PhoneFeatureListCreateView/', PhoneFeatureListCreateView.as_view(), name='PhoneFeatureListCreateView'),
 ]

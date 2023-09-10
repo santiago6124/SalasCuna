@@ -61,6 +61,16 @@ class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer
 
+class PhoneFeatureListCreateView(generics.ListCreateAPIView):
+    queryset = PhoneFeature.objects.all()
+    serializer_class = PhoneFeatureSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["feature"]  # fields to filter
+
+
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Payout.objects.all()
