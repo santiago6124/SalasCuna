@@ -166,7 +166,7 @@ class Cribroom(models.Model):
     name = models.CharField(max_length=255, blank=False)
     entity = models.CharField(max_length=255, blank=False)
     CUIT = models.BigIntegerField(blank=False)  # nuevos campos
-    code = models.IntegerField(blank=False)
+    code = models.CharField(max_length=255, blank=False)
     max_capacity = models.IntegerField(blank=False)
     is_active = models.BooleanField(default=True)
     street = models.CharField(max_length=255, blank=False)
