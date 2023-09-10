@@ -127,7 +127,7 @@ class Child(models.Model):
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
     user = models.ForeignKey(
-        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=False
+        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
     )  # Field name made lowercase.
     guardian = models.ForeignKey(
         "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=False

@@ -57,6 +57,11 @@ from .serializers import (
 from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
+
+class ChildListCreateView(generics.ListCreateAPIView):
+    queryset = Child.objects.all()
+    serializer_class = ChildSerializer
+
 class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer

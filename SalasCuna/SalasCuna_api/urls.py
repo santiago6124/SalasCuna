@@ -22,6 +22,7 @@ from .views import (
     NeighborhoodListCreateView,
     GenderListCreateView,
     ShiftListCreateView,
+    ChildListCreateView,
 )
 
 router = routers.DefaultRouter()
@@ -80,4 +81,5 @@ urlpatterns = router.urls + [
     path('NeighborhoodListCreateView/', NeighborhoodListCreateView.as_view(), name='NeighborhoodListCreateView'),
     path('GenderListCreateView/', GenderListCreateView.as_view(), name='GenderListCreateView'),
     path('ShiftListCreateView/', ShiftListCreateView.as_view(), name='ShiftListCreateView'),
+    path('ChildListCreateView/', ChildListCreateView.as_view(), name='ChildListCreateView'),
 ]
