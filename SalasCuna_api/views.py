@@ -1,10 +1,4 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import (
-    IsAdminUser,
-    IsAuthenticated,
-    DjangoModelPermissionsOrAnonReadOnly,
-    AllowAny,
-)
 from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,11 +6,19 @@ from rest_framework.filters import OrderingFilter
 
 # Custom permissions in permissions.py
 from .permissions import (
+    AllUsersPerms,
+    AdministradorPerms,
+    ArquitectoPerms,
+    CoordinadorTSPerms,
+    DevPerms,
     DirectorPerms,
+    PsicopedagogaPerms,
+    SecretarioPerms,
     TrabajadorSocialPerms,
 )
 
 from django.contrib.auth.models import Group
+from django.contrib.admin.models import LogEntry
 from .models import (
     Child,
     Locality,
@@ -52,14 +54,70 @@ from .serializers import (
     TechnicalReportSerializer,
     DepartmentSerializer,
     DeleteCribroomSerializer,
+    LogEntrySerializer,
 )
 
 from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
 
+class ChildListCreateView(generics.ListCreateAPIView):
+    queryset = Child.objects.all()
+    serializer_class = ChildSerializer
+
+class LocalityListCreateView(generics.ListCreateAPIView):
+    queryset = Locality.objects.all()
+    serializer_class = LocalitySerializer
+
+class PhoneFeatureListCreateView(generics.ListCreateAPIView):
+    queryset = PhoneFeature.objects.all()
+    serializer_class = PhoneFeatureSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["feature"]  # fields to filter
+
+class GuardianListCreateView(generics.ListCreateAPIView):
+    queryset = Guardian.objects.all()
+    serializer_class = GuardianSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["dni"]  # fields to filter
+
+
+class NeighborhoodListCreateView(generics.ListCreateAPIView):
+    queryset = Neighborhood.objects.all()
+    serializer_class = NeighborhoodSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["neighborhood"]  # fields to filter
+    
+class GenderListCreateView(generics.ListCreateAPIView):
+
+    queryset = Gender.objects.all()
+    serializer_class = GenderSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["gender"]  # fields to filter
+
+class ShiftListCreateView(generics.ListCreateAPIView):
+    queryset = Shift.objects.all()
+    serializer_class = ShiftSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name"]  # fields to filter
+
 class PayoutViewSet(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms]
     queryset = Payout.objects.all()
     serializer_class = PayoutSerializer
     filter_backends = [
@@ -70,27 +128,30 @@ class PayoutViewSet(viewsets.ModelViewSet):
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [AllUsersPerms]
     serializer_class = GroupSerializer
     queryset = Group.objects.all()
 
     def get_queryset(self):
         exclude_directora = self.request.query_params.get("exclude_directora")
-
+        only_ts = self.request.query_params.get("only_ts")
         if exclude_directora is not None:
-            self.queryset = Group.objects.exclude(name="Director")
+            self.queryset = Group.objects.exclude(name="Dev")
+            self.queryset = self.queryset.exclude(name="Director")
+        elif only_ts is not None:
+            self.queryset = Group.objects.filter(name="Trabajador Social")
 
         return super().get_queryset()
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms]
     queryset = UserAccount.objects.all()
     serializer_class = UserSerializer
 
 
 class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms]
 
     def get(self, request, *args, **kwargs):
         localitys = Locality.objects.all()
@@ -119,7 +180,7 @@ class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
 
 
 class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms | AdministradorPerms]
     queryset = Cribroom.objects.all()
     serializer_class = TechnicalReportSerializer
 
@@ -133,43 +194,45 @@ class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
 class LocalityListView(generics.ListAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllUsersPerms]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "locality"]  # fields to filter
 
 
 class NeighborhoodListView(generics.ListAPIView):
     queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllUsersPerms]
 
 
 class GenderListView(generics.ListAPIView):
     queryset = Gender.objects.all()
     serializer_class = GenderSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllUsersPerms]
 
 
 class ShiftListView(generics.ListAPIView):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms]
 
 
 class PhoneFeatureListView(generics.ListAPIView):
     queryset = PhoneFeature.objects.all()
     serializer_class = PhoneFeatureSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
 
 
 class GuardianTypeListView(generics.ListAPIView):
     queryset = GuardianType.objects.all()
     serializer_class = GuardianTypeSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
 
 
 class ChildModelViewSet(viewsets.ModelViewSet):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     filter_backends = [DjangoFilterBackend]  # This makes django-filters works
     filterset_fields = ["id", "locality", "cribroom_id"]  # fields to filter
 
@@ -275,7 +338,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 class CribroomModelViewSet(viewsets.ModelViewSet):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     filter_backends = [
         DjangoFilterBackend,
         OrderingFilter,
@@ -286,11 +349,8 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "zone",
         "shift",
         "id",
+        "user",
     ]  # fields to filter
-
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -329,16 +389,22 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
 class ShiftModelViewSet(viewsets.ModelViewSet):
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
 
 
 class ZoneModelViewSet(viewsets.ModelViewSet):
     queryset = Zone.objects.all()
     serializer_class = ZoneSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllUsersPerms]
 
 
 class DepartmentModelViewSet(viewsets.ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AllUsersPerms]
+
+
+class LogEntryModelViewSet(viewsets.ModelViewSet):
+    queryset = LogEntry.objects.all()
+    serializer_class = LogEntrySerializer
+    permission_classes = [DevPerms | DirectorPerms]

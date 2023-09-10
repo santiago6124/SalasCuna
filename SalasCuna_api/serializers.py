@@ -1,9 +1,9 @@
-from rest_framework import serializers, viewsets
-from datetime import date
+from rest_framework import serializers
 
 # from django.contrib.auth.models import User
 
 from django.contrib.auth.models import Group
+from django.contrib.admin.models import LogEntry
 from .models import (
     Child,
     Locality,
@@ -208,3 +208,10 @@ class DeleteCribroomSerializer(serializers.ModelSerializer):
             "max_capacity": {"required": False},
             "street": {"required": False},
         }
+
+
+class LogEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LogEntry
+        depth = 1
+        fields = "__all__"

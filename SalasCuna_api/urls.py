@@ -16,6 +16,14 @@ from .views import (
     ZoneModelViewSet,
     TechnicalReportRetrieveAPIView,
     DepartmentModelViewSet,
+    LocalityListCreateView,
+    PhoneFeatureListCreateView,
+    GuardianListCreateView,
+    NeighborhoodListCreateView,
+    GenderListCreateView,
+    ShiftListCreateView,
+    ChildListCreateView,
+    LogEntryModelViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -26,6 +34,7 @@ router.register(r"payout", PayoutViewSet)
 router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
 router.register(r"department", DepartmentModelViewSet)
+router.register(r"logEntry", LogEntryModelViewSet)
 
 urlpatterns = router.urls + [
     path(
@@ -68,4 +77,11 @@ urlpatterns = router.urls + [
         name="GuardianTypeListView",
     ),
     path("GroupViewSet/", GroupViewSet.as_view({"get": "list"}), name="GroupViewSet"),
+    path('LocalityListCreateView/', LocalityListCreateView.as_view(), name='LocalityListCreateView'),
+    path('PhoneFeatureListCreateView/', PhoneFeatureListCreateView.as_view(), name='PhoneFeatureListCreateView'),
+    path('GuardianListCreateView/', GuardianListCreateView.as_view(), name='GuardianListCreateView'),
+    path('NeighborhoodListCreateView/', NeighborhoodListCreateView.as_view(), name='NeighborhoodListCreateView'),
+    path('GenderListCreateView/', GenderListCreateView.as_view(), name='GenderListCreateView'),
+    path('ShiftListCreateView/', ShiftListCreateView.as_view(), name='ShiftListCreateView'),
+    path('ChildListCreateView/', ChildListCreateView.as_view(), name='ChildListCreateView'),
 ]

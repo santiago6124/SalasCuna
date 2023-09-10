@@ -127,7 +127,7 @@ class Child(models.Model):
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
     )  # Field name made lowercase.
     user = models.ForeignKey(
-        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=False
+        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
     )  # Field name made lowercase.
     guardian = models.ForeignKey(
         "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=False
@@ -166,7 +166,7 @@ class Cribroom(models.Model):
     name = models.CharField(max_length=255, blank=False)
     entity = models.CharField(max_length=255, blank=False)
     CUIT = models.BigIntegerField(blank=False)  # nuevos campos
-    code = models.IntegerField(blank=False)
+    code = models.CharField(max_length=255, blank=False)
     max_capacity = models.IntegerField(blank=False)
     is_active = models.BooleanField(default=True)
     street = models.CharField(max_length=255, blank=False)
@@ -189,6 +189,9 @@ class Cribroom(models.Model):
     zone = models.ForeignKey(
         "Zone", models.DO_NOTHING, db_column="zone_id", blank=True, null=True
     )
+    user = models.ForeignKey(
+        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+    )  # Field name made lowercase.
     history = HistoricalRecords()
 
     def __str__(self):
