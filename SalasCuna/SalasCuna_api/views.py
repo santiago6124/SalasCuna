@@ -61,6 +61,61 @@ from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
 
+class ChildListCreateView(generics.ListCreateAPIView):
+    queryset = Child.objects.all()
+    serializer_class = ChildSerializer
+
+class LocalityListCreateView(generics.ListCreateAPIView):
+    queryset = Locality.objects.all()
+    serializer_class = LocalitySerializer
+
+class PhoneFeatureListCreateView(generics.ListCreateAPIView):
+    queryset = PhoneFeature.objects.all()
+    serializer_class = PhoneFeatureSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["feature"]  # fields to filter
+
+class GuardianListCreateView(generics.ListCreateAPIView):
+    queryset = Guardian.objects.all()
+    serializer_class = GuardianSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["dni"]  # fields to filter
+
+
+class NeighborhoodListCreateView(generics.ListCreateAPIView):
+    queryset = Neighborhood.objects.all()
+    serializer_class = NeighborhoodSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["neighborhood"]  # fields to filter
+    
+class GenderListCreateView(generics.ListCreateAPIView):
+
+    queryset = Gender.objects.all()
+    serializer_class = GenderSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["gender"]  # fields to filter
+
+class ShiftListCreateView(generics.ListCreateAPIView):
+    queryset = Shift.objects.all()
+    serializer_class = ShiftSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name"]  # fields to filter
+
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [DevPerms | DirectorPerms]
     queryset = Payout.objects.all()
@@ -140,6 +195,8 @@ class LocalityListView(generics.ListAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer
     permission_classes = [AllUsersPerms]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "locality"]  # fields to filter
 
 
 class NeighborhoodListView(generics.ListAPIView):
