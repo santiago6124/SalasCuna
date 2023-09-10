@@ -75,7 +75,16 @@ def create_neighborhoods(num_neighborhoods):
 
 
 def create_groups():
-    grupos = ["Director", "Trabajador Social", "Arquitecto"]
+    grupos = [
+        "Director",
+        "Trabajador Social",
+        "Arquitecto",
+        "Dev",
+        "Psicopedagoga",
+        "Administrador",
+        "Secretario",
+        "CoordinadorTS",
+    ]
     for grupo in grupos:
         Group.objects.create(name=grupo)
 
@@ -128,6 +137,7 @@ def create_cribroom(num_features):
     neighborhoods = Neighborhood.objects.all()
     shifts = Shift.objects.all()
     zones = Zone.objects.all()
+    users = User.objects.all()
     for _ in range(num_features):
         Cribroom.objects.create(
             name=fake.city(),
@@ -142,6 +152,7 @@ def create_cribroom(num_features):
             neighborhood=random.choice(neighborhoods),
             shift=random.choice(shifts),
             zone=random.choice(zones),
+            user=random.choice(users),
         )
 
 
