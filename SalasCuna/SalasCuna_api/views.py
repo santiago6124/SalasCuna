@@ -57,6 +57,9 @@ from .serializers import (
 from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
+class LocalityListCreateView(generics.ListCreateAPIView):
+    queryset = Locality.objects.all()
+    serializer_class = LocalitySerializer
 
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
@@ -134,6 +137,8 @@ class LocalityListView(generics.ListAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer
     permission_classes = [AllowAny]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "locality"]  # fields to filter
 
 
 class NeighborhoodListView(generics.ListAPIView):
