@@ -51,6 +51,8 @@ JAZZMIN_SETTINGS = {
         "SalasCuna_api.Zone": "far fa-square",
     },
     "order_with_respect_to": [
+        "admin",
+        "SalasCuna_api",
         "SalasCuna_api.UserAccount",
         "SalasCuna_api.PhoneFeature",
         "SalasCuna_api.Role",

@@ -189,6 +189,9 @@ class Cribroom(models.Model):
     zone = models.ForeignKey(
         "Zone", models.DO_NOTHING, db_column="zone_id", blank=True, null=True
     )
+    user = models.ForeignKey(
+        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+    )  # Field name made lowercase.
     history = HistoricalRecords()
 
     def __str__(self):
