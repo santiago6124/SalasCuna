@@ -79,6 +79,35 @@ class GuardianListCreateView(generics.ListCreateAPIView):
     ]  # This makes django-filters works
     filterset_fields = ["dni"]  # fields to filter
 
+
+class NeighborhoodListCreateView(generics.ListCreateAPIView):
+    queryset = Neighborhood.objects.all()
+    serializer_class = NeighborhoodSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["neighborhood"]  # fields to filter
+    
+class GenderListCreateView(generics.ListCreateAPIView):
+
+    queryset = Gender.objects.all()
+    serializer_class = GenderSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["gender"]  # fields to filter
+
+class ShiftListCreateView(generics.ListCreateAPIView):
+    queryset = Shift.objects.all()
+    serializer_class = ShiftSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name"]  # fields to filter
+
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     queryset = Payout.objects.all()
