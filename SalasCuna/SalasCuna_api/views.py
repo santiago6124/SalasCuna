@@ -65,9 +65,11 @@ class ChildListCreateView(generics.ListCreateAPIView):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
 
+
 class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer
+
 
 class PhoneFeatureListCreateView(generics.ListCreateAPIView):
     queryset = PhoneFeature.objects.all()
@@ -77,6 +79,7 @@ class PhoneFeatureListCreateView(generics.ListCreateAPIView):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["feature"]  # fields to filter
+
 
 class GuardianListCreateView(generics.ListCreateAPIView):
     queryset = Guardian.objects.all()
@@ -96,9 +99,9 @@ class NeighborhoodListCreateView(generics.ListCreateAPIView):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["neighborhood"]  # fields to filter
-    
-class GenderListCreateView(generics.ListCreateAPIView):
 
+
+class GenderListCreateView(generics.ListCreateAPIView):
     queryset = Gender.objects.all()
     serializer_class = GenderSerializer
     filter_backends = [
@@ -106,6 +109,7 @@ class GenderListCreateView(generics.ListCreateAPIView):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["gender"]  # fields to filter
+
 
 class ShiftListCreateView(generics.ListCreateAPIView):
     queryset = Shift.objects.all()
@@ -115,6 +119,7 @@ class ShiftListCreateView(generics.ListCreateAPIView):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["name"]  # fields to filter
+
 
 class PayoutViewSet(viewsets.ModelViewSet):
     permission_classes = [DevPerms | DirectorPerms]
@@ -335,10 +340,40 @@ class ChildModelViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class CribroomModelViewSet(viewsets.ModelViewSet):
+class CribroomListView(generics.ListAPIView):
     queryset = Cribroom.objects.all()
     serializer_class = CribroomSerializer
     permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = [
+        "max_capacity",
+        "is_active",
+        "zone",
+        "shift",
+        "id",
+        "user",
+    ]  # fields to filter
+
+    def get_queryset(self):
+        no_depth = self.request.query_params.get("no_depth")
+
+        if no_depth is not None:
+            self.queryset = Cribroom.objects.all()
+            self.serializer_class = CribroomSerializer
+            return super().get_queryset()
+        else:
+            self.queryset = Cribroom.objects.all()
+            self.serializer_class = DepthCribroomSerializer
+            return super().get_queryset()
+
+
+class CribroomModelViewSet(viewsets.ModelViewSet):
+    queryset = Cribroom.objects.all()
+    serializer_class = CribroomSerializer
+    permission_classes = [DevPerms | DirectorPerms]
     filter_backends = [
         DjangoFilterBackend,
         OrderingFilter,
