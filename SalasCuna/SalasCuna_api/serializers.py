@@ -107,17 +107,6 @@ class GuardianTypeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ChildAndGuardian_RelatedObjectsSerializer(serializers.Serializer):
-    locality = LocalitySerializer(many=True)
-    neighborhood = NeighborhoodSerializer(many=True)
-    gender = GenderSerializer(many=True)
-    cribroom = CribroomSerializer(many=True)
-    shift = ShiftSerializer(many=True)
-    guardian = GuardianSerializer(many=True)
-    phone_Feature = PhoneFeatureSerializer(many=True)
-    guardian_Type = GuardianTypeSerializer(many=True)
-
-
 class ChildSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField()
 

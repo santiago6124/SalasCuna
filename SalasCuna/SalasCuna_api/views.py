@@ -36,7 +36,6 @@ from .models import (
 )
 from .serializers import (
     ChildSerializer,
-    ChildAndGuardian_RelatedObjectsSerializer,
     GroupSerializer,
     GuardianSerializer,
     NeighborhoodSerializer,
@@ -153,35 +152,6 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = [DevPerms | DirectorPerms]
     queryset = UserAccount.objects.all()
     serializer_class = UserSerializer
-
-
-class ChildAndGuardian_RelatedObjectsView(generics.RetrieveAPIView):
-    permission_classes = [DevPerms]
-
-    def get(self, request, *args, **kwargs):
-        localitys = Locality.objects.all()
-        neighborhoods = Neighborhood.objects.all()
-        genders = Gender.objects.all()
-        cribrooms = Cribroom.objects.all()
-        shifts = Shift.objects.all()
-        guardians = Guardian.objects.all()
-        phone_Features = PhoneFeature.objects.all()
-        guardian_Types = GuardianType.objects.all()
-
-        serializer = ChildAndGuardian_RelatedObjectsSerializer(
-            {
-                "locality": localitys,
-                "neighborhood": neighborhoods,
-                "gender": genders,
-                "cribroom": cribrooms,
-                "shift": shifts,
-                "guardian": guardians,
-                "phone_Feature": phone_Features,
-                "guardian_Type": guardian_Types,
-            }
-        )
-
-        return Response(serializer.data)
 
 
 class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):

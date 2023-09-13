@@ -2,7 +2,6 @@ from django.urls import include, path
 from rest_framework import routers
 from .views import (
     ChildModelViewSet,
-    ChildAndGuardian_RelatedObjectsView,
     CribroomModelViewSet,
     GroupViewSet,
     LocalityListView,
@@ -41,11 +40,6 @@ urlpatterns = router.urls + [
     path(
         "technical-report/<pk>/<str:initial_date>/<str:end_date>/",
         TechnicalReportRetrieveAPIView.as_view(),
-    ),
-    path(
-        "ChildRelatedObjectsView/",
-        ChildAndGuardian_RelatedObjectsView.as_view(),
-        name="ChildRelatedObjectsView",
     ),
     path(
         "LocalityListView/",
