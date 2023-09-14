@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django_filters",
     'django_celery_results',
     'django_celery_beat',
+    'Encuesta',
 ]
 
 JAZZMIN_SETTINGS = JAZZMIN_SETTINGS
