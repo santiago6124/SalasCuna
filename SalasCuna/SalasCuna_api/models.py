@@ -453,12 +453,12 @@ class Zone(models.Model):
 class Poll(models.Model):
     name =  models.CharField(max_length=255, blank=False)
 
-class ChildPoll(models.Model):
+class ChildAnswer(models.Model):
     child = models.ForeignKey(
         "Child", on_delete=models.CASCADE, blank=False, null=False
     )
-    poll = models.ForeignKey(
-        "Poll", on_delete=models.CASCADE, blank=False, null=False
+    answer = models.ForeignKey(
+        "Answer", on_delete=models.CASCADE, blank=False, null=False
     )
 
 class QuestionType(models.Model):
