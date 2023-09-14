@@ -1,0 +1,39 @@
+COSAS QUE NO FUNCIONAN:
+
+
+LOGIN:
+
+cuando te queres dirigir a la pagina login, esta te manda a /generate-padron
+
+AGREGAR USUARIO:
+
+no te permite crear un usuario
+
+esta es la response 
+
+{"detail":"CSRF Failed: CSRF token missing."}
+
+
+RESET-PASSWORD:
+
+
+GENERATE-PADRON:
+
+LA CREACION (EXCEL PDF) NO ANDA
+
+AÑADIR-CHICO:
+
+una vez selecionada una salacuna, cuando uno quiere exportar tira un error
+
+Uncaught runtime errors:
+×
+ERROR
+Cannot read properties of undefined (reading 'code')
+TypeError: Cannot read properties of undefined (reading 'code')
+    at handleExport (http://localhost:3000/static/js/bundle.js:3315:41)
+
+
+En editar chicos
+
+el espacio "estado" no tiene opciones, no permite continuar
+
