@@ -109,11 +109,33 @@ class UserAccountAdmin(admin.ModelAdmin):
         "email",
     ]
 
-
 class ZoneAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
     list_filter = ["name"]
 
+class PollAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    list_filter = ["name"]
+
+class ChildPollAdmin(admin.ModelAdmin):
+    list_display = ("id", "child", 'poll')
+    list_filter = ["child", 'poll']
+    
+class QuestionTypeAdmin(admin.ModelAdmin):
+    list_display = ("id", "type")
+    list_filter = ["type"]
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ("id", "description", "parentQuestion", "questionType", "poll")
+    list_filter = ["description"]
+
+class AnswerTypeAdmin(admin.ModelAdmin):
+    list_display = ("id", "type")
+    list_filter = ["type"]
+
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ("id", "description", "question", "answerType")
+    list_filter = ["description"]
 
 admin.site.register(Child, ChildAdmin)
 admin.site.register(Company, CompanyAdmin)
@@ -132,3 +154,9 @@ admin.site.register(Payout, PayoutAdmin)
 admin.site.register(Shift, ShiftAdmin)
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(Zone, ZoneAdmin)
+admin.site.register(Poll, PollAdmin)
+admin.site.register(ChildPoll, ChildPollAdmin)
+admin.site.register(QuestionType, QuestionTypeAdmin)
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(AnswerType, AnswerTypeAdmin)
+admin.site.register(Answer, AnswerAdmin)
