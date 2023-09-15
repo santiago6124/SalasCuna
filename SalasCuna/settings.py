@@ -100,6 +100,7 @@ DATABASES = {
         'PASSWORD': 'pepe1234',
         'HOST': 'salasbackend.cpew4ddmqibh.sa-east-1.rds.amazonaws.com',
         'PORT': '5432',
+        'OPTIONS': {'sslmode': 'require'},
     }
 }
 
