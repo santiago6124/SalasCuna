@@ -3,7 +3,6 @@ from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
-from rest_framework.authentication import TokenAuthentication
 
 # Custom permissions in permissions.py
 from .permissions import (
@@ -150,7 +149,6 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [DevPerms | DirectorPerms]
     queryset = UserAccount.objects.all()
     serializer_class = UserSerializer
