@@ -514,9 +514,6 @@ class ChildAnswer(models.Model):
     def __str__(self):
         return f"Child: {self.child}, Answer: {self.answer}"
     
-    def returnValueAsAnswerType(self):
-        pass
-    
     def save(self, *args, **kwargs):
         # Check if the associated question's questionType is 'Single Option'
         if self.answer.question.questionType in ('Single Option','Single Choice'):
@@ -525,5 +522,17 @@ class ChildAnswer(models.Model):
             if existing_childAnswer and existing_childAnswer != self:
                 raise ValidationError("There can only be one childAnswer for Single Option/Single Choice questions.")
         super().save(*args, **kwargs)
+
+    # implementar mas adelante
+    # def checkAnswerType(self):
+    #     pass
+
+    def returnValueAsAnswerType(self):
+        
+        selfAnswerType = self.answer.answerType
+        selfValue = self.value
+        valueReturn = bool(selfValue) if selfAnswerType == 'Boolean' else int(selfValue) if selfAnswerType == 'Integer' else float(selfValue) if selfAnswerType == 'Float' else str(selfValue)
+            
+        return valueReturn    
 
     
