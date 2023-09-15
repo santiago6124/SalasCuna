@@ -453,33 +453,37 @@ class Zone(models.Model):
 class Poll(models.Model):
     name =  models.CharField(max_length=255, blank=False)
 
+
+class Question(models.Model):
+    description =  models.CharField(max_length=255, blank=False)
+    parentQuestion = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    QUESTION_CHOICES = (
+        ('Single Option', 'Single Option'),
+        ('Single Choice', 'Single Choice'),
+        ('Multiple Choice', 'Multiple Choice'),
+    )
+    questionType = models.CharField(max_length=255, blank=False, null=False, choices=QUESTION_CHOICES)
+    poll = models.ForeignKey(
+        "Poll", on_delete=models.CASCADE, blank=False, null=False
+    )
+
+class Answer(models.Model):
+    description =  models.CharField(max_length=255, blank=False)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE, null=False, blank=False)
+    ANSWER_CHOICES = (
+        ('Boolean', 'Boolean'),
+        ('Integer', 'Integer'),
+        ('Float', 'Float'),
+        ('String', 'String'),
+    )
+    answerType = models.CharField(max_length=255, blank=False, null=False, choices=ANSWER_CHOICES)
+    
+    
+
 class ChildAnswer(models.Model):
     child = models.ForeignKey(
         "Child", on_delete=models.CASCADE, blank=False, null=False
     )
     answer = models.ForeignKey(
         "Answer", on_delete=models.CASCADE, blank=False, null=False
-    )
-
-class QuestionType(models.Model):
-    type =  models.CharField(max_length=255, blank=False)
-
-class Question(models.Model):
-    description =  models.CharField(max_length=255, blank=False)
-    parentQuestion = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
-    questionType = models.ForeignKey(
-        "QuestionType", on_delete=models.CASCADE, blank=False, null=False
-    )
-    poll = models.ForeignKey(
-        "Poll", on_delete=models.CASCADE, blank=False, null=False
-    )
-
-class AnswerType(models.Model):
-    type =  models.CharField(max_length=255, blank=False)
-
-class Answer(models.Model):
-    description =  models.CharField(max_length=255, blank=False)
-    question = models.ForeignKey('Question', on_delete=models.SET_NULL, null=True, blank=True)
-    answerType = models.ForeignKey(
-        "AnswerType", on_delete=models.CASCADE, blank=False, null=False
     )

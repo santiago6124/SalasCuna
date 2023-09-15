@@ -120,18 +120,10 @@ class PollAdmin(admin.ModelAdmin):
 class ChildAnswerAdmin(admin.ModelAdmin):
     list_display = ("id", "child", 'answer')
     list_filter = ["child", 'answer']
-    
-class QuestionTypeAdmin(admin.ModelAdmin):
-    list_display = ("id", "type")
-    list_filter = ["type"]
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ("id", "description", "parentQuestion", "questionType", "poll")
     list_filter = ["description"]
-
-class AnswerTypeAdmin(admin.ModelAdmin):
-    list_display = ("id", "type")
-    list_filter = ["type"]
 
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ("id", "description", "question", "answerType")
@@ -156,7 +148,5 @@ admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(Zone, ZoneAdmin)
 admin.site.register(Poll, PollAdmin)
 admin.site.register(ChildAnswer, ChildAnswerAdmin)
-admin.site.register(QuestionType, QuestionTypeAdmin)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(AnswerType, AnswerTypeAdmin)
 admin.site.register(Answer, AnswerAdmin)
