@@ -44,7 +44,7 @@ class ChildAdmin(admin.ModelAdmin):
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "phone")
+    list_display = ("id", "title")
     list_filter = ["title"]
 
 
@@ -77,6 +77,21 @@ class PhoneFeatureAdmin(admin.ModelAdmin):
     list_display = ("id", "feature")
     list_filter = ["feature"]
 
+
+class PhoneGuardianAdmin(admin.ModelAdmin):
+    list_display = ("id", "guardian", "phone_feature")
+    list_filter = ["guardian"]
+    
+    
+class PhoneCompanyAdmin(admin.ModelAdmin):
+    list_display = ("id", "company", "phone_feature")
+    list_filter = ["company"]
+    
+
+class PhoneUserAdmin(admin.ModelAdmin):
+    list_display = ("id", "user", "phone_feature")
+    list_filter = ["user"]
+    
 
 class GuardianTypeAdmin(admin.ModelAdmin):
     list_display = ("id", "type")
@@ -126,6 +141,9 @@ admin.site.register(Locality, LocalityAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Neighborhood, NeighborhoodAdmin)
 admin.site.register(PhoneFeature, PhoneFeatureAdmin)
+admin.site.register(PhoneGuardian, PhoneGuardianAdmin)
+admin.site.register(PhoneCompany, PhoneCompanyAdmin)
+admin.site.register(PhoneUser, PhoneUserAdmin)
 admin.site.register(Guardian, GuardianAdmin)
 admin.site.register(GuardianType, GuardianTypeAdmin)
 admin.site.register(Payout, PayoutAdmin)

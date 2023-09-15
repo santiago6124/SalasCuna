@@ -10,6 +10,7 @@ from .models import (
     Neighborhood,
     Gender,
     Cribroom,
+    PhoneCompany,
     Shift,
     Guardian,
     PhoneFeature,
@@ -19,6 +20,8 @@ from .models import (
     UserAccount,
     Desinfection,
     Department,
+    PhoneGuardian,
+    PhoneUser,
 )
 
 
@@ -203,4 +206,22 @@ class LogEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = LogEntry
         depth = 1
+        fields = "__all__"
+
+
+class PhoneGuardianSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneGuardian
+        fields = "__all__"
+
+
+class PhoneUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneUser
+        fields = "__all__"
+
+
+class PhoneCompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PhoneCompany
         fields = "__all__"

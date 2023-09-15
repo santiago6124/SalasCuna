@@ -7,6 +7,7 @@ from .views import (
     LocalityListView,
     NeighborhoodListView,
     GenderListView,
+    PhoneCompanyCreateView,
     ShiftListView,
     PhoneFeatureListView,
     GuardianTypeListView,
@@ -24,6 +25,8 @@ from .views import (
     ChildListCreateView,
     LogEntryModelViewSet,
     CribroomListView,
+    PhoneGuardianCreateView,
+    PhoneUserCreateView,
 )
 
 router = routers.DefaultRouter()
@@ -107,5 +110,20 @@ urlpatterns = router.urls + [
         "ChildListCreateView/",
         ChildListCreateView.as_view(),
         name="ChildListCreateView",
+    ),
+    path(
+        "PhoneUserCreateView/",
+        PhoneUserCreateView.as_view(),
+        name="PhoneUserCreateView",
+    ),
+    path(
+        "PhoneGuardianCreateView/",
+        PhoneGuardianCreateView.as_view(),
+        name="PhoneGuardianCreateView",
+    ),
+    path(
+        "PhoneCompanyCreateView/",
+        PhoneCompanyCreateView.as_view(),
+        name="PhoneCompanyCreateView",
     ),
 ]

@@ -46,7 +46,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     dni = models.CharField(max_length=11)
-    phone_number = models.CharField(max_length=15)
     address = models.CharField(max_length=255)
     department = models.ForeignKey(
         "Department",
@@ -155,7 +154,6 @@ class Child(models.Model):
 
 class Company(models.Model):
     title = models.CharField(max_length=255, blank=False)
-    phone = models.IntegerField(blank=False)
     history = HistoricalRecords()
 
     def __str__(self):
@@ -384,6 +382,36 @@ class Gender(models.Model):
         return f"{self.gender}"
 
 
+class PhoneGuardian(models.Model):
+    number = models.BigIntegerField(blank=False)
+    guardian = models.ForeignKey(
+        "Guardian", on_delete=models.CASCADE, blank=True, null=True
+    )
+    phone_feature = models.ForeignKey(
+        "PhoneFeature", on_delete=models.CASCADE, blank=False
+    )
+
+
+class PhoneCompany(models.Model):
+    number = models.BigIntegerField(blank=False)
+    company = models.ForeignKey(
+        "Company", on_delete=models.CASCADE, blank=True, null=True
+    )
+    phone_feature = models.ForeignKey(
+        "PhoneFeature", on_delete=models.CASCADE, blank=False
+    )
+
+
+class PhoneUser(models.Model):
+    number = models.BigIntegerField(blank=False)
+    user = models.ForeignKey(
+        "UserAccount", on_delete=models.CASCADE, blank=True, null=True
+    )
+    phone_feature = models.ForeignKey(
+        "PhoneFeature", on_delete=models.CASCADE, blank=False
+    )
+
+
 class PhoneFeature(models.Model):
     feature = models.BigIntegerField(blank=False)
     history = HistoricalRecords()
@@ -405,11 +433,6 @@ class Guardian(models.Model):
     last_name = models.CharField(max_length=255, blank=False)
     dni = models.CharField(max_length=255, blank=False)
 
-    phone_number = models.IntegerField(blank=True, null=True)
-
-    phone_Feature = models.ForeignKey(
-        PhoneFeature, on_delete=models.CASCADE, blank=True, null=True
-    )
     guardian_Type = models.ForeignKey(
         GuardianType, on_delete=models.CASCADE, blank=False
     )

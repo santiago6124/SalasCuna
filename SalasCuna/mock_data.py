@@ -31,6 +31,9 @@ from SalasCuna_api.models import (
     Shift,
     Zone,
     Department,
+    PhoneGuardian,
+    PhoneUser,
+    PhoneCompany,
 )
 
 fake = Faker()
@@ -44,7 +47,6 @@ def create_users(num_users):
         last_name = fake.last_name()
         email = fake.email()
         dni = fake.unique.random_number(digits=7)
-        phone_number = fake.random_int(min=0, max=9999999)
         address = fake.street_name()
         department = random.choice(departments)
         city = fake.city()
@@ -55,7 +57,6 @@ def create_users(num_users):
             first_name=first_name,
             last_name=last_name,
             dni=dni,
-            phone_number=phone_number,
             address=address,
             department=department,
             city=city,
@@ -110,8 +111,7 @@ def create_departments(num_departments):
 def create_companies(num_companies):
     for _ in range(num_companies):
         title = fake.company()
-        phone = fake.unique.random_number(digits=9)
-        Company.objects.create(title=title, phone=phone)
+        Company.objects.create(title=title)
 
 
 def create_genders():
@@ -122,8 +122,41 @@ def create_genders():
 
 def create_phone_features(num_features):
     for _ in range(num_features):
-        feature = fake.random_int(min=100, max=999)
+        feature = fake.random_int(min=310, max=380)
         PhoneFeature.objects.create(feature=feature)
+
+
+def create_guardianPhones(num_phones):
+    guardians = Guardian.objects.all()
+    phone_features = PhoneFeature.objects.all()
+    for _ in range(num_phones):
+        PhoneGuardian.objects.create(
+            number=fake.unique.random_number(digits=7),
+            guardian=random.choice(guardians),
+            phone_feature=random.choice(phone_features),
+        )
+
+
+def create_userPhones(num_phones):
+    users = User.objects.all()
+    phone_features = PhoneFeature.objects.all()
+    for _ in range(num_phones):
+        PhoneUser.objects.create(
+            number=fake.unique.random_number(digits=7),
+            user=random.choice(users),
+            phone_feature=random.choice(phone_features),
+        )
+
+
+def create_companyPhones(num_phones):
+    companies = Company.objects.all()
+    phone_features = PhoneFeature.objects.all()
+    for _ in range(num_phones):
+        PhoneCompany.objects.create(
+            number=fake.unique.random_number(digits=7),
+            company=random.choice(companies),
+            phone_feature=random.choice(phone_features),
+        )
 
 
 def create_guardian_types():
@@ -235,24 +268,19 @@ def create_forms(num_forms):
 
 def create_guardians(num_guardians):
     genders = Gender.objects.all()
-    phone_features = PhoneFeature.objects.all()
     guardian_types = GuardianType.objects.all()
     for _ in range(num_guardians):
         first_name = fake.first_name()
         last_name = fake.last_name()
         dni = fake.unique.random_number(digits=7)
-        phone_number = fake.random_int(min=0, max=9999999)
         gender = random.choice(genders)
-        phone_feature = random.choice(phone_features)
         guardian_type = random.choice(guardian_types)
 
         Guardian.objects.create(
             first_name=first_name,
             last_name=last_name,
             dni=dni,
-            phone_number=phone_number,
             gender=gender,
-            phone_Feature=phone_feature,
             guardian_Type=guardian_type,
         )
 
@@ -278,6 +306,9 @@ num_departments = 20
 num_desinfection = 5
 num_forms = 10
 num_phone_features = 20
+num_guardianPhone = 10
+num_userPhone = 10
+num_companyPhone = 7
 num_guardians = 15
 num_payouts = 10
 num_shifts = 20
@@ -297,6 +328,10 @@ for i in range(15):
     create_payouts(num_payouts)
 create_groups()
 create_users(num_users)
+for i in range(20):
+    create_guardianPhones(num_guardianPhone)
+    create_userPhones(num_userPhone)
+    create_companyPhones(num_companyPhone)
 create_shifts(num_shifts)
 create_cribroom(num_cribroom)
 create_cribroom_users(num_cribroom_users)

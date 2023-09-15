@@ -25,6 +25,9 @@ from .models import (
     Neighborhood,
     Gender,
     Cribroom,
+    PhoneCompany,
+    PhoneGuardian,
+    PhoneUser,
     Shift,
     Guardian,
     PhoneFeature,
@@ -43,6 +46,9 @@ from .serializers import (
     DepthChildSerializer,
     LocalitySerializer,
     GenderSerializer,
+    PhoneCompanySerializer,
+    PhoneGuardianSerializer,
+    PhoneUserSerializer,
     ShiftSerializer,
     PhoneFeatureSerializer,
     GuardianTypeSerializer,
@@ -192,9 +198,27 @@ class ShiftListView(generics.ListAPIView):
     permission_classes = [DevPerms | DirectorPerms]
 
 
-class PhoneFeatureListView(generics.ListAPIView):
+class PhoneFeatureListView(generics.CreateAPIView):
     queryset = PhoneFeature.objects.all()
     serializer_class = PhoneFeatureSerializer
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+
+
+class PhoneUserCreateView(generics.CreateAPIView):
+    queryset = PhoneUser.objects.all()
+    serializer_class = PhoneUserSerializer
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+
+
+class PhoneGuardianCreateView(generics.CreateAPIView):
+    queryset = PhoneGuardian.objects.all()
+    serializer_class = PhoneGuardianSerializer
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+
+
+class PhoneCompanyCreateView(generics.CreateAPIView):
+    queryset = PhoneCompany.objects.all()
+    serializer_class = PhoneCompanySerializer
     permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
 
 
