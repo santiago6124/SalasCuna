@@ -33,6 +33,10 @@ from .models import (
     Zone,
     UserAccount,
     Department,
+    Poll,
+    Question,
+    Answer,
+    ChildAnswer,
 )
 from .serializers import (
     ChildSerializer,
@@ -54,11 +58,56 @@ from .serializers import (
     DepartmentSerializer,
     DeleteCribroomSerializer,
     LogEntrySerializer,
+    PollSerializer,
+    QuestionSerializer,
+    AnswerSerializer,
+    ChildAnswerSerializer,
 )
 
 from datetime import datetime
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
+
+class PollListView(generics.ListAPIView):
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name"]  # fields to filter
+
+class QuestionListView(generics.ListAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["description", 'parentQuestion']  # fields to filter
+
+class AnswerListView(generics.ListAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["description", 'question']  # fields to filter
+
+
+class ChildAnswerListCreateView(generics.ListCreateAPIView):
+    queryset = ChildAnswer.objects.all()
+    serializer_class = ChildAnswerSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["value", 'answer', 'answer__question']  # fields to filter
 
 class ChildListCreateView(generics.ListCreateAPIView):
     queryset = Child.objects.all()

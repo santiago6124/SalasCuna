@@ -24,6 +24,10 @@ from .views import (
     ChildListCreateView,
     LogEntryModelViewSet,
     CribroomListView,
+    PollListView,
+    QuestionListView,
+    AnswerListView,
+    ChildAnswerListCreateView,
 )
 
 router = routers.DefaultRouter()
@@ -107,5 +111,25 @@ urlpatterns = router.urls + [
         "ChildListCreateView/",
         ChildListCreateView.as_view(),
         name="ChildListCreateView",
+    ),
+    path(
+        "PollListView/",
+        PollListView.as_view(),
+        name="PollListView",
+    ),
+    path(
+        "QuestionListView/",
+        QuestionListView.as_view(),
+        name="QuestionListView",
+    ),
+    path(
+        "AnswerListView/",
+        AnswerListView.as_view(),
+        name="AnswerListView",
+    ),
+    path(
+        "ChildAnswerListCreateView/",
+        ChildAnswerListCreateView.as_view(),
+        name="ChildAnswerListCreateView",
     ),
 ]
