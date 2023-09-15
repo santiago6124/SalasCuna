@@ -19,8 +19,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', '0').lower() in ['true', 't', '1']
 
-ALLOWED_HOSTS = ['salasproduccion.azurewebsites.net']
-CSRF_TRUSTED_ORIGINS = ['https://salasproduccion.azurewebsites.net']
+ALLOWED_HOSTS = ['salascunaweb.azurewebsites.net']
+CSRF_TRUSTED_ORIGINS = ['https://salascunaweb.azurewebsites.net']
 
 SECURE_SSL_REDIRECT = \
     os.getenv('SECURE_SSL_REDIRECT', '0').lower() in ['true', 't', '1']
@@ -95,11 +95,11 @@ WSGI_APPLICATION = "SalasCuna.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DBNAME'),
-        'HOST': os.environ.get('DBHOST'),
-        'USER': os.environ.get('DBUSER'),
-        'PASSWORD': os.environ.get('DBPASS'),
-        'OPTIONS': {'sslmode': 'require'},
+        'NAME': 'salasbackend',
+        'USER': 'mysuperuser',
+        'PASSWORD': 'pepe1234',
+        'HOST': 'salasbackend.cpew4ddmqibh.sa-east-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
