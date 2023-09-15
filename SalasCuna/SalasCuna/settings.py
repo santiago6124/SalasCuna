@@ -85,9 +85,13 @@ WSGI_APPLICATION = "SalasCuna.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'salasbackend',
+        'USER': 'mysuperuser',
+        'PASSWORD': 'pepe1234',
+        'HOST': 'salasbackend.cpew4ddmqibh.sa-east-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
