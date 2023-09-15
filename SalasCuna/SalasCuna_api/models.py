@@ -15,6 +15,8 @@ from django.contrib.auth.models import (
 from simple_history.models import HistoricalRecords
 from num2words import num2words
 
+from django.core.exceptions import ValidationError
+
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -486,6 +488,17 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.description
+    
+    
+    def save(self, *args, **kwargs):
+        # Check if the associated question's questionType is 'Single Option'
+        if self.question.questionType == 'Single Option':
+            # Check if there is already an answer for this question
+            existing_answer = Answer.objects.filter(question=self.question).first()
+            if existing_answer and existing_answer != self:
+                raise ValidationError("There can only be one answer for Single Option questions.")
+        super().save(*args, **kwargs)
+
 
 
 
@@ -501,4 +514,16 @@ class ChildAnswer(models.Model):
     def __str__(self):
         return f"Child: {self.child}, Answer: {self.answer}"
     
+    def returnValueAsAnswerType(self):
+        pass
+    
+    def save(self, *args, **kwargs):
+        # Check if the associated question's questionType is 'Single Option'
+        if self.answer.question.questionType in ('Single Option','Single Choice'):
+            # Check if there is already an answer for this question
+            existing_childAnswer = ChildAnswer.objects.filter(answer__question=self.answer.question, child = self.child).first()
+            if existing_childAnswer and existing_childAnswer != self:
+                raise ValidationError("There can only be one childAnswer for Single Option/Single Choice questions.")
+        super().save(*args, **kwargs)
+
     
