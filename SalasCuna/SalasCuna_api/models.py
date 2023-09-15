@@ -496,6 +496,7 @@ class ChildAnswer(models.Model):
     answer = models.ForeignKey(
         "Answer", on_delete=models.CASCADE, blank=False, null=False
     )
+    value =  models.CharField(max_length=255, blank=False)
 
     def __str__(self):
         return f"Child: {self.child}, Answer: {self.answer}"
