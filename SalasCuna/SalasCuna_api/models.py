@@ -450,9 +450,12 @@ class Zone(models.Model):
     def __str__(self):
         return self.name
 
+
 class Poll(models.Model):
     name =  models.CharField(max_length=255, blank=False)
 
+    def __str__(self):
+        return self.name
 
 class Question(models.Model):
     description =  models.CharField(max_length=255, blank=False)
@@ -466,9 +469,12 @@ class Question(models.Model):
     poll = models.ForeignKey(
         "Poll", on_delete=models.CASCADE, blank=False, null=False
     )
+    
+    def __str__(self):
+        return self.description
 
 class Answer(models.Model):
-    description =  models.CharField(max_length=255, blank=False)
+    description = models.CharField(max_length=255, blank=False)
     question = models.ForeignKey('Question', on_delete=models.CASCADE, null=False, blank=False)
     ANSWER_CHOICES = (
         ('Boolean', 'Boolean'),
@@ -477,8 +483,11 @@ class Answer(models.Model):
         ('String', 'String'),
     )
     answerType = models.CharField(max_length=255, blank=False, null=False, choices=ANSWER_CHOICES)
-    
-    
+
+    def __str__(self):
+        return self.description
+
+
 
 class ChildAnswer(models.Model):
     child = models.ForeignKey(
@@ -487,3 +496,8 @@ class ChildAnswer(models.Model):
     answer = models.ForeignKey(
         "Answer", on_delete=models.CASCADE, blank=False, null=False
     )
+
+    def __str__(self):
+        return f"Child: {self.child}, Answer: {self.answer}"
+    
+    
