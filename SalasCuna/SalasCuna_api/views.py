@@ -36,6 +36,7 @@ from .models import (
 )
 from .serializers import (
     ChildSerializer,
+    DeleteChildSerializer,
     GroupSerializer,
     GuardianSerializer,
     NeighborhoodSerializer,
@@ -214,10 +215,15 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
         no_depth = self.request.query_params.get("no_depth")
+        delete = self.request.query_params.get("delete")
 
         if no_depth is not None:
             self.queryset = Child.objects.all()
             self.serializer_class = ChildSerializer
+            return super().get_queryset()
+        elif delete is not None:
+            self.queryset = Child.objects.all()
+            self.serializer_class = DeleteChildSerializer
             return super().get_queryset()
         else:
             self.queryset = Child.objects.all()
