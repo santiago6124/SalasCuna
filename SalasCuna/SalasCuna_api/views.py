@@ -57,7 +57,7 @@ from .serializers import (
     LogEntrySerializer,
 )
 
-from datetime import datetime
+from datetime import datetime, date
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
 
@@ -286,7 +286,7 @@ class ChildModelViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data)
         if serializer.is_valid():
             updated_instance = serializer.save()
-            if updated_instance.disenroll_date <= datetime.now():
+            if updated_instance.disenroll_date <= date.today():
                 updated_instance.is_active = False
             return Response(serializer.data)
         else:
