@@ -25,8 +25,10 @@ class UserAccountManager(BaseUserManager):
         user = self.model(email=email, **extra_fields)
         extra_fields.setdefault("is_active", True)
 
+        
         user.set_password(password)
         user.save()
+        
 
         return user  # Add this line to return the created user object
 
@@ -64,7 +66,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     objects = UserAccountManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"]
+    REQUIRED_FIELDS = ["first_name", "last_name", "dni", "phone_number", "address", "city", "department"]
 
     def get_full_name(self):
         return self.first_name
