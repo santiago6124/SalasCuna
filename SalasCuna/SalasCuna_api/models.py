@@ -17,7 +17,7 @@ from num2words import num2words
 
 
 class UserAccountManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
+    def create_user(self, email, role, password=None, **extra_fields):
         if not email:
             raise ValueError("Users must have an email address")
 
@@ -28,7 +28,7 @@ class UserAccountManager(BaseUserManager):
         
         user.set_password(password)
         user.save()
-        user.groups.set("2")
+        user.groups.set(role)
 
         return user  # Add this line to return the created user object
 
