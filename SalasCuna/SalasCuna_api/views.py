@@ -254,9 +254,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
                 child_instance.guardian = guardian_instance
                 child_instance.save()
             else:
-                # If the guardian serializer is not valid, you may handle the error here
-                print(guardian_serializer.errors)
-
                 return Response(
                     {"message": "check the guardian data"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -277,9 +274,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
                 child_instance.neighborhood = neighborhood_instance
                 child_instance.save()
             else:
-                # If the Neighborhood serializer is not valid, you may handle the error here
-                print(neighborhood_serializer.errors)
-
                 return Response(
                     {"message": "check the neighborhood data"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -289,27 +283,13 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        disenroll = bool(self.request.query_params.get("disenroll"))
-        # disenroll_date
-        print(f"paramter: {disenroll}")
-
-        if disenroll:
-            print(f"disenroll: {disenroll}")
-            instance.disenroll_date = datetime.now()
-            instance.is_active = False
-            print(instance)
-            print("Inactive")
-            # instance.user=self.request.user
-            instance.save()
-
-            return Response(status=status.HTTP_202_ACCEPTED)
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid():
+            updated_instance = serializer.save()
+            if updated_instance.disenroll_date <= datetime.now():
+                updated_instance.is_active = False
+            return Response(serializer.data)
         else:
-            # If 'disenroll' parameter is not present, proceed with normal update
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
@@ -366,7 +346,6 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
-        print(serializer)
         if serializer.is_valid():
             updated_instance = serializer.save()
             if not updated_instance.is_active:
