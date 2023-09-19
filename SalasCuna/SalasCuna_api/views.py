@@ -286,8 +286,9 @@ class ChildModelViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data)
         if serializer.is_valid():
             updated_instance = serializer.save()
-            if updated_instance.disenroll_date <= date.today():
-                updated_instance.is_active = False
+            if updated_instance.disenroll_date is not None:
+                if updated_instance.disenroll_date <= date.today():
+                    updated_instance.is_active = False
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
