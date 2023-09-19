@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.790749e4.css",
-    "main.js": "/static/js/main.8a9723f0.js",
+    "main.css": "/static/css/main.3207fcac.css",
+    "main.js": "/static/js/main.795894c3.js",
     "static/media/fondo.png": "/static/media/fondo.4cbf2e6b18b74afab81b.png",
     "static/media/Sala-cuna_x4.png": "/static/media/Sala-cuna_x4.c0492886fd65848e2371.png",
     "static/media/Profile.jpg": "/static/media/Profile.cf322f20804ef45499a1.jpg",
     "index.html": "/index.html",
-    "main.790749e4.css.map": "/static/css/main.790749e4.css.map",
-    "main.8a9723f0.js.map": "/static/js/main.8a9723f0.js.map"
+    "main.3207fcac.css.map": "/static/css/main.3207fcac.css.map",
+    "main.795894c3.js.map": "/static/js/main.795894c3.js.map"
   },
   "entrypoints": [
-    "static/css/main.790749e4.css",
-    "static/js/main.8a9723f0.js"
+    "static/css/main.3207fcac.css",
+    "static/js/main.795894c3.js"
   ]
 }
