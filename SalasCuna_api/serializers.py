@@ -204,3 +204,20 @@ class LogEntrySerializer(serializers.ModelSerializer):
         model = LogEntry
         depth = 1
         fields = "__all__"
+
+
+class DeleteChildSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Child
+        fields = "__all__"
+        extra_kwargs = {
+            "first_name": {"required": False},
+            "last_name": {"required": False},
+            "dni": {"required": False},
+            "birthdate": {"required": False},
+            "street": {"required": False},
+            "registration_date": {"required": False},
+            "gender": {"required": False},
+            "cribroom": {"required": False},
+            "guardian": {"required": False},
+        }
