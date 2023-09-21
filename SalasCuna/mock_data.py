@@ -140,7 +140,7 @@ def create_companies(num_companies):
 def create_genders():
     Gender.objects.create(gender="Male")
     Gender.objects.create(gender="Female")
-    Gender.objects.create(gender="10th generation Apache Helicopter")
+    # Gender.objects.create(gender="10th generation Apache Helicopter")
 
 
 def create_phone_features(num_features):
