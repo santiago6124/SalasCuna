@@ -199,3 +199,6 @@ SITE_NAME = "Salas Cuna"
 CORS_ALLOW_ALL_ORIGINS = True
 
 CELERY_RESULT_BACKEND = 'django-db'
+
+
+REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
