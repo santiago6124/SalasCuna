@@ -1,0 +1,175 @@
+@startuml
+
+' !define ENTITY
+!define PRIMARY_KEY(x) <b><color:blue>x</color></b>
+!define FOREIGN_KEY(x) <color:green>x</color>
+
+hide circle
+
+entity Cribroom {
+    + PRIMARY_KEY(id)
+    --
+    name
+    code
+    max_capacity = int
+    street
+    house_number
+    --
+    FOREIGN_KEY(Locality)
+    FOREIGN_KEY(Neighborhood)
+    FOREIGN_KEY(Shift)
+    --
+    generarPadron()
+    generarNotaDePago()
+    generarInformeTecnico()
+}
+
+entity Company {
+    + PRIMARY_KEY(id)
+    --
+    title = str
+    phone = int
+    --
+    --
+    ()
+}
+
+entity Desinfection {
+    + PRIMARY_KEY(id)
+    --
+    date = datetime
+    description = str
+    --
+    FOREIGN_KEY(Cribroom)
+    FOREIGN_KEY(Company)
+    --
+    ()
+}
+
+Desinfection "*" - "1" Company
+Desinfection "*" -- "1" Cribroom
+
+entity Payout {
+    + PRIMARY_KEY(id)
+    --
+    amount = float
+    date = date
+    --
+    FOREIGN_KEY(Zone)
+    ' Payout_Adress = capital or upcountry
+    --
+    ()
+}
+
+entity Zone {
+    + PRIMARY_KEY(id)
+    --
+    name
+    --
+
+    ' interior or capital
+    --
+    ()
+}
+
+Payout "*" - "1" Zone
+' Zone "1" - "*" Cribroom
+
+entity Child {
+    + PRIMARY_KEY(id)
+    --
+    first_name
+    last_name
+    dni
+    birthdate
+    street
+    house_number
+    registration_date
+    disenroll_date = default null
+    --
+    FOREIGN_KEY(Locality)
+    FOREIGN_KEY(Neighborhood)
+    FOREIGN_KEY(Gender)
+    FOREIGN_KEY(Cribroom)
+    FOREIGN_KEY(Shift)
+    social_worker = FOREIGN_KEY(User)
+    FOREIGN_KEY(Guardian)
+    FOREIGN_KEY(Child_state)
+    --
+    ()
+}
+
+Cribroom "1" - "*" Child
+
+entity User {
+    + PRIMARY_KEY(id)
+    --
+    username
+    password
+    --
+    FOREIGN_KEY(User_email)
+    FOREIGN_KEY(Role)
+    --
+    ()
+}
+
+entity Cribroom_User {
+    + PRIMARY_KEY(id)
+    --
+
+    --
+    FOREIGN_KEY(Cribroom)
+    FOREIGN_KEY(User)
+    --
+    ()
+}
+
+Cribroom "1" - "*" Cribroom_User
+Cribroom_User "*" - "1" User
+
+
+entity Guardian {
+    + PRIMARY_KEY(id)
+    --
+    first_name
+    last_name
+    dni
+    phone_number
+    --
+    FOREIGN_KEY(Phone_feature)
+    FOREIGN_KEY(Gender)
+    FOREIGN_KEY(Guardian_Type)
+    --
+    ()
+}
+
+Child "*" -- "1" Guardian
+
+entity Form {
+    + PRIMARY_KEY(id)
+    --
+    generation_date
+    --
+    FOREIGN_KEY(Cribroom_User)
+    FOREIGN_KEY(Role)
+    --
+    setRole()
+}
+
+Cribroom_User "*" -- "1" Form
+
+entity Locality {
+    + PRIMARY_KEY(id)
+    --
+    name
+    --
+    FOREIGN_KEY(Zone)
+    --
+    ()
+}
+
+Zone "1" - "*" Locality
+Locality "*" - "1" Cribroom
+
+
+@enduml
