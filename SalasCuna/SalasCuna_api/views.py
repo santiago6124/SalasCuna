@@ -3,6 +3,7 @@ from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 
 # Custom permissions in permissions.py
 from .permissions import (
@@ -59,6 +60,8 @@ from .serializers import (
 
 from datetime import datetime, date
 from rest_framework.views import APIView  # Import APIView from rest_framework
+
+
 
 
 class ChildListCreateView(generics.ListCreateAPIView):
@@ -150,7 +153,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [DevPerms | DirectorPerms]
+    permission_classes = [DevPerms | DirectorPerms | IsAuthenticated]
     queryset = UserAccount.objects.all()
     serializer_class = UserSerializer
 
