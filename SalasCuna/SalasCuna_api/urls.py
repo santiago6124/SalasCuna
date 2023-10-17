@@ -17,6 +17,7 @@ from .views import (
     GenderListCreateView,
     LogEntryModelViewSet,
     CribroomListView,
+    ShiftModelViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -28,6 +29,7 @@ router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
 router.register(r"department", DepartmentModelViewSet)
 router.register(r"logEntry", LogEntryModelViewSet)
+router.register(r"shift", ShiftModelViewSet)
 
 urlpatterns = router.urls + [
     path(
