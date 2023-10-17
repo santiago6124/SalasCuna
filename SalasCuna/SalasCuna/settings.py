@@ -136,6 +136,7 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
 # JWT
@@ -197,6 +198,3 @@ SITE_NAME = "Salas Cuna"
 CORS_ALLOW_ALL_ORIGINS = True
 
 CELERY_RESULT_BACKEND = 'django-db'
-
-
-REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
