@@ -4,11 +4,6 @@ from .views import (
     ChildModelViewSet,
     CribroomModelViewSet,
     GroupViewSet,
-    LocalityListView,
-    NeighborhoodListView,
-    GenderListView,
-    ShiftListView,
-    PhoneFeatureListView,
     GuardianTypeListView,
     PayoutViewSet,
     UserViewSet,
@@ -20,8 +15,6 @@ from .views import (
     GuardianListCreateView,
     NeighborhoodListCreateView,
     GenderListCreateView,
-    ShiftListCreateView,
-    ChildListCreateView,
     LogEntryModelViewSet,
     CribroomListView,
 )
@@ -40,31 +33,6 @@ urlpatterns = router.urls + [
     path(
         "technical-report/<pk>/<str:initial_date>/<str:end_date>/",
         TechnicalReportRetrieveAPIView.as_view(),
-    ),
-    path(
-        "LocalityListView/",
-        LocalityListView.as_view(),
-        name="LocalityListView",
-    ),
-    path(
-        "NeighborhoodListView/",
-        NeighborhoodListView.as_view(),
-        name="NeighborhoodListView",
-    ),
-    path(
-        "GenderListView/",
-        GenderListView.as_view(),
-        name="GenderListView",
-    ),
-    path(
-        "ShiftListView/",
-        ShiftListView.as_view(),
-        name="ShiftListView",
-    ),
-    path(
-        "PhoneFeatureListView/",
-        PhoneFeatureListView.as_view(),
-        name="PhoneFeatureListView",
     ),
     path(
         "GuardianTypeListView/",
@@ -97,15 +65,5 @@ urlpatterns = router.urls + [
         "GenderListCreateView/",
         GenderListCreateView.as_view(),
         name="GenderListCreateView",
-    ),
-    path(
-        "ShiftListCreateView/",
-        ShiftListCreateView.as_view(),
-        name="ShiftListCreateView",
-    ),
-    path(
-        "ChildListCreateView/",
-        ChildListCreateView.as_view(),
-        name="ChildListCreateView",
     ),
 ]
