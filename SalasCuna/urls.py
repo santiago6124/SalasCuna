@@ -9,6 +9,5 @@ urlpatterns = [
     path("auth/", include("djoser.urls.jwt")),
     path("api/", include("SalasCuna_api.urls")),
     path('docs/', include_docs_urls(title='My API title', public=False)),
+    re_path(r"^(?:.*)?$", TemplateView.as_view(template_name="index.html"))
 ]
-
-urlpatterns += [re_path(r"^.*", TemplateView.as_view(template_name="index.html"))]
