@@ -451,3 +451,32 @@ class Zone(models.Model):
 
     def __str__(self):
         return self.name
+
+class technicalReport(models.Model):
+    encabezado = models.CharField(max_length=255, blank=False, default="1983/2023 - 40 AÑOS DE DEMOCRACIA")
+    ministro = models.CharField(max_length=255, blank=False, default="Sr. Ministro de Desarrollo Social Dr. Juan Carlos Massei")
+    resolucion = models.CharField(max_length=255, blank=False, default="Resolución Ministerial N° 0007/2023")
+    remitanse = models.CharField(max_length=255, blank=False, default="REMÍTANSE a la Subsecretaria de Administración y Recursos Humanos")
+    history = HistoricalRecords()
+    
+    def save(self, *args, **kwargs):
+        existing_obj = technicalReport.objects.first()
+
+        if existing_obj:
+            # Update the existing instance with the new values
+            existing_obj.encabezado = self.encabezado
+            existing_obj.ministro = self.ministro
+            existing_obj.resolucion = self.resolucion
+            existing_obj.remitanse = self.remitanse
+            super(technicalReport, existing_obj).save(*args, **kwargs)
+        else:
+            super(technicalReport, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Avoid deleting the object
+        
+        print('method not allowed')
+        pass
+
+    def __str__(self):
+        return self.resolucion
