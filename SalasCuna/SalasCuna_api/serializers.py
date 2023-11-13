@@ -19,6 +19,7 @@ from .models import (
     UserAccount,
     Desinfection,
     Department,
+    TechnicalReport
 )
 
 
@@ -221,3 +222,8 @@ class DeleteChildSerializer(serializers.ModelSerializer):
             "cribroom": {"required": False},
             "guardian": {"required": False},
         }
+
+class TechnicalReportTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnicalReport
+        exclude = ("id",)

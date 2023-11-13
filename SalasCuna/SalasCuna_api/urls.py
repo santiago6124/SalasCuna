@@ -18,6 +18,7 @@ from .views import (
     LogEntryModelViewSet,
     CribroomListView,
     ShiftModelViewSet,
+    TechnicalReportTableListCreateView
 )
 
 router = routers.DefaultRouter()
@@ -32,6 +33,11 @@ router.register(r"logEntry", LogEntryModelViewSet)
 router.register(r"shift", ShiftModelViewSet)
 
 urlpatterns = router.urls + [
+    path(
+        "TechnicalReportTableListCreateView/",
+        TechnicalReportTableListCreateView.as_view(),
+        name="TechnicalReportTableListCreateView",
+    ),
     path(
         "technical-report/<pk>/<str:initial_date>/<str:end_date>/",
         TechnicalReportRetrieveAPIView.as_view(),
