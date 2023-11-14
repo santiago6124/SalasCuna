@@ -220,6 +220,16 @@ class Cribroom(models.Model):
 
         for n in 12_months:
             month_import_n = max_capacity * amount
+            
+        calculando proporcionalmente el month_import_0 y el month_import_-1
+            segun la cantidad de dias seleccionados. Formula:
+            initYear, initMonth, initDay = 2022, 2, 11 
+            initAmount  = 15006.0
+            init_days_in_month = calendar.monthrange(initYear, initMonth)[1]
+
+            initAmountProporcional = (initAmount/init_days_in_month) * (init_days_in_month - initDay)
+            endAmountProporcional = (endAmount/end_days_in_month) * (0 + initDay)
+            
         """
         try:
             payouts = Payout.objects.filter(
