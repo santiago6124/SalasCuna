@@ -38,7 +38,7 @@ class NeighborhoodAdmin(admin.ModelAdmin):
 
 
 class ChildAdmin(admin.ModelAdmin):
-    list_display = ("id", "__str__", "dni", "cribroom", "guardian")
+    list_display = ("id", "__str__", "identification", "ident_type", "cribroom", "guardian")
     list_filter = ["last_name", "cribroom"]
     search_fields = ["last_name", ""]
 

@@ -31,6 +31,7 @@ from SalasCuna_api.models import (
     Shift,
     Zone,
     Department,
+    IdentType
 )
 
 fake = Faker()
@@ -178,6 +179,10 @@ def create_cribroom(num_features):
             user=random.choice(users),
         )
 
+def create_identType():
+    IdentType.objects.create(type="Pasaporte")
+    IdentType.objects.create(type="DNI")
+
 
 def create_children(num_children):
     localities = Locality.objects.all()
@@ -186,10 +191,11 @@ def create_children(num_children):
     cribrooms = Cribroom.objects.all()
     guardians = Guardian.objects.all()
     genders = Gender.objects.all()
+    identTypes = IdentType.objects.all()
     for _ in range(num_children):
         first_name = fake.first_name()
         last_name = fake.last_name()
-        dni = fake.unique.random_number(digits=8)
+        identification = fake.unique.random_number(digits=8)
         birthdate = fake.date_of_birth()
         street = fake.street_name()
         house_number = fake.random_int(min=1, max=6000)
@@ -202,13 +208,15 @@ def create_children(num_children):
         gender = random.choice(genders)
         cribroom = random.choice(cribrooms)
         shift = random.choice(shifts)
+        identType = random.choice(identTypes)
         user = User.objects.order_by("?").first()
         guardian = random.choice(guardians)
 
         Child.objects.create(
             first_name=first_name,
             last_name=last_name,
-            dni=dni,
+            identification=identification,
+            ident_type=identType,
             birthdate=birthdate,
             street=street,
             house_number=house_number,
@@ -327,6 +335,7 @@ create_cribroom_users(num_cribroom_users)
 for i in range(20):
     create_desinfections(num_desinfection)
 create_forms(num_forms)
+create_identType()
 for i in range(50):
     create_children(num_children)
 
