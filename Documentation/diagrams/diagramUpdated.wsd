@@ -14,10 +14,10 @@ entity Cribroom {
     max_capacity = int
     street
     house_number
-    cogestion = {ONGint, ComMun, ONGcap}
     --
     FOREIGN_KEY(Locality)
     FOREIGN_KEY(Shift)
+    FOREIGN_KEY(Co_management)
     FOREIGN_KEY(Neighborhood) (null True)
     FOREIGN_KEY(Sectional) (null True)
     --
