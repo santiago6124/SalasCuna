@@ -14,10 +14,12 @@ entity Cribroom {
     max_capacity = int
     street
     house_number
+    cogestion = {ONGint, ComMun, ONGcap}
     --
     FOREIGN_KEY(Locality)
-    FOREIGN_KEY(Neighborhood)
     FOREIGN_KEY(Shift)
+    FOREIGN_KEY(Neighborhood) (null True)
+    FOREIGN_KEY(Sectional) (null True)
     --
     generarPadron()
     generarNotaDePago()
@@ -80,7 +82,7 @@ entity Child {
     --
     first_name
     last_name
-    dni
+    identification = str, null True
     birthdate
     street
     house_number
@@ -95,6 +97,7 @@ entity Child {
     social_worker = FOREIGN_KEY(User)
     FOREIGN_KEY(Guardian)
     FOREIGN_KEY(Child_state)
+    FOREIGN_KEY(Ident_type)
     --
     ()
 }
@@ -134,16 +137,28 @@ entity Guardian {
     first_name
     last_name
     dni
-    phone_number
     --
-    FOREIGN_KEY(Phone_feature)
     FOREIGN_KEY(Gender)
     FOREIGN_KEY(Guardian_Type)
     --
     ()
 }
 
+
+entity Phone {
+    + PRIMARY_KEY(id)
+    --
+    phone_name
+    phone_number
+    --
+    FOREIGN_KEY(Phone_feature)
+    FOREIGN_KEY(Guardian)
+    --
+    ()
+}
+
 Child "*" -- "1" Guardian
+Phone "*" - "1" Guardian
 
 entity Form {
     + PRIMARY_KEY(id)
@@ -164,6 +179,7 @@ entity Locality {
     name
     --
     FOREIGN_KEY(Zone)
+    FOREIGN_KEY(Department)
     --
     ()
 }
