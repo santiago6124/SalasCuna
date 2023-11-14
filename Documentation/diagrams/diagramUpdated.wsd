@@ -188,4 +188,53 @@ Zone "1" - "*" Locality
 Locality "*" - "1" Cribroom
 
 
+entity Poll{
+    name
+    --
+    --
+    ()
+}
+
+entity Question{
+    description
+    parentQuestion
+    questionType = {
+     Single Option,
+     Single Choice,
+     Multiple Choice}
+    --
+    FOREIGN_KEY(Poll)
+    --
+    ()
+}
+
+entity Answer{
+    description
+    answerType = {
+     Boolean,
+     Integer,
+     Float,
+     String}
+    --
+    FOREIGN_KEY(Question)
+    --
+    saveOverride()
+}
+
+class ChildAnswer{
+    value
+    --
+    FOREIGN_KEY(Child)
+    FOREIGN_KEY(Answer)
+    --
+    saveOVerride()
+    checkAnswerType()
+    returnValueAsAnswerType()
+}
+
+Child "*" - "1" ChildAnswer
+ChildAnswer "1" - "1*" Answer
+Answer "*" -- "1" Question
+Poll "1" - "*" Question
+
 @enduml
