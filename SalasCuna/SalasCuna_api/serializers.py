@@ -19,12 +19,33 @@ from .models import (
     UserAccount,
     Desinfection,
     Department,
+    Co_managment,
+    Sectional,
+    IdentType,
 )
 
 
 class LocalitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Locality
+        fields = "__all__"
+        
+        
+class IdentTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IdentType
+        fields = "__all__"
+        
+        
+class SectionalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sectional
+        fields = "__all__"
+        
+        
+class Co_managmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Co_managment
         fields = "__all__"
 
 

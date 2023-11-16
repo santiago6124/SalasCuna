@@ -2,10 +2,13 @@ from django.urls import include, path
 from rest_framework import routers
 from .views import (
     ChildModelViewSet,
+    Co_managmentListCreateView,
     CribroomModelViewSet,
     GroupViewSet,
     GuardianTypeListView,
+    IdentTypeListCreateView,
     PayoutViewSet,
+    SectionalListCreateView,
     UserViewSet,
     ZoneModelViewSet,
     TechnicalReportRetrieveAPIView,
@@ -67,5 +70,20 @@ urlpatterns = router.urls + [
         "GenderListCreateView/",
         GenderListCreateView.as_view(),
         name="GenderListCreateView",
+    ),
+    path(
+        "IdentTypeListCreateView/",
+        IdentTypeListCreateView.as_view(),
+        name="IdentTypeListCreateView",
+    ),
+    path(
+        "SectionalListCreateView/",
+        SectionalListCreateView.as_view(),
+        name="SectionalListCreateView",
+    ),
+    path(
+        "Co_managmentListCreateView/",
+        Co_managmentListCreateView.as_view(),
+        name="Co_managmentListCreateView",
     ),
 ]

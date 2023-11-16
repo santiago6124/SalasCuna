@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from rest_framework import mixins, generics, views
+from rest_framework import generics
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
@@ -22,10 +22,13 @@ from django.contrib.auth.models import Group
 from django.contrib.admin.models import LogEntry
 from .models import (
     Child,
+    Co_managment,
+    IdentType,
     Locality,
     Neighborhood,
     Gender,
     Cribroom,
+    Sectional,
     Shift,
     Guardian,
     PhoneFeature,
@@ -37,14 +40,17 @@ from .models import (
 )
 from .serializers import (
     ChildSerializer,
+    Co_managmentSerializer,
     DeleteChildSerializer,
     GroupSerializer,
     GuardianSerializer,
+    IdentTypeSerializer,
     NeighborhoodSerializer,
     CribroomSerializer,
     DepthChildSerializer,
     LocalitySerializer,
     GenderSerializer,
+    SectionalSerializer,
     ShiftSerializer,
     PhoneFeatureSerializer,
     GuardianTypeSerializer,
@@ -87,7 +93,7 @@ class GuardianListCreateView(generics.ListCreateAPIView):
         DjangoFilterBackend,
         OrderingFilter,
     ]  # This makes django-filters works
-    filterset_fields = ["dni"]  # fields to filter
+    filterset_fields = ["identification"]  # fields to filter
 
 
 class NeighborhoodListCreateView(generics.ListCreateAPIView):
@@ -200,11 +206,9 @@ class ChildModelViewSet(viewsets.ModelViewSet):
             guardian_data = {
                 "first_name": request_data.get("guardian_first_name"),
                 "last_name": request_data.get("guardian_last_name"),
-                "dni": request_data.get("guardian_dni"),
-                "phone_number": request_data.get("guardian_phone_number"),
-                "phone_Feature": request_data.get("guardian_phone_Feature_id"),
+                "identification": request_data.get("guardian_identification"),
                 "guardian_Type": request_data.get("guardian_guardian_Type_id"),
-                "gender": request_data.get("guardian_gender_id"),
+                "identType": request_data.get("guardian_identType"),
             }
 
             guardian_serializer = GuardianSerializer(data=guardian_data)
@@ -267,7 +271,6 @@ class CribroomListView(generics.ListAPIView):
     filterset_fields = [
         "max_capacity",
         "is_active",
-        "zone",
         "shift",
         "id",
         "user",
@@ -297,7 +300,6 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         "max_capacity",
         "is_active",
-        "zone",
         "shift",
         "id",
         "user",
@@ -363,3 +365,21 @@ class LogEntryModelViewSet(viewsets.ModelViewSet):
     queryset = LogEntry.objects.all()
     serializer_class = LogEntrySerializer
     permission_classes = [DevPerms | DirectorPerms]
+
+
+class IdentTypeListCreateView(generics.ListCreateAPIView):
+    permission_classes = [AllUsersPerms]
+    queryset = IdentType.objects.all()
+    serializer_class = IdentTypeSerializer
+    
+    
+class SectionalListCreateView(generics.ListCreateAPIView):
+    permission_classes = [AllUsersPerms]
+    queryset = Sectional.objects.all()
+    serializer_class = SectionalSerializer
+    
+    
+class Co_managmentListCreateView(generics.ListCreateAPIView):
+    permission_classes = [AllUsersPerms]
+    queryset = Co_managment.objects.all()
+    serializer_class = Co_managmentSerializer
