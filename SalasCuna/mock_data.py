@@ -195,7 +195,6 @@ def create_cribroom(num_features):
             shift=random.choice(shifts),
             co_managment = random.choice(co_managments),
             sectional = random.choice(sectionals),
-            user=random.choice(users),
         )
 
 def create_identType():
@@ -249,7 +248,6 @@ def create_children(num_children):
             gender=gender,
             cribroom=cribroom,
             shift=shift,
-            user=user,
             guardian=guardian,
         )
 

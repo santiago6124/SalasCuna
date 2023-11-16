@@ -154,9 +154,7 @@ class Child(models.Model):
     shift = models.ForeignKey(
         "Shift", models.DO_NOTHING, db_column="Shift_id", blank=False, null=False
     )  # Field name made lowercase.
-    user = models.ForeignKey(
-        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=False, null=False
-    )  # Field name made lowercase.
+
     guardian = models.ForeignKey(
         "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=False, null=False
     )  # Field name made lowercase.
@@ -210,10 +208,7 @@ class Cribroom(models.Model):
     co_managment = models.ForeignKey(
         "Co_managment", models.DO_NOTHING, db_column="Co_managment_id"
     )  # Field name made lowercase.
-    
-    user = models.ForeignKey(
-        "UserAccount", models.DO_NOTHING, db_column="User_id"
-    )  # Field name made lowercase.
+
 
     neighborhood = models.ForeignKey(
         Neighborhood, on_delete=models.CASCADE, blank=False, null=True
