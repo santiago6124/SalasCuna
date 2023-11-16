@@ -201,6 +201,7 @@ def create_cribroom(num_features):
 def create_identType():
     IdentType.objects.create(type="Pasaporte")
     IdentType.objects.create(type="DNI")
+    IdentType.objects.create(type="Indocumentado")
 
 
 def create_children(num_children):
