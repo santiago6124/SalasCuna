@@ -85,7 +85,7 @@ class PhoneFeatureListCreateView(generics.ListCreateAPIView):
     filterset_fields = ["feature"]  # fields to filter
 
 
-class GuardianListCreateView(generics.ListCreateAPIView):
+class GuardianModelViewSet(viewsets.ModelViewSet):
     permission_classes = [AllUsersPerms]
     queryset = Guardian.objects.all()
     serializer_class = GuardianSerializer
@@ -96,7 +96,7 @@ class GuardianListCreateView(generics.ListCreateAPIView):
     filterset_fields = ["identification"]  # fields to filter
 
 
-class NeighborhoodListCreateView(generics.ListCreateAPIView):
+class NeighborhoodListView(generics.ListAPIView):
     permission_classes = [AllUsersPerms]
     queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodSerializer
@@ -107,7 +107,7 @@ class NeighborhoodListCreateView(generics.ListCreateAPIView):
     filterset_fields = ["neighborhood"]  # fields to filter
 
 
-class GenderListCreateView(generics.ListCreateAPIView):
+class GenderListView(generics.ListAPIView):
     permission_classes = [AllUsersPerms]
     queryset = Gender.objects.all()
     serializer_class = GenderSerializer
@@ -334,9 +334,12 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
             self.queryset = Cribroom.objects.all()
             self.serializer_class = DepthCribroomSerializer
             return super().get_queryset()
+        
+    def destroy(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class ShiftModelViewSet(viewsets.ModelViewSet):
+class ShiftListCreateView(generics.ListCreateAPIView):
     permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
@@ -347,13 +350,13 @@ class ShiftModelViewSet(viewsets.ModelViewSet):
     filterset_fields = ["name"]  # fields to filter
 
 
-class ZoneModelViewSet(viewsets.ModelViewSet):
+class ZoneListCreateView(generics.ListCreateAPIView):
     queryset = Zone.objects.all()
     serializer_class = ZoneSerializer
     permission_classes = [AllUsersPerms]
 
 
-class DepartmentModelViewSet(viewsets.ModelViewSet):
+class DepartmentListCreateView(generics.ListCreateAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [AllUsersPerms]
@@ -365,19 +368,19 @@ class LogEntryModelViewSet(viewsets.ModelViewSet):
     permission_classes = [DevPerms | DirectorPerms]
 
 
-class IdentTypeListCreateView(generics.ListCreateAPIView):
+class IdentTypeListView(generics.ListAPIView):
     permission_classes = [AllUsersPerms]
     queryset = IdentType.objects.all()
     serializer_class = IdentTypeSerializer
     
     
-class SectionalListCreateView(generics.ListCreateAPIView):
+class SectionalListView(generics.ListAPIView):
     permission_classes = [AllUsersPerms]
     queryset = Sectional.objects.all()
     serializer_class = SectionalSerializer
     
     
-class Co_managmentListCreateView(generics.ListCreateAPIView):
+class Co_managmentListView(generics.ListAPIView):
     permission_classes = [AllUsersPerms]
     queryset = Co_managment.objects.all()
     serializer_class = Co_managmentSerializer

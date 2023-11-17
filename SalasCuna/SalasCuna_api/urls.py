@@ -2,25 +2,25 @@ from django.urls import include, path
 from rest_framework import routers
 from .views import (
     ChildModelViewSet,
-    Co_managmentListCreateView,
+    Co_managmentListView,
     CribroomModelViewSet,
     GroupViewSet,
     GuardianTypeListView,
-    IdentTypeListCreateView,
+    IdentTypeListView,
     PayoutViewSet,
-    SectionalListCreateView,
+    SectionalListView,
     UserViewSet,
-    ZoneModelViewSet,
+    ZoneListCreateView,
     TechnicalReportRetrieveAPIView,
-    DepartmentModelViewSet,
+    DepartmentListCreateView,
     LocalityListCreateView,
     PhoneFeatureListCreateView,
-    GuardianListCreateView,
-    NeighborhoodListCreateView,
-    GenderListCreateView,
+    GuardianModelViewSet,
+    NeighborhoodListView,
+    GenderListView,
     LogEntryModelViewSet,
     CribroomListView,
-    ShiftModelViewSet,
+    ShiftListCreateView,
 )
 
 router = routers.DefaultRouter()
@@ -28,11 +28,9 @@ router = routers.DefaultRouter()
 router.register(r"child", ChildModelViewSet)
 router.register(r"cribroomDir", CribroomModelViewSet)
 router.register(r"payout", PayoutViewSet)
-router.register(r"zone", ZoneModelViewSet)
 router.register(r"user", UserViewSet)
-router.register(r"department", DepartmentModelViewSet)
 router.register(r"logEntry", LogEntryModelViewSet)
-router.register(r"shift", ShiftModelViewSet)
+router.register(r"GuardianListCreateView", GuardianModelViewSet)
 
 urlpatterns = router.urls + [
     path(
@@ -57,33 +55,43 @@ urlpatterns = router.urls + [
         name="PhoneFeatureListCreateView",
     ),
     path(
-        "GuardianListCreateView/",
-        GuardianListCreateView.as_view(),
-        name="GuardianListCreateView",
-    ),
-    path(
         "NeighborhoodListCreateView/",
-        NeighborhoodListCreateView.as_view(),
+        NeighborhoodListView.as_view(),
         name="NeighborhoodListCreateView",
     ),
     path(
         "GenderListCreateView/",
-        GenderListCreateView.as_view(),
+        GenderListView.as_view(),
         name="GenderListCreateView",
     ),
     path(
         "IdentTypeListCreateView/",
-        IdentTypeListCreateView.as_view(),
+        IdentTypeListView.as_view(),
         name="IdentTypeListCreateView",
     ),
     path(
         "SectionalListCreateView/",
-        SectionalListCreateView.as_view(),
+        SectionalListView.as_view(),
         name="SectionalListCreateView",
     ),
     path(
         "Co_managmentListCreateView/",
-        Co_managmentListCreateView.as_view(),
+        Co_managmentListView.as_view(),
         name="Co_managmentListCreateView",
+    ),
+    path(
+        "shift/",
+        ShiftListCreateView.as_view(),
+        name="ShiftListCreateView",
+    ),
+    path(
+        "department/",
+        DepartmentListCreateView.as_view(),
+        name="DepartmentListCreateView",
+    ),
+    path(
+        "zone/",
+        ZoneListCreateView.as_view(),
+        name="ZoneListCreateView",
     ),
 ]
