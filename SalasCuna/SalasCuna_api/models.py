@@ -136,8 +136,8 @@ class Child(models.Model):
     geolocation = models.CharField(max_length=255, blank=True, null=True)
     
     registration_date = models.DateField(blank=False)
-    disenroll_date = models.DateField(blank=False, null=True)
-    is_active = models.BooleanField(default=True)
+    disenroll_date = models.DateField(blank=True, null=True)
+    is_active = models.BooleanField(blank=True, default=True)
 
     locality = models.ForeignKey(
         "Locality", on_delete=models.CASCADE, blank=False, null=False
@@ -246,7 +246,7 @@ class Cribroom(models.Model):
         """
         try:
             payouts = Payout.objects.filter(
-                zone=self.zone.id, date__range=[init_date, end_date]
+                zone=self.locality.department.zone.id, date__range=[init_date, end_date]
             )
             print(f"payouts: {payouts}")
             min_date = min(payouts, key=lambda payout: payout.date).date

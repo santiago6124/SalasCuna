@@ -273,7 +273,6 @@ class CribroomListView(generics.ListAPIView):
         "is_active",
         "shift",
         "id",
-        "user",
     ]  # fields to filter
 
     def get_queryset(self):
@@ -302,7 +301,6 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "is_active",
         "shift",
         "id",
-        "user",
     ]  # fields to filter
 
     def update(self, request, *args, **kwargs):
