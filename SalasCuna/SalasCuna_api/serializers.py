@@ -152,6 +152,28 @@ class GuardianSerializer(serializers.ModelSerializer):
         model = Guardian
         fields = "__all__"
 
+        extra_kwargs = {
+            "first_name": {"required": False},
+            "last_name": {"required": False},
+            "indentification": {"required": False},
+            "ident_type": {"required": False},
+        }
+
+class DepthGuardianSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guardian
+        depth = 1
+        fields = "__all__"
+
+    # history = serializers.SerializerMethodField()
+
+    # def get_history(self, obj):
+    #     model = obj.history.__dict__['model']
+    #     fields = "__all__"
+    #     serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+    #     serializer.is_valid()
+    #     return serializer.data
+
 
 class PhoneFeatureSerializer(serializers.ModelSerializer):
     class Meta:
@@ -211,15 +233,6 @@ class DepthChildSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         return obj.age()
-
-
-class DepthGuardianSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Guardian
-        # depth = 1
-        fields = "__all__"
-
-
 
 
 class TechnicalReportSerializer(serializers.ModelSerializer):

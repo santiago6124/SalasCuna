@@ -45,6 +45,7 @@ from .serializers import (
     Co_managmentSerializer,
     GroupSerializer,
     GuardianSerializer,
+    DepthGuardianSerializer,
     IdentTypeSerializer,
     NeighborhoodSerializer,
     CribroomSerializer,
@@ -110,6 +111,21 @@ class GuardianModelViewSet(viewsets.ModelViewSet):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["identification"]  # fields to filter
+
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+        #guardian/?depth=True
+        #guardian/1/?depth=True
+
+        depth = bool(self.request.query_params.get("depth"))
+        if depth:
+            self.queryset = Guardian.objects.all()
+            self.serializer_class = DepthGuardianSerializer
+        else:
+            queryset = Guardian.objects.all()
+            serializer_class = GuardianSerializer
+
+        return super().get_queryset()
 
 
 class NeighborhoodListView(generics.ListAPIView):
