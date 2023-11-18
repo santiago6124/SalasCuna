@@ -83,14 +83,11 @@ class PhoneModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         #cribroomUser/?depth=True
         #cribroomUser/1/?depth=True
+        # '1' para True y '0' para False
 
-        depth = bool(self.request.query_params.get("depth"))
-        if depth:
-            self.queryset = Phone.objects.all()
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
             self.serializer_class = DepthPhoneSerializer
-        else:
-            queryset = Phone.objects.all()
-            serializer_class = PhoneSerializer
 
         return super().get_queryset()
 
@@ -105,14 +102,11 @@ class CribroomUserModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         #cribroomUser/?depth=True
         #cribroomUser/1/?depth=True
+        # '1' para True y '0' para False
 
-        depth = bool(self.request.query_params.get("depth"))
-        if depth:
-            self.queryset = CribroomUser.objects.all()
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
             self.serializer_class = DepthCribroomUserSerializer
-        else:
-            queryset = CribroomUser.objects.all()
-            serializer_class = CribroomUserSerializer
 
         return super().get_queryset()
 
@@ -148,14 +142,11 @@ class GuardianModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         #guardian/?depth=True
         #guardian/1/?depth=True
+        # '1' para True y '0' para False
 
-        depth = bool(self.request.query_params.get("depth"))
-        if depth:
-            self.queryset = Guardian.objects.all()
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
             self.serializer_class = DepthGuardianSerializer
-        else:
-            queryset = Guardian.objects.all()
-            serializer_class = GuardianSerializer
 
         return super().get_queryset()
 
@@ -245,14 +236,11 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         #child/?depth=True
         #child/1/?depth=True
+        # '1' para True y '0' para False
 
-        depth = bool(self.request.query_params.get("depth"))
-        if depth:
-            self.queryset = Child.objects.all()
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
             self.serializer_class = DepthChildSerializer
-        else:
-            queryset = Child.objects.all()
-            serializer_class = ChildSerializer
 
         return super().get_queryset()
 
@@ -318,14 +306,11 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         #cribroom/?depth=True
         #cribroom/1/?depth=True
+        # '1' para True y '0' para False
 
-        depth = bool(self.request.query_params.get("depth"))
-        if depth:
-            self.queryset = Cribroom.objects.all()
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
             self.serializer_class = DepthCribroomSerializer
-        else:
-            queryset = Cribroom.objects.all()
-            serializer_class = CribroomSerializer
 
         return super().get_queryset()
 
