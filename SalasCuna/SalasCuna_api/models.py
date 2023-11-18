@@ -118,13 +118,13 @@ class Sectional(models.Model):
     def __str__(self):
         return f"{self.sectional}"
 
-class Co_managment(models.Model):
-    co_managment = models.CharField(max_length=255, blank=False)
+class Co_management(models.Model):
+    co_management = models.CharField(max_length=255, blank=False)
 
     history = HistoricalRecords()
 
     def __str__(self):
-        return f"{self.co_managment}"
+        return f"{self.co_management}"
 
 class IdentType(models.Model):
     type = models.CharField(max_length=255, blank=False)
@@ -219,8 +219,8 @@ class Cribroom(models.Model):
         "Shift", models.DO_NOTHING, db_column="Shift_id"
     )  # Field name made lowercase.
     
-    co_managment = models.ForeignKey(
-        "Co_managment", models.DO_NOTHING, db_column="Co_managment_id"
+    co_management = models.ForeignKey(
+        "Co_management", models.DO_NOTHING, db_column="Co_management_id"
     )  # Field name made lowercase.
 
 

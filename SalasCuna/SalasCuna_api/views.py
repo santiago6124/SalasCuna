@@ -22,7 +22,7 @@ from django.contrib.auth.models import Group
 from django.contrib.admin.models import LogEntry
 from .models import (
     Child,
-    Co_managment,
+    Co_management,
     IdentType,
     Locality,
     Neighborhood,
@@ -42,7 +42,7 @@ from .models import (
 )
 from .serializers import (
     ChildSerializer,
-    Co_managmentSerializer,
+    Co_managementSerializer,
     GroupSerializer,
     GuardianSerializer,
     DepthGuardianSerializer,
@@ -389,7 +389,7 @@ class SectionalListView(generics.ListAPIView):
     serializer_class = SectionalSerializer
     
     
-class Co_managmentListView(generics.ListAPIView):
+class Co_managementListView(generics.ListAPIView):
     permission_classes = [AllUsersPerms]
-    queryset = Co_managment.objects.all()
-    serializer_class = Co_managmentSerializer
+    queryset = Co_management.objects.all()
+    serializer_class = Co_managementSerializer

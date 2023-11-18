@@ -19,7 +19,7 @@ from .models import (
     UserAccount,
     Desinfection,
     Department,
-    Co_managment,
+    Co_management,
     Sectional,
     IdentType,
     Phone,
@@ -94,9 +94,9 @@ class SectionalSerializer(serializers.ModelSerializer):
         fields = "__all__"
         
         
-class Co_managmentSerializer(serializers.ModelSerializer):
+class Co_managementSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Co_managment
+        model = Co_management
         fields = "__all__"
 
 

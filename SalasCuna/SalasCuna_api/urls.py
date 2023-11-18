@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from .views import (
     ChildModelViewSet,
-    Co_managmentListView,
+    Co_managementListView,
     CribroomModelViewSet,
     GroupViewSet,
     GuardianTypeListView,
@@ -79,9 +79,9 @@ urlpatterns = router.urls + [
         name="SectionalListCreateView",
     ),
     path(
-        "Co_managmentListCreateView/",
-        Co_managmentListView.as_view(),
-        name="Co_managmentListCreateView",
+        "Co_managementListCreateView/",
+        Co_managementListView.as_view(),
+        name="Co_managementListCreateView",
     ),
     path(
         "shift/",

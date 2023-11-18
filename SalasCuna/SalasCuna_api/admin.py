@@ -118,9 +118,9 @@ class PhoneAdmin(admin.ModelAdmin):
     list_display = ("id", "phone_name", "phone_Feature", "guardian")
     list_filter = ["guardian"]
 
-class Co_managmentAdmin(admin.ModelAdmin):
-    list_display = ("id", "co_managment")
-    list_filter = [ "co_managment"]
+class Co_managementAdmin(admin.ModelAdmin):
+    list_display = ("id", "co_management")
+    list_filter = [ "co_management"]
 
 class SectionalAdmin(admin.ModelAdmin):
     list_display = ("id", "sectional")
@@ -148,7 +148,7 @@ admin.site.register(Phone, PhoneAdmin)
 
 admin.site.register(Shift, ShiftAdmin)
 
-admin.site.register(Co_managment, Co_managmentAdmin)
+admin.site.register(Co_management, Co_managementAdmin)
 admin.site.register(Sectional, SectionalAdmin)
 admin.site.register(IdentType, IdentTypeAdmin)
 

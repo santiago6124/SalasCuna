@@ -33,7 +33,7 @@ from SalasCuna_api.models import (
     Department,
     IdentType,
     Sectional,
-    Co_managment
+    Co_management
 )
 
 fake = Faker()
@@ -137,8 +137,8 @@ def create_seccional(num_seccional):
 
 def create_coManagment(num_coManagment):
     for _ in range(num_coManagment):
-        co_managment = fake.city()
-        Co_managment.objects.create(co_managment=co_managment)
+        co_management = fake.city()
+        Co_management.objects.create(co_management=co_management)
 
 
 def create_departments(num_departments):
@@ -177,7 +177,7 @@ def create_cribroom(num_features):
     localities = Locality.objects.all()
     neighborhoods = Neighborhood.objects.all()
     shifts = Shift.objects.all()
-    co_managments = Co_managment.objects.all()
+    co_managements = Co_management.objects.all()
     sectionals = Sectional.objects.all()
     users = User.objects.all()
     for _ in range(num_features):
@@ -193,7 +193,7 @@ def create_cribroom(num_features):
             locality=random.choice(localities),
             neighborhood=random.choice(neighborhoods),
             shift=random.choice(shifts),
-            co_managment = random.choice(co_managments),
+            co_management = random.choice(co_managements),
             sectional = random.choice(sectionals),
         )
 
