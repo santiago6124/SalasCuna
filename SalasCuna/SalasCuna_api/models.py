@@ -85,11 +85,15 @@ class Department(models.Model):
         "Zone", on_delete=models.CASCADE, blank=False
     )
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.department}"
 
 class Locality(models.Model):
     locality = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
 
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE, blank=False
@@ -101,11 +105,15 @@ class Locality(models.Model):
 class Neighborhood(models.Model):
     neighborhood = models.CharField(max_length=255, blank=False)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.neighborhood}"
 
 class Sectional(models.Model):
     sectional = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.sectional}"
@@ -113,11 +121,15 @@ class Sectional(models.Model):
 class Co_managment(models.Model):
     co_managment = models.CharField(max_length=255, blank=False)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.co_managment}"
 
 class IdentType(models.Model):
     type = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.type
@@ -182,6 +194,8 @@ class Child(models.Model):
 class Company(models.Model):
     title = models.CharField(max_length=255, blank=False)
     phone = models.IntegerField(blank=False)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.title
@@ -370,6 +384,8 @@ class CribroomUser(models.Model):
         "UserAccount", models.DO_NOTHING, db_column="User_id", blank=False
     )  # Field name made lowercase.
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.user}, {self.cribroom}"
 
@@ -384,6 +400,8 @@ class Desinfection(models.Model):
         Company, models.DO_NOTHING, db_column="Company_id", blank=False
     )  # Field name made lowercase.
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.cribroom}, {self.date}"
 
@@ -394,12 +412,16 @@ class Form(models.Model):
         CribroomUser, models.DO_NOTHING, db_column="Cribroom_User_id", blank=False
     )  # Field name made lowercase.
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.id}, {self.generation_date}"
 
 
 class Gender(models.Model):
     gender = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.gender}"
@@ -408,12 +430,16 @@ class Gender(models.Model):
 class PhoneFeature(models.Model):
     feature = models.BigIntegerField(blank=False)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.feature}"
 
 
 class GuardianType(models.Model):
     type = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.type}"
@@ -422,6 +448,8 @@ class Guardian(models.Model):
     first_name = models.CharField(max_length=255, blank=False)
     last_name = models.CharField(max_length=255, blank=False)
     identification = models.CharField(max_length=255, blank=False, null=True)
+
+    history = HistoricalRecords()
 
     guardian_Type = models.ForeignKey(
         GuardianType, on_delete=models.CASCADE, blank=False
@@ -436,6 +464,8 @@ class Guardian(models.Model):
 class Phone(models.Model):
     phone_name = models.CharField(max_length=255, blank=False)
     phone_number = models.IntegerField(blank=False, null=False)
+
+    history = HistoricalRecords()
 
     phone_Feature = models.ForeignKey(
         PhoneFeature, on_delete=models.CASCADE, blank=False
@@ -454,6 +484,8 @@ class Payout(models.Model):
         "Zone", models.DO_NOTHING, db_column="Zone_id", blank=False
     )  # Field name made lowercase.
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.id}, {self.amount}, {self.date}"
 
@@ -461,12 +493,16 @@ class Payout(models.Model):
 class Shift(models.Model):
     name = models.CharField(max_length=255, blank=False)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return f"{self.name}"
 
 
 class Zone(models.Model):
     name = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
