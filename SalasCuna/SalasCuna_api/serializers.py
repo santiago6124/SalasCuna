@@ -150,13 +150,40 @@ class GuardianTypeSerializer(serializers.ModelSerializer):
 
 
 class ChildSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Child
+        fields = "__all__"
+        
+        extra_kwargs = {
+            "first_name": {"required": False},
+            "last_name": {"required": False},
+            "indentification": {"required": False},
+            "ident_type": {"required": False},
+            "birthdate": {"required": False},
+            "street": {"required": False},
+            "house_number": {"required": False},
+            "geolocation": {"required": False},
+            "registration_date": {"required": False},
+            "disenroll_date": {"required": False},
+            "is_active": {"required": False},
+            "locality": {"required": False},
+            "neighborhood": {"required": False},
+            "gender": {"required": False},
+            "cribroom": {"required": False},
+            "shift": {"required": False},
+            "guardian": {"required": False},
+        }
+        
+
+class DepthChildSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField()
 
     class Meta:
         model = Child
         fields = "__all__"
-        read_only_fields = ["user"]
-        
+        depth = 1
+
     history = serializers.SerializerMethodField()
 
     def get_history(self, obj):
@@ -168,19 +195,19 @@ class ChildSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         return obj.age()
-    
+
 
 class DepthGuardianSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guardian
-        depth = 1
+        # depth = 1
         fields = "__all__"
 
 
 class DepthCribroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cribroom
-        depth = 1
+        # depth = 1
         fields = "__all__"
 
 
@@ -200,16 +227,6 @@ class TechnicalReportSerializer(serializers.ModelSerializer):
 
     def get_maxCapacityStr(self, obj):
         return obj.maxCapacityStr()
-
-
-class DepthChildSerializer(serializers.ModelSerializer):
-    guardian = DepthGuardianSerializer()
-
-    class Meta:
-        model = Child
-        fields = "__all__"
-        depth = 1
-        read_only_fields = ["user"]
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -264,23 +281,6 @@ class LogEntrySerializer(serializers.ModelSerializer):
         model = LogEntry
         depth = 1
         fields = "__all__"
-
-
-class DeleteChildSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Child
-        fields = "__all__"
-        extra_kwargs = {
-            "first_name": {"required": False},
-            "last_name": {"required": False},
-            "dni": {"required": False},
-            "birthdate": {"required": False},
-            "street": {"required": False},
-            "registration_date": {"required": False},
-            "gender": {"required": False},
-            "cribroom": {"required": False},
-            "guardian": {"required": False},
-        }
 
 
 class HistoricalRecordSerializer(serializers.ModelSerializer):

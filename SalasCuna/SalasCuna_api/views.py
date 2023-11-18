@@ -43,7 +43,6 @@ from .models import (
 from .serializers import (
     ChildSerializer,
     Co_managmentSerializer,
-    DeleteChildSerializer,
     GroupSerializer,
     GuardianSerializer,
     IdentTypeSerializer,
@@ -197,21 +196,18 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 
     # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
-        no_depth = self.request.query_params.get("no_depth")
-        delete = self.request.query_params.get("delete")
+        #child/?depth=True
+        #child/1/?depth=True
 
-        if no_depth is not None:
-            self.queryset = Child.objects.all()
-            self.serializer_class = ChildSerializer
-            return super().get_queryset()
-        elif delete is not None:
-            self.queryset = Child.objects.all()
-            self.serializer_class = DeleteChildSerializer
-            return super().get_queryset()
-        else:
+        depth = bool(self.request.query_params.get("depth"))
+        if depth:
             self.queryset = Child.objects.all()
             self.serializer_class = DepthChildSerializer
-            return super().get_queryset()
+        else:
+            queryset = Child.objects.all()
+            serializer_class = ChildSerializer
+
+        return super().get_queryset()
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
