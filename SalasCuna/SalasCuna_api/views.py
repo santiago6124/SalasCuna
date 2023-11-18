@@ -37,6 +37,8 @@ from .models import (
     Zone,
     UserAccount,
     Department,
+    Phone,
+    CribroomUser,
 )
 from .serializers import (
     ChildSerializer,
@@ -62,10 +64,26 @@ from .serializers import (
     DepartmentSerializer,
     DeleteCribroomSerializer,
     LogEntrySerializer,
+    PhoneSerializer,
+    CribroomUserSerializer,
 )
 
 from datetime import datetime, date
 from rest_framework.views import APIView  # Import APIView from rest_framework
+
+class PhoneModelViewSet(viewsets.ModelViewSet):
+    queryset = Phone.objects.all()
+    serializer_class = PhoneSerializer
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "phone_name", "phone_number", "phone_Feature", "guardian"]  # fields to filter
+
+class CribroomUserModelViewSet(viewsets.ModelViewSet):
+    queryset = CribroomUser.objects.all()
+    serializer_class = CribroomUserSerializer
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "cribroom", "user"]  # fields to filter
 
 class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()

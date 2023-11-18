@@ -21,6 +21,8 @@ from .views import (
     LogEntryModelViewSet,
     CribroomListView,
     ShiftListCreateView,
+    PhoneModelViewSet,
+    CribroomUserModelViewSet,
 )
 
 router = routers.DefaultRouter()
@@ -31,6 +33,8 @@ router.register(r"payout", PayoutViewSet)
 router.register(r"user", UserViewSet)
 router.register(r"logEntry", LogEntryModelViewSet)
 router.register(r"GuardianListCreateView", GuardianModelViewSet)
+router.register(r"phone", PhoneModelViewSet)
+router.register(r"cribroomUser", CribroomUserModelViewSet)
 
 urlpatterns = router.urls + [
     path(

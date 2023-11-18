@@ -22,8 +22,20 @@ from .models import (
     Co_managment,
     Sectional,
     IdentType,
+    Phone,
+    CribroomUser,
 )
 
+
+class PhoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = "__all__"
+
+class CribroomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CribroomUser
+        fields = "__all__"
 
 class LocalitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -210,7 +222,6 @@ class PayoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payout
         fields = "__all__"
-
 
 class ZoneSerializer(serializers.ModelSerializer):
     class Meta:
