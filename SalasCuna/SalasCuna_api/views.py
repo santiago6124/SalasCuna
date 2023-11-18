@@ -213,55 +213,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
             self.serializer_class = DepthChildSerializer
             return super().get_queryset()
 
-    def perform_create(self, serializer):
-        # First, create the Child object
-        child_instance = serializer.save()
-
-        request_data = self.request.data
-
-        if child_instance.guardian is None:
-            # Now, create the associated Guardian object
-            guardian_data = {
-                "first_name": request_data.get("guardian_first_name"),
-                "last_name": request_data.get("guardian_last_name"),
-                "identification": request_data.get("guardian_identification"),
-                "guardian_Type": request_data.get("guardian_guardian_Type_id"),
-                "identType": request_data.get("guardian_identType"),
-            }
-
-            guardian_serializer = GuardianSerializer(data=guardian_data)
-            if guardian_serializer.is_valid():
-                guardian_instance = guardian_serializer.save()
-                child_instance.guardian = guardian_instance
-                child_instance.save()
-            else:
-                return Response(
-                    {"message": "check the guardian data"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        if (
-            child_instance.neighborhood is None
-            and request_data.get("neighborhood_neighborhood") is None
-        ):
-            # Now, create the associated Neighborhood object
-            neighborhood_data = {
-                "neighborhood": request_data.get("neighborhood_neighborhood"),
-            }
-
-            neighborhood_serializer = NeighborhoodSerializer(data=neighborhood_data)
-            if neighborhood_serializer.is_valid():
-                neighborhood_instance = neighborhood_serializer.save()
-                child_instance.neighborhood = neighborhood_instance
-                child_instance.save()
-            else:
-                return Response(
-                    {"message": "check the neighborhood data"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
