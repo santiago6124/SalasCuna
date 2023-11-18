@@ -86,9 +86,29 @@ class DesinfectionSerializer(serializers.ModelSerializer):
 
 
 class CribroomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cribroom
+        fields = "__all__"
+
+        extra_kwargs = {
+            "name": {"required": False},
+            "entity": {"required": False},
+            "CUIT": {"required": False},
+            "code": {"required": False},
+            "max_capacity": {"required": False},
+            "street": {"required": False},
+        }
+
+class DepthCribroomSerializer(serializers.ModelSerializer):
     lastDesinfection = DesinfectionSerializer(read_only=True)
     actualCapacity = serializers.SerializerMethodField()
     reachMax = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cribroom
+        fields = "__all__"
+        depth = 1
+
     history = serializers.SerializerMethodField()
 
     def get_history(self, obj):
@@ -107,10 +127,6 @@ class CribroomSerializer(serializers.ModelSerializer):
 
     def get_reachMax(self, obj):
         return obj.reachMax()
-
-    class Meta:
-        model = Cribroom
-        fields = "__all__"
 
     """
     ESTO ES PARA HACER DISPLAY DEL DICCIONARIO CON EL HISTORIAL/AUDITORIA
@@ -204,11 +220,6 @@ class DepthGuardianSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class DepthCribroomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cribroom
-        # depth = 1
-        fields = "__all__"
 
 
 class TechnicalReportSerializer(serializers.ModelSerializer):
@@ -261,19 +272,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = "__all__"
 
-
-class DeleteCribroomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cribroom
-        fields = "__all__"
-        extra_kwargs = {
-            "name": {"required": False},
-            "entity": {"required": False},
-            "CUIT": {"required": False},
-            "code": {"required": False},
-            "max_capacity": {"required": False},
-            "street": {"required": False},
-        }
 
 
 class LogEntrySerializer(serializers.ModelSerializer):

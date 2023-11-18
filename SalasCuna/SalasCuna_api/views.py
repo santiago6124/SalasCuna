@@ -61,7 +61,6 @@ from .serializers import (
     DepthCribroomSerializer,
     TechnicalReportSerializer,
     DepartmentSerializer,
-    DeleteCribroomSerializer,
     LogEntrySerializer,
     PhoneSerializer,
     CribroomUserSerializer,
@@ -268,6 +267,20 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "id",
     ]  # fields to filter
 
+    def get_queryset(self):
+        #cribroom/?depth=True
+        #cribroom/1/?depth=True
+
+        depth = bool(self.request.query_params.get("depth"))
+        if depth:
+            self.queryset = Cribroom.objects.all()
+            self.serializer_class = DepthCribroomSerializer
+        else:
+            queryset = Cribroom.objects.all()
+            serializer_class = CribroomSerializer
+
+        return super().get_queryset()
+
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
@@ -282,23 +295,6 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
 
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def get_queryset(self):
-        no_depth = self.request.query_params.get("no_depth")
-        delete = self.request.query_params.get("delete")
-
-        if no_depth is not None:
-            self.queryset = Cribroom.objects.all()
-            self.serializer_class = CribroomSerializer
-            return super().get_queryset()
-        elif delete is not None:
-            self.queryset = Cribroom.objects.all()
-            self.serializer_class = DeleteCribroomSerializer
-            return super().get_queryset()
-        else:
-            self.queryset = Cribroom.objects.all()
-            self.serializer_class = DepthCribroomSerializer
-            return super().get_queryset()
         
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
