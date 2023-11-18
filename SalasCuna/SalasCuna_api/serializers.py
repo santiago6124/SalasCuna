@@ -31,11 +31,50 @@ class PhoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Phone
         fields = "__all__"
+        extra_kwargs = {
+        }
+
+class DepthPhoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = "__all__"
+        depth = 1
+
+    # history = serializers.SerializerMethodField()
+
+    # def get_history(self, obj):
+    #     model = obj.history.__dict__['model']
+    #     fields = "__all__"
+    #     serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+    #     serializer.is_valid()
+    #     return serializer.data
+
+    # def get_age(self, obj):
+    #     return obj.age()
 
 class CribroomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CribroomUser
         fields = "__all__"
+
+        extra_kwargs = {
+        }
+
+class DepthCribroomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CribroomUser
+        fields = "__all__"
+        depth = 1
+
+    # history = serializers.SerializerMethodField()
+
+    # def get_history(self, obj):
+    #     model = obj.history.__dict__['model']
+    #     fields = "__all__"
+    #     serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+    #     serializer.is_valid()
+    #     return serializer.data
+
 
 class LocalitySerializer(serializers.ModelSerializer):
     class Meta:

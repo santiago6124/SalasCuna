@@ -65,6 +65,8 @@ from .serializers import (
     LogEntrySerializer,
     PhoneSerializer,
     CribroomUserSerializer,
+    DepthCribroomUserSerializer,
+    DepthPhoneSerializer,
 )
 
 from datetime import datetime, date
@@ -76,6 +78,21 @@ class PhoneModelViewSet(viewsets.ModelViewSet):
     permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     filter_backends = [DjangoFilterBackend]  # This makes django-filters works
     filterset_fields = ["id", "phone_name", "phone_number", "phone_Feature", "guardian"]  # fields to filter
+    
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+        #cribroomUser/?depth=True
+        #cribroomUser/1/?depth=True
+
+        depth = bool(self.request.query_params.get("depth"))
+        if depth:
+            self.queryset = Phone.objects.all()
+            self.serializer_class = DepthPhoneSerializer
+        else:
+            queryset = Phone.objects.all()
+            serializer_class = PhoneSerializer
+
+        return super().get_queryset()
 
 class CribroomUserModelViewSet(viewsets.ModelViewSet):
     queryset = CribroomUser.objects.all()
@@ -83,6 +100,21 @@ class CribroomUserModelViewSet(viewsets.ModelViewSet):
     permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     filter_backends = [DjangoFilterBackend]  # This makes django-filters works
     filterset_fields = ["id", "cribroom", "user"]  # fields to filter
+    
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+        #cribroomUser/?depth=True
+        #cribroomUser/1/?depth=True
+
+        depth = bool(self.request.query_params.get("depth"))
+        if depth:
+            self.queryset = CribroomUser.objects.all()
+            self.serializer_class = DepthCribroomUserSerializer
+        else:
+            queryset = CribroomUser.objects.all()
+            serializer_class = CribroomUserSerializer
+
+        return super().get_queryset()
 
 class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()
