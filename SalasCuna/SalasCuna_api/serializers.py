@@ -19,8 +19,39 @@ from .models import (
     UserAccount,
     Desinfection,
     Department,
+    Poll,
+    Question,
+    Answer,
+    ChildAnswer,
     TechnicalReport
 )
+
+
+class PollSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poll
+        fields = "__all__"
+
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = "__all__"
+
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = "__all__"
+
+class ChildAnswerSerializer(serializers.ModelSerializer):
+
+    valueCorrectType = serializers.SerializerMethodField()
+
+    def get_valueCorrectType(self, obj):
+        return obj.returnValueAsAnswerType()
+
+    class Meta:
+        model = ChildAnswer
+        fields = "__all__"
 
 
 class LocalitySerializer(serializers.ModelSerializer):

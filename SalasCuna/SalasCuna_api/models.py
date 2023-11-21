@@ -15,6 +15,8 @@ from django.contrib.auth.models import (
 from simple_history.models import HistoricalRecords
 from num2words import num2words
 
+from django.core.exceptions import ValidationError
+
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -462,6 +464,91 @@ class Zone(models.Model):
     def __str__(self):
         return self.name
 
+
+class Poll(models.Model):
+    name =  models.CharField(max_length=255, blank=False)
+
+    def __str__(self):
+        return self.name
+
+class Question(models.Model):
+    description =  models.CharField(max_length=255, blank=False)
+    parentQuestion = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    QUESTION_CHOICES = (
+        ('Single Option', 'Single Option'),
+        ('Single Choice', 'Single Choice'),
+        ('Multiple Choice', 'Multiple Choice'),
+    )
+    questionType = models.CharField(max_length=255, blank=False, null=False, choices=QUESTION_CHOICES)
+    poll = models.ForeignKey(
+        "Poll", on_delete=models.CASCADE, blank=False, null=False
+    )
+    
+    def __str__(self):
+        return self.description
+
+class Answer(models.Model):
+    description = models.CharField(max_length=255, blank=False)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE, null=False, blank=False)
+    ANSWER_CHOICES = (
+        ('Boolean', 'Boolean'),
+        ('Integer', 'Integer'),
+        ('Float', 'Float'),
+        ('String', 'String'),
+    )
+    answerType = models.CharField(max_length=255, blank=False, null=False, choices=ANSWER_CHOICES)
+
+    def __str__(self):
+        return self.description
+    
+    
+    def save(self, *args, **kwargs):
+        # Check if the associated question's questionType is 'Single Option'
+        if self.question.questionType == 'Single Option':
+            # Check if there is already an answer for this question
+            existing_answer = Answer.objects.filter(question=self.question).first()
+            if existing_answer and existing_answer != self:
+                raise ValidationError("There can only be one answer for Single Option questions.")
+        super().save(*args, **kwargs)
+
+
+
+
+class ChildAnswer(models.Model):
+    child = models.ForeignKey(
+        "Child", on_delete=models.CASCADE, blank=False, null=False
+    )
+    answer = models.ForeignKey(
+        "Answer", on_delete=models.CASCADE, blank=False, null=False
+    )
+    value =  models.CharField(max_length=255, blank=False)
+
+    def __str__(self):
+        return f"Child: {self.child}, Answer: {self.answer}"
+    
+    def save(self, *args, **kwargs):
+        # Check if the associated question's questionType is 'Single Option'
+        if self.answer.question.questionType in ('Single Option','Single Choice'):
+            # Check if there is already an answer for this question
+            existing_childAnswer = ChildAnswer.objects.filter(answer__question=self.answer.question, child = self.child).first()
+            if existing_childAnswer and existing_childAnswer != self:
+                raise ValidationError("There can only be one childAnswer for Single Option/Single Choice questions.")
+        super().save(*args, **kwargs)
+
+    # implementar mas adelante
+    # def checkAnswerType(self):
+    #     pass
+
+    def returnValueAsAnswerType(self):
+        
+        selfAnswerType = self.answer.answerType
+        selfValue = self.value
+        valueReturn = bool(selfValue) if selfAnswerType == 'Boolean' else int(selfValue) if selfAnswerType == 'Integer' else float(selfValue) if selfAnswerType == 'Float' else str(selfValue)
+            
+        return valueReturn    
+
+    
+
 class TechnicalReport(models.Model):
     encabezado = models.CharField(max_length=255, blank=False, default="1983/2023 - 40 AÑOS DE DEMOCRACIA")
     ministro = models.CharField(max_length=255, blank=False, default="Sr. Ministro de Desarrollo Social Dr. Juan Carlos Massei")
@@ -492,3 +579,4 @@ class TechnicalReport(models.Model):
 
     def __str__(self):
         return self.resolucion
+

@@ -17,6 +17,10 @@ from .views import (
     GenderListCreateView,
     LogEntryModelViewSet,
     CribroomListView,
+    PollListView,
+    QuestionListView,
+    AnswerListView,
+    ChildAnswerListCreateView,
     ShiftModelViewSet,
     TechnicalReportTableListCreateView
 )
@@ -73,5 +77,35 @@ urlpatterns = router.urls + [
         "GenderListCreateView/",
         GenderListCreateView.as_view(),
         name="GenderListCreateView",
+    ),
+    path(
+        "ShiftListCreateView/",
+        ShiftListCreateView.as_view(),
+        name="ShiftListCreateView",
+    ),
+    path(
+        "ChildListCreateView/",
+        ChildListCreateView.as_view(),
+        name="ChildListCreateView",
+    ),
+    path(
+        "PollListView/",
+        PollListView.as_view(),
+        name="PollListView",
+    ),
+    path(
+        "QuestionListView/",
+        QuestionListView.as_view(),
+        name="QuestionListView",
+    ),
+    path(
+        "AnswerListView/",
+        AnswerListView.as_view(),
+        name="AnswerListView",
+    ),
+    path(
+        "ChildAnswerListCreateView/",
+        ChildAnswerListCreateView.as_view(),
+        name="ChildAnswerListCreateView",
     ),
 ]
