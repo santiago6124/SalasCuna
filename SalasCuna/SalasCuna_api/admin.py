@@ -38,7 +38,7 @@ class NeighborhoodAdmin(admin.ModelAdmin):
 
 
 class ChildAdmin(admin.ModelAdmin):
-    list_display = ("id", "__str__", "dni", "cribroom", "guardian")
+    list_display = ("id", "__str__", "identification", "ident_type", "cribroom", "guardian")
     list_filter = ["last_name", "cribroom"]
     search_fields = ["last_name", ""]
 
@@ -49,7 +49,7 @@ class CompanyAdmin(admin.ModelAdmin):
 
 
 class CribroomAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "code", "max_capacity", "zone", "shift")
+    list_display = ("id", "name", "code", "max_capacity", "locality", "shift")
     list_filter = ["name", "code", "locality"]
 
 
@@ -84,8 +84,8 @@ class GuardianTypeAdmin(admin.ModelAdmin):
 
 
 class GuardianAdmin(admin.ModelAdmin):
-    list_display = ("id", "__str__", "dni", "guardian_Type")
-    list_filter = ["last_name", "guardian_Type"]
+    list_display = ("id", "__str__", "identification", "guardian_Type")
+    list_filter = ["last_name", "identification", "guardian_Type"]
 
 
 class PayoutAdmin(admin.ModelAdmin):
@@ -113,6 +113,23 @@ class ZoneAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
     list_filter = ["name"]
 
+class PhoneAdmin(admin.ModelAdmin):
+    list_display = ("id", "phone_name", "phone_Feature", "guardian")
+    list_filter = ["guardian"]
+
+class Co_managementAdmin(admin.ModelAdmin):
+    list_display = ("id", "co_management")
+    list_filter = [ "co_management"]
+
+class SectionalAdmin(admin.ModelAdmin):
+    list_display = ("id", "sectional")
+    list_filter = ["sectional"]
+
+class IdentTypeAdmin(admin.ModelAdmin):
+    list_display = ("id", "type")
+    list_filter = ["type"]
+
+
 
 class PollAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
@@ -134,22 +151,35 @@ class TechnicalReportAdmin(admin.ModelAdmin):
     list_display = ("id", "encabezado", "ministro", "resolucion", "remitanse")
     list_filter = ["id"]
 
-
+admin.site.register(Payout, PayoutAdmin)
+admin.site.register(Zone, ZoneAdmin)
+admin.site.register(Department, DepartmentAdmin)
+admin.site.register(Locality, LocalityAdmin)
 admin.site.register(Child, ChildAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Cribroom, CribroomAdmin)
 admin.site.register(CribroomUser, CribroomUserAdmin)
+admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(Desinfection, DesinfectionAdmin)
+admin.site.register(Company, CompanyAdmin)
 admin.site.register(Form, FormAdmin)
-admin.site.register(Gender, GenderAdmin)
-admin.site.register(Locality, LocalityAdmin)
-admin.site.register(Department, DepartmentAdmin)
-admin.site.register(Neighborhood, NeighborhoodAdmin)
-admin.site.register(PhoneFeature, PhoneFeatureAdmin)
+
+admin.site.register(Child, ChildAdmin)
 admin.site.register(Guardian, GuardianAdmin)
-admin.site.register(GuardianType, GuardianTypeAdmin)
-admin.site.register(Payout, PayoutAdmin)
+admin.site.register(Phone, PhoneAdmin)
+
 admin.site.register(Shift, ShiftAdmin)
+
+admin.site.register(Co_management, Co_managementAdmin)
+admin.site.register(Sectional, SectionalAdmin)
+admin.site.register(IdentType, IdentTypeAdmin)
+
+admin.site.register(Neighborhood, NeighborhoodAdmin)
+
+admin.site.register(Gender, GenderAdmin)
+admin.site.register(GuardianType, GuardianTypeAdmin)
+admin.site.register(PhoneFeature, PhoneFeatureAdmin)
+
 admin.site.register(UserAccount, UserAccountAdmin)
 admin.site.register(Zone, ZoneAdmin)
 
@@ -159,4 +189,3 @@ admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer, AnswerAdmin)
 
 admin.site.register(TechnicalReport, TechnicalReportAdmin)
-

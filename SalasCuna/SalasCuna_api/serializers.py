@@ -19,12 +19,67 @@ from .models import (
     UserAccount,
     Desinfection,
     Department,
+
+    Co_management,
+    Sectional,
+    IdentType,
+    Phone,
+    CribroomUser,
     Poll,
     Question,
     Answer,
     ChildAnswer,
     TechnicalReport
 )
+
+
+class PhoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = "__all__"
+        extra_kwargs = {
+        }
+
+class DepthPhoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = "__all__"
+        depth = 1
+
+    # history = serializers.SerializerMethodField()
+
+    # def get_history(self, obj):
+    #     model = obj.history.__dict__['model']
+    #     fields = "__all__"
+    #     serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+    #     serializer.is_valid()
+    #     return serializer.data
+
+    # def get_age(self, obj):
+    #     return obj.age()
+
+class CribroomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CribroomUser
+        fields = "__all__"
+
+        extra_kwargs = {
+        }
+
+class DepthCribroomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CribroomUser
+        fields = "__all__"
+        depth = 1
+
+    # history = serializers.SerializerMethodField()
+
+    # def get_history(self, obj):
+    #     model = obj.history.__dict__['model']
+    #     fields = "__all__"
+    #     serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+    #     serializer.is_valid()
+    #     return serializer.data
 
 
 class PollSerializer(serializers.ModelSerializer):
@@ -58,6 +113,24 @@ class LocalitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Locality
         fields = "__all__"
+        
+        
+class IdentTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IdentType
+        fields = "__all__"
+        
+        
+class SectionalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sectional
+        fields = "__all__"
+        
+        
+class Co_managementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Co_management
+        fields = "__all__"
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -85,9 +158,33 @@ class DesinfectionSerializer(serializers.ModelSerializer):
 
 
 class CribroomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cribroom
+        fields = "__all__"
+
+        extra_kwargs = {
+            "name": {"required": False},
+            "entity": {"required": False},
+            "CUIT": {"required": False},
+            "code": {"required": False},
+            "max_capacity": {"required": False},
+            "street": {"required": False},
+            "house_number": {"required": False},
+            "locality": {"required": False},
+            "shift": {"required": False},
+            "co_management": {"required": False},
+        }
+
+class DepthCribroomSerializer(serializers.ModelSerializer):
     lastDesinfection = DesinfectionSerializer(read_only=True)
     actualCapacity = serializers.SerializerMethodField()
     reachMax = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cribroom
+        fields = "__all__"
+        depth = 1
+
     history = serializers.SerializerMethodField()
 
     def get_history(self, obj):
@@ -106,10 +203,6 @@ class CribroomSerializer(serializers.ModelSerializer):
 
     def get_reachMax(self, obj):
         return obj.reachMax()
-
-    class Meta:
-        model = Cribroom
-        fields = "__all__"
 
     """
     ESTO ES PARA HACER DISPLAY DEL DICCIONARIO CON EL HISTORIAL/AUDITORIA
@@ -135,6 +228,28 @@ class GuardianSerializer(serializers.ModelSerializer):
         model = Guardian
         fields = "__all__"
 
+        extra_kwargs = {
+            "first_name": {"required": False},
+            "last_name": {"required": False},
+            "indentification": {"required": False},
+            "ident_type": {"required": False},
+        }
+
+class DepthGuardianSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guardian
+        depth = 1
+        fields = "__all__"
+
+    # history = serializers.SerializerMethodField()
+
+    # def get_history(self, obj):
+    #     model = obj.history.__dict__['model']
+    #     fields = "__all__"
+    #     serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+    #     serializer.is_valid()
+    #     return serializer.data
+
 
 class PhoneFeatureSerializer(serializers.ModelSerializer):
     class Meta:
@@ -149,13 +264,40 @@ class GuardianTypeSerializer(serializers.ModelSerializer):
 
 
 class ChildSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Child
+        fields = "__all__"
+        
+        extra_kwargs = {
+            "first_name": {"required": False},
+            "last_name": {"required": False},
+            "indentification": {"required": False},
+            "ident_type": {"required": False},
+            "birthdate": {"required": False},
+            "street": {"required": False},
+            "house_number": {"required": False},
+            "geolocation": {"required": False},
+            "registration_date": {"required": False},
+            "disenroll_date": {"required": False},
+            "is_active": {"required": False},
+            "locality": {"required": False},
+            "neighborhood": {"required": False},
+            "gender": {"required": False},
+            "cribroom": {"required": False},
+            "shift": {"required": False},
+            "guardian": {"required": False},
+        }
+        
+
+class DepthChildSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField()
 
     class Meta:
         model = Child
         fields = "__all__"
-        read_only_fields = ["user"]
-        
+        depth = 1
+
     history = serializers.SerializerMethodField()
 
     def get_history(self, obj):
@@ -167,25 +309,12 @@ class ChildSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         return obj.age()
-    
-
-class DepthGuardianSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Guardian
-        depth = 1
-        fields = "__all__"
-
-
-class DepthCribroomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cribroom
-        depth = 1
-        fields = "__all__"
 
 
 class TechnicalReportSerializer(serializers.ModelSerializer):
     pays = serializers.SerializerMethodField()
     maxCapacityStr = serializers.SerializerMethodField()
+    department = serializers.SerializerMethodField()
 
     class Meta:
         model = Cribroom
@@ -199,16 +328,9 @@ class TechnicalReportSerializer(serializers.ModelSerializer):
 
     def get_maxCapacityStr(self, obj):
         return obj.maxCapacityStr()
-
-
-class DepthChildSerializer(serializers.ModelSerializer):
-    guardian = DepthGuardianSerializer()
-
-    class Meta:
-        model = Child
-        fields = "__all__"
-        depth = 1
-        read_only_fields = ["user"]
+    
+    def get_department(self, obj):
+        return obj.get_department()
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -221,7 +343,6 @@ class PayoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payout
         fields = "__all__"
-
 
 class ZoneSerializer(serializers.ModelSerializer):
     class Meta:
@@ -245,19 +366,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class DeleteCribroomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cribroom
-        fields = "__all__"
-        extra_kwargs = {
-            "name": {"required": False},
-            "entity": {"required": False},
-            "CUIT": {"required": False},
-            "code": {"required": False},
-            "max_capacity": {"required": False},
-            "street": {"required": False},
-        }
-
 
 class LogEntrySerializer(serializers.ModelSerializer):
     class Meta:
@@ -266,21 +374,6 @@ class LogEntrySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class DeleteChildSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Child
-        fields = "__all__"
-        extra_kwargs = {
-            "first_name": {"required": False},
-            "last_name": {"required": False},
-            "dni": {"required": False},
-            "birthdate": {"required": False},
-            "street": {"required": False},
-            "registration_date": {"required": False},
-            "gender": {"required": False},
-            "cribroom": {"required": False},
-            "guardian": {"required": False},
-        }
 
 class TechnicalReportTableSerializer(serializers.ModelSerializer):
     class Meta:

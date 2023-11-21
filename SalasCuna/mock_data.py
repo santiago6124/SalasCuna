@@ -31,6 +31,9 @@ from SalasCuna_api.models import (
     Shift,
     Zone,
     Department,
+    IdentType,
+    Sectional,
+    Co_management
 )
 
 fake = Faker()
@@ -86,9 +89,11 @@ def create_superuser():
 
 
 def create_localities(num_localities):
+    departments = Department.objects.all()
     for _ in range(num_localities):
         locality = fake.city()
-        Locality.objects.create(locality=locality)
+        department = random.choice(departments)
+        Locality.objects.create(locality=locality, department=department)
 
 
 def create_neighborhoods(num_neighborhoods):
@@ -124,10 +129,24 @@ def create_zones(num_zones):
         Zone.objects.create(name=name)
 
 
+def create_seccional(num_seccional):
+    for _ in range(num_seccional):
+        sectional = fake.city()
+        Sectional.objects.create(sectional=sectional)
+        
+
+def create_coManagment(num_coManagment):
+    for _ in range(num_coManagment):
+        co_management = fake.city()
+        Co_management.objects.create(co_management=co_management)
+
+
 def create_departments(num_departments):
+    zones = Zone.objects.all()
     for _ in range(num_departments):
         name = fake.city()
-        Department.objects.create(department=name)
+        zone = random.choice(zones)
+        Department.objects.create(department=name, zone=zone)
 
 
 def create_companies(num_companies):
@@ -156,10 +175,10 @@ def create_guardian_types():
 
 def create_cribroom(num_features):
     localities = Locality.objects.all()
-    departments = Department.objects.all()
     neighborhoods = Neighborhood.objects.all()
     shifts = Shift.objects.all()
-    zones = Zone.objects.all()
+    co_managements = Co_management.objects.all()
+    sectionals = Sectional.objects.all()
     users = User.objects.all()
     for _ in range(num_features):
         Cribroom.objects.create(
@@ -170,13 +189,18 @@ def create_cribroom(num_features):
             max_capacity=fake.random_int(min=50, max=600),
             street=fake.street_name(),
             house_number=fake.random_int(min=1, max=6000),
+            geolocation = (fake.random_int(min=-179, max=180), fake.random_int(min=-179, max=180)),
             locality=random.choice(localities),
-            department=random.choice(departments),
             neighborhood=random.choice(neighborhoods),
             shift=random.choice(shifts),
-            zone=random.choice(zones),
-            user=random.choice(users),
+            co_management = random.choice(co_managements),
+            sectional = random.choice(sectionals),
         )
+
+def create_identType():
+    IdentType.objects.create(type="Pasaporte")
+    IdentType.objects.create(type="DNI")
+    IdentType.objects.create(type="Indocumentado")
 
 
 def create_children(num_children):
@@ -186,10 +210,11 @@ def create_children(num_children):
     cribrooms = Cribroom.objects.all()
     guardians = Guardian.objects.all()
     genders = Gender.objects.all()
+    identTypes = IdentType.objects.all()
     for _ in range(num_children):
         first_name = fake.first_name()
         last_name = fake.last_name()
-        dni = fake.unique.random_number(digits=8)
+        identification = fake.unique.random_number(digits=8)
         birthdate = fake.date_of_birth()
         street = fake.street_name()
         house_number = fake.random_int(min=1, max=6000)
@@ -197,21 +222,25 @@ def create_children(num_children):
         disenroll_date = fake.date_between(
             start_date=registration_date, end_date="today"
         )
+        geolocation = (fake.random_int(min=-179, max=180), fake.random_int(min=-179, max=180))
         locality = random.choice(localities)
         neighborhood = random.choice(neighborhoods)
         gender = random.choice(genders)
         cribroom = random.choice(cribrooms)
         shift = random.choice(shifts)
+        identType = random.choice(identTypes)
         user = User.objects.order_by("?").first()
         guardian = random.choice(guardians)
 
         Child.objects.create(
             first_name=first_name,
             last_name=last_name,
-            dni=dni,
+            identification=identification,
+            ident_type=identType,
             birthdate=birthdate,
             street=street,
             house_number=house_number,
+            geolocation=geolocation,
             registration_date=registration_date,
             disenroll_date=disenroll_date,
             locality=locality,
@@ -219,7 +248,6 @@ def create_children(num_children):
             gender=gender,
             cribroom=cribroom,
             shift=shift,
-            user=user,
             guardian=guardian,
         )
 
@@ -257,25 +285,20 @@ def create_forms(num_forms):
 
 
 def create_guardians(num_guardians):
-    genders = Gender.objects.all()
-    phone_features = PhoneFeature.objects.all()
+    identTypes = IdentType.objects.all()
     guardian_types = GuardianType.objects.all()
     for _ in range(num_guardians):
         first_name = fake.first_name()
         last_name = fake.last_name()
-        dni = fake.unique.random_number(digits=7)
-        phone_number = fake.random_int(min=0, max=9999999)
-        gender = random.choice(genders)
-        phone_feature = random.choice(phone_features)
+        identification = fake.unique.random_number(digits=7)
+        ident_type = random.choice(identTypes)
         guardian_type = random.choice(guardian_types)
 
         Guardian.objects.create(
             first_name=first_name,
             last_name=last_name,
-            dni=dni,
-            phone_number=phone_number,
-            gender=gender,
-            phone_Feature=phone_feature,
+            identification=identification,
+            ident_type=ident_type,
             guardian_Type=guardian_type,
         )
 
@@ -290,44 +313,38 @@ def create_payouts(num_payouts):
 
 
 # Set the number of instances you want to create for each model
-num_users = 9
-num_localities = 20
-num_neighborhoods = 20
-num_children = 10
-num_companies = 10
-num_cribroom = 15
-num_cribroom_users = 10
-num_departments = 20
-num_desinfection = 5
-num_forms = 10
-num_phone_features = 20
-num_guardians = 15
-num_payouts = 10
-num_shifts = 20
-num_zones = 20
+nueve = 9
+veinte = 20
+diez = 10
+quince = 15
+cinco = 5
 
 # Call the functions to create the mock data
-create_localities(num_localities)
-create_neighborhoods(num_neighborhoods)
-create_companies(num_companies)
+create_identType()
+create_zones(veinte)
+create_departments(veinte)
+create_localities(veinte)
+create_neighborhoods(veinte)
+create_companies(diez)
 create_genders()
-create_phone_features(num_phone_features)
+create_phone_features(veinte)
 create_guardian_types()
-create_guardians(num_guardians)
-create_zones(num_zones)
-create_departments(num_departments)
+create_guardians(quince)
+create_coManagment(veinte)
+create_seccional(veinte)
 for i in range(15):
-    create_payouts(num_payouts)
+    create_payouts(diez)
 create_groups()
-create_users(num_users)
+create_users(nueve)
 create_superuser()
-create_shifts(num_shifts)
-create_cribroom(num_cribroom)
-create_cribroom_users(num_cribroom_users)
+create_shifts(veinte)
+create_cribroom(quince)
+create_cribroom_users(diez)
 for i in range(20):
-    create_desinfections(num_desinfection)
-create_forms(num_forms)
+    create_desinfections(cinco)
+create_forms(diez)
+create_identType()
 for i in range(50):
-    create_children(num_children)
+    create_children(diez)
 
 print("Mock data has been successfully created.")
