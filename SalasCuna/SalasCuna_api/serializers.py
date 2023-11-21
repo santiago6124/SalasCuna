@@ -23,6 +23,7 @@ from .models import (
     Question,
     Answer,
     ChildAnswer,
+    TechnicalReport
 )
 
 
@@ -87,6 +88,15 @@ class CribroomSerializer(serializers.ModelSerializer):
     lastDesinfection = DesinfectionSerializer(read_only=True)
     actualCapacity = serializers.SerializerMethodField()
     reachMax = serializers.SerializerMethodField()
+    history = serializers.SerializerMethodField()
+
+    def get_history(self, obj):
+        model = obj.history.__dict__['model']
+        fields = "__all__"
+        serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+        serializer.is_valid()
+        return serializer.data
+
 
     def get_actualCapacity(self, obj):
         return obj.actualCapacity()
@@ -145,10 +155,19 @@ class ChildSerializer(serializers.ModelSerializer):
         model = Child
         fields = "__all__"
         read_only_fields = ["user"]
+        
+    history = serializers.SerializerMethodField()
+
+    def get_history(self, obj):
+        model = obj.history.__dict__['model']
+        fields = "__all__"
+        serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+        serializer.is_valid()
+        return serializer.data
 
     def get_age(self, obj):
         return obj.age()
-
+    
 
 class DepthGuardianSerializer(serializers.ModelSerializer):
     class Meta:
@@ -211,6 +230,16 @@ class ZoneSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    history = serializers.SerializerMethodField()
+
+    def get_history(self, obj):
+        model = obj.history.__dict__['model']
+        fields = "__all__"
+        serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
+        serializer.is_valid()
+        return serializer.data
+
+
     class Meta:
         model = UserAccount
         fields = "__all__"
@@ -235,3 +264,34 @@ class LogEntrySerializer(serializers.ModelSerializer):
         model = LogEntry
         depth = 1
         fields = "__all__"
+
+
+class DeleteChildSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Child
+        fields = "__all__"
+        extra_kwargs = {
+            "first_name": {"required": False},
+            "last_name": {"required": False},
+            "dni": {"required": False},
+            "birthdate": {"required": False},
+            "street": {"required": False},
+            "registration_date": {"required": False},
+            "gender": {"required": False},
+            "cribroom": {"required": False},
+            "guardian": {"required": False},
+        }
+
+class TechnicalReportTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnicalReport
+        exclude = ("id",)
+
+class HistoricalRecordSerializer(serializers.ModelSerializer):
+    def __init__(self, model, *args, fields='__all__', **kwargs):
+        self.Meta.model = model
+        self.Meta.fields = fields
+        super().__init__()
+
+    class Meta:
+        pass

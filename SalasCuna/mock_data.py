@@ -61,6 +61,29 @@ def create_users(num_users):
             city=city,
         )
 
+def create_superuser():
+    departments = Department.objects.all()
+    first_name = "Admin"
+    last_name = "Admin"
+    email = "a@gmail.com"
+    dni = fake.unique.random_number(digits=7)
+    phone_number = fake.random_int(min=0, max=9999999)
+    address = fake.street_name()
+    department = random.choice(departments)
+    city = fake.city()
+    password = "pepe1234"  # You can set a common password for all users
+    User.objects.create_user(
+        email=email,
+        password=password,
+        first_name=first_name,
+        last_name=last_name,
+        dni=dni,
+        phone_number=phone_number,
+        address=address,
+        department=department,
+        city=city,
+    )
+
 
 def create_localities(num_localities):
     for _ in range(num_localities):
@@ -117,7 +140,7 @@ def create_companies(num_companies):
 def create_genders():
     Gender.objects.create(gender="Male")
     Gender.objects.create(gender="Female")
-    Gender.objects.create(gender="10th generation Apache Helicopter")
+    # Gender.objects.create(gender="10th generation Apache Helicopter")
 
 
 def create_phone_features(num_features):
@@ -297,6 +320,7 @@ for i in range(15):
     create_payouts(num_payouts)
 create_groups()
 create_users(num_users)
+create_superuser()
 create_shifts(num_shifts)
 create_cribroom(num_cribroom)
 create_cribroom_users(num_cribroom_users)

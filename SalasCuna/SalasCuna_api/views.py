@@ -3,6 +3,7 @@ from rest_framework import mixins, generics, views
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 
 # Custom permissions in permissions.py
 from .permissions import (
@@ -37,9 +38,11 @@ from .models import (
     Question,
     Answer,
     ChildAnswer,
+    TechnicalReport
 )
 from .serializers import (
     ChildSerializer,
+    DeleteChildSerializer,
     GroupSerializer,
     GuardianSerializer,
     NeighborhoodSerializer,
@@ -62,9 +65,10 @@ from .serializers import (
     QuestionSerializer,
     AnswerSerializer,
     ChildAnswerSerializer,
+    TechnicalReportTableSerializer
 )
 
-from datetime import datetime
+from datetime import datetime, date
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
 
@@ -113,13 +117,20 @@ class ChildListCreateView(generics.ListCreateAPIView):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
 
+class TechnicalReportTableListCreateView(generics.ListCreateAPIView):
+    queryset = TechnicalReport.objects.all()
+    serializer_class = TechnicalReportTableSerializer
+    permission_classes = [AllUsersPerms]
 
 class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer
-
+    permission_classes = [AllUsersPerms]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "locality"]  # fields to filter
 
 class PhoneFeatureListCreateView(generics.ListCreateAPIView):
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     queryset = PhoneFeature.objects.all()
     serializer_class = PhoneFeatureSerializer
     filter_backends = [
@@ -130,6 +141,7 @@ class PhoneFeatureListCreateView(generics.ListCreateAPIView):
 
 
 class GuardianListCreateView(generics.ListCreateAPIView):
+    permission_classes = [AllUsersPerms]
     queryset = Guardian.objects.all()
     serializer_class = GuardianSerializer
     filter_backends = [
@@ -140,6 +152,7 @@ class GuardianListCreateView(generics.ListCreateAPIView):
 
 
 class NeighborhoodListCreateView(generics.ListCreateAPIView):
+    permission_classes = [AllUsersPerms]
     queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodSerializer
     filter_backends = [
@@ -150,6 +163,7 @@ class NeighborhoodListCreateView(generics.ListCreateAPIView):
 
 
 class GenderListCreateView(generics.ListCreateAPIView):
+    permission_classes = [AllUsersPerms]
     queryset = Gender.objects.all()
     serializer_class = GenderSerializer
     filter_backends = [
@@ -157,16 +171,6 @@ class GenderListCreateView(generics.ListCreateAPIView):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["gender"]  # fields to filter
-
-
-class ShiftListCreateView(generics.ListCreateAPIView):
-    queryset = Shift.objects.all()
-    serializer_class = ShiftSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        OrderingFilter,
-    ]  # This makes django-filters works
-    filterset_fields = ["name"]  # fields to filter
 
 
 class PayoutViewSet(viewsets.ModelViewSet):
@@ -198,7 +202,7 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = [DevPerms | DirectorPerms]
+    permission_classes = [DevPerms | DirectorPerms | IsAuthenticated]
     queryset = UserAccount.objects.all()
     serializer_class = UserSerializer
 
@@ -213,38 +217,6 @@ class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
         context["initial_date"] = self.kwargs.get("initial_date")
         context["end_date"] = self.kwargs.get("end_date")
         return context
-
-
-class LocalityListView(generics.ListAPIView):
-    queryset = Locality.objects.all()
-    serializer_class = LocalitySerializer
-    permission_classes = [AllUsersPerms]
-    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
-    filterset_fields = ["id", "locality"]  # fields to filter
-
-
-class NeighborhoodListView(generics.ListAPIView):
-    queryset = Neighborhood.objects.all()
-    serializer_class = NeighborhoodSerializer
-    permission_classes = [AllUsersPerms]
-
-
-class GenderListView(generics.ListAPIView):
-    queryset = Gender.objects.all()
-    serializer_class = GenderSerializer
-    permission_classes = [AllUsersPerms]
-
-
-class ShiftListView(generics.ListAPIView):
-    queryset = Shift.objects.all()
-    serializer_class = ShiftSerializer
-    permission_classes = [DevPerms | DirectorPerms]
-
-
-class PhoneFeatureListView(generics.ListAPIView):
-    queryset = PhoneFeature.objects.all()
-    serializer_class = PhoneFeatureSerializer
-    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
 
 
 class GuardianTypeListView(generics.ListAPIView):
@@ -263,10 +235,15 @@ class ChildModelViewSet(viewsets.ModelViewSet):
     # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
         no_depth = self.request.query_params.get("no_depth")
+        delete = self.request.query_params.get("delete")
 
         if no_depth is not None:
             self.queryset = Child.objects.all()
             self.serializer_class = ChildSerializer
+            return super().get_queryset()
+        elif delete is not None:
+            self.queryset = Child.objects.all()
+            self.serializer_class = DeleteChildSerializer
             return super().get_queryset()
         else:
             self.queryset = Child.objects.all()
@@ -297,9 +274,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
                 child_instance.guardian = guardian_instance
                 child_instance.save()
             else:
-                # If the guardian serializer is not valid, you may handle the error here
-                print(guardian_serializer.errors)
-
                 return Response(
                     {"message": "check the guardian data"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -320,9 +294,6 @@ class ChildModelViewSet(viewsets.ModelViewSet):
                 child_instance.neighborhood = neighborhood_instance
                 child_instance.save()
             else:
-                # If the Neighborhood serializer is not valid, you may handle the error here
-                print(neighborhood_serializer.errors)
-
                 return Response(
                     {"message": "check the neighborhood data"},
                     status=status.HTTP_400_BAD_REQUEST,
@@ -332,27 +303,14 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        disenroll = bool(self.request.query_params.get("disenroll"))
-        # disenroll_date
-        print(f"paramter: {disenroll}")
-
-        if disenroll:
-            print(f"disenroll: {disenroll}")
-            instance.disenroll_date = datetime.now()
-            instance.is_active = False
-            print(instance)
-            print("Inactive")
-            # instance.user=self.request.user
-            instance.save()
-
-            return Response(status=status.HTTP_202_ACCEPTED)
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid():
+            updated_instance = serializer.save()
+            if updated_instance.disenroll_date is not None:
+                if updated_instance.disenroll_date <= date.today():
+                    updated_instance.is_active = False
+            return Response(serializer.data)
         else:
-            # If 'disenroll' parameter is not present, proceed with normal update
-            serializer = self.get_serializer(instance, data=request.data, partial=True)
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
@@ -409,7 +367,6 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data)
-        print(serializer)
         if serializer.is_valid():
             updated_instance = serializer.save()
             if not updated_instance.is_active:
@@ -441,9 +398,14 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
 
 
 class ShiftModelViewSet(viewsets.ModelViewSet):
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
-    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name"]  # fields to filter
 
 
 class ZoneModelViewSet(viewsets.ModelViewSet):
