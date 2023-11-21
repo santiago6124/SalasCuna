@@ -295,7 +295,7 @@ num_localities = 20
 num_neighborhoods = 20
 num_children = 10
 num_companies = 10
-num_cribroom = 15
+num_cribroom = 10
 num_cribroom_users = 10
 num_departments = 20
 num_desinfection = 5
@@ -307,27 +307,16 @@ num_shifts = 20
 num_zones = 20
 
 # Call the functions to create the mock data
-create_localities(num_localities)
-create_neighborhoods(num_neighborhoods)
-create_companies(num_companies)
-create_genders()
-create_phone_features(num_phone_features)
-create_guardian_types()
-create_guardians(num_guardians)
-create_zones(num_zones)
-create_departments(num_departments)
-for i in range(15):
-    create_payouts(num_payouts)
-create_groups()
-create_users(num_users)
+
 create_superuser()
 create_shifts(num_shifts)
-create_cribroom(num_cribroom)
+for i in range(250):
+    create_cribroom(num_cribroom)
 create_cribroom_users(num_cribroom_users)
 for i in range(20):
     create_desinfections(num_desinfection)
 create_forms(num_forms)
-for i in range(50):
+for i in range(50000):
     create_children(num_children)
 
 print("Mock data has been successfully created.")
