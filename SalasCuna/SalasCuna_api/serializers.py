@@ -19,6 +19,7 @@ from .models import (
     UserAccount,
     Desinfection,
     Department,
+    TechnicalReport
 )
 
 
@@ -250,6 +251,10 @@ class DeleteChildSerializer(serializers.ModelSerializer):
             "guardian": {"required": False},
         }
 
+class TechnicalReportTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnicalReport
+        exclude = ("id",)
 
 class HistoricalRecordSerializer(serializers.ModelSerializer):
     def __init__(self, model, *args, fields='__all__', **kwargs):

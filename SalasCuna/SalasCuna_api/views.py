@@ -34,6 +34,7 @@ from .models import (
     Zone,
     UserAccount,
     Department,
+    TechnicalReport
 )
 from .serializers import (
     ChildSerializer,
@@ -56,10 +57,16 @@ from .serializers import (
     DepartmentSerializer,
     DeleteCribroomSerializer,
     LogEntrySerializer,
+    TechnicalReportTableSerializer
 )
 
 from datetime import datetime, date
 from rest_framework.views import APIView  # Import APIView from rest_framework
+
+class TechnicalReportTableListCreateView(generics.ListCreateAPIView):
+    queryset = TechnicalReport.objects.all()
+    serializer_class = TechnicalReportTableSerializer
+    permission_classes = [AllUsersPerms]
 
 class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()

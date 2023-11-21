@@ -220,6 +220,16 @@ class Cribroom(models.Model):
 
         for n in 12_months:
             month_import_n = max_capacity * amount
+            
+        calculando proporcionalmente el month_import_0 y el month_import_-1
+            segun la cantidad de dias seleccionados. Formula:
+            initYear, initMonth, initDay = 2022, 2, 11 
+            initAmount  = 15006.0
+            init_days_in_month = calendar.monthrange(initYear, initMonth)[1]
+
+            initAmountProporcional = (initAmount/init_days_in_month) * (init_days_in_month - initDay)
+            endAmountProporcional = (endAmount/end_days_in_month) * (0 + initDay)
+            
         """
         try:
             payouts = Payout.objects.filter(
@@ -451,3 +461,34 @@ class Zone(models.Model):
 
     def __str__(self):
         return self.name
+
+class TechnicalReport(models.Model):
+    encabezado = models.CharField(max_length=255, blank=False, default="1983/2023 - 40 AÑOS DE DEMOCRACIA")
+    ministro = models.CharField(max_length=255, blank=False, default="Sr. Ministro de Desarrollo Social Dr. Juan Carlos Massei")
+    resolucion = models.CharField(max_length=255, blank=False, default="Resolución Ministerial N° 0007/2023")
+    remitanse = models.CharField(max_length=255, blank=False, default="REMÍTANSE a la Subsecretaria de Administración y Recursos Humanos")
+    history = HistoricalRecords()
+    
+    def save(self, *args, **kwargs):
+
+        existing_obj = TechnicalReport.objects.first()
+
+        if existing_obj:
+            # Update the existing instance with the new values
+            TechnicalReport.objects.filter(id=existing_obj.id).update(
+                encabezado=self.encabezado,
+                ministro=self.ministro,
+                resolucion=self.resolucion,
+                remitanse=self.remitanse
+            )
+        else:
+            super(TechnicalReport, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Avoid deleting the object
+        
+        print('method not allowed')
+        pass
+
+    def __str__(self):
+        return self.resolucion
