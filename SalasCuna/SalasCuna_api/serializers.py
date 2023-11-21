@@ -136,6 +136,10 @@ class CribroomSerializer(serializers.ModelSerializer):
             "code": {"required": False},
             "max_capacity": {"required": False},
             "street": {"required": False},
+            "house_number": {"required": False},
+            "locality": {"required": False},
+            "shift": {"required": False},
+            "co_management": {"required": False},
         }
 
 class DepthCribroomSerializer(serializers.ModelSerializer):
