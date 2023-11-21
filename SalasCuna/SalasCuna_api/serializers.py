@@ -19,11 +19,17 @@ from .models import (
     UserAccount,
     Desinfection,
     Department,
+
     Co_management,
     Sectional,
     IdentType,
     Phone,
     CribroomUser,
+    Poll,
+    Question,
+    Answer,
+    ChildAnswer,
+    TechnicalReport
 )
 
 
@@ -74,6 +80,33 @@ class DepthCribroomUserSerializer(serializers.ModelSerializer):
     #     serializer = HistoricalRecordSerializer(model, obj.history.all().order_by('history_date'), fields=fields, many=True)
     #     serializer.is_valid()
     #     return serializer.data
+
+
+class PollSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poll
+        fields = "__all__"
+
+class QuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = "__all__"
+
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = "__all__"
+
+class ChildAnswerSerializer(serializers.ModelSerializer):
+
+    valueCorrectType = serializers.SerializerMethodField()
+
+    def get_valueCorrectType(self, obj):
+        return obj.returnValueAsAnswerType()
+
+    class Meta:
+        model = ChildAnswer
+        fields = "__all__"
 
 
 class LocalitySerializer(serializers.ModelSerializer):
@@ -340,6 +373,12 @@ class LogEntrySerializer(serializers.ModelSerializer):
         depth = 1
         fields = "__all__"
 
+
+
+class TechnicalReportTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TechnicalReport
+        exclude = ("id",)
 
 class HistoricalRecordSerializer(serializers.ModelSerializer):
     def __init__(self, model, *args, fields='__all__', **kwargs):

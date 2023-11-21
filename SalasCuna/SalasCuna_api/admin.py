@@ -109,7 +109,6 @@ class UserAccountAdmin(admin.ModelAdmin):
         "email",
     ]
 
-
 class ZoneAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
     list_filter = ["name"]
@@ -131,10 +130,33 @@ class IdentTypeAdmin(admin.ModelAdmin):
     list_filter = ["type"]
 
 
+
+class PollAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    list_filter = ["name"]
+
+class ChildAnswerAdmin(admin.ModelAdmin):
+    list_display = ("id", "child", 'answer')
+    list_filter = ["child", 'answer']
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ("id", "description", "parentQuestion", "questionType", "poll")
+    list_filter = ["description"]
+
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ("id", "description", "question", "answerType")
+    list_filter = ["description"]
+
+class TechnicalReportAdmin(admin.ModelAdmin):
+    list_display = ("id", "encabezado", "ministro", "resolucion", "remitanse")
+    list_filter = ["id"]
+
 admin.site.register(Payout, PayoutAdmin)
 admin.site.register(Zone, ZoneAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Locality, LocalityAdmin)
+admin.site.register(Child, ChildAdmin)
+admin.site.register(Company, CompanyAdmin)
 admin.site.register(Cribroom, CribroomAdmin)
 admin.site.register(CribroomUser, CribroomUserAdmin)
 admin.site.register(UserAccount, UserAccountAdmin)
@@ -157,3 +179,13 @@ admin.site.register(Neighborhood, NeighborhoodAdmin)
 admin.site.register(Gender, GenderAdmin)
 admin.site.register(GuardianType, GuardianTypeAdmin)
 admin.site.register(PhoneFeature, PhoneFeatureAdmin)
+
+admin.site.register(UserAccount, UserAccountAdmin)
+admin.site.register(Zone, ZoneAdmin)
+
+admin.site.register(Poll, PollAdmin)
+admin.site.register(ChildAnswer, ChildAnswerAdmin)
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(Answer, AnswerAdmin)
+
+admin.site.register(TechnicalReport, TechnicalReportAdmin)

@@ -39,6 +39,11 @@ from .models import (
     Department,
     Phone,
     CribroomUser,
+    Poll,
+    Question,
+    Answer,
+    ChildAnswer,
+    TechnicalReport
 )
 from .serializers import (
     ChildSerializer,
@@ -67,6 +72,11 @@ from .serializers import (
     CribroomUserSerializer,
     DepthCribroomUserSerializer,
     DepthPhoneSerializer,
+    PollSerializer,
+    QuestionSerializer,
+    AnswerSerializer,
+    ChildAnswerSerializer,
+    TechnicalReportTableSerializer
 )
 
 from datetime import datetime, date
@@ -109,6 +119,56 @@ class CribroomUserModelViewSet(viewsets.ModelViewSet):
             self.serializer_class = DepthCribroomUserSerializer
 
         return super().get_queryset()
+
+class PollListView(generics.ListAPIView):
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name"]  # fields to filter
+
+class QuestionListView(generics.ListAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["description", 'parentQuestion']  # fields to filter
+
+class AnswerListView(generics.ListAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["description", 'question']  # fields to filter
+
+
+class ChildAnswerListCreateView(generics.ListCreateAPIView):
+    queryset = ChildAnswer.objects.all()
+    serializer_class = ChildAnswerSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["value", 'answer', 'answer__question']  # fields to filter
+
+class ChildListCreateView(generics.ListCreateAPIView):
+    queryset = Child.objects.all()
+    serializer_class = ChildSerializer
+
+class TechnicalReportTableListCreateView(generics.ListCreateAPIView):
+    queryset = TechnicalReport.objects.all()
+    serializer_class = TechnicalReportTableSerializer
+    permission_classes = [AllUsersPerms]
 
 class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()

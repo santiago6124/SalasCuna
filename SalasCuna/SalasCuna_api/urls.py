@@ -23,6 +23,12 @@ from .views import (
     ShiftListCreateView,
     PhoneModelViewSet,
     CribroomUserModelViewSet,
+    PollListView,
+    QuestionListView,
+    AnswerListView,
+    ChildAnswerListCreateView,
+    ShiftModelViewSet,
+    TechnicalReportTableListCreateView
 )
 
 router = routers.DefaultRouter()
@@ -37,6 +43,11 @@ router.register(r"phone", PhoneModelViewSet)
 router.register(r"cribroomUser", CribroomUserModelViewSet)
 
 urlpatterns = router.urls + [
+    path(
+        "TechnicalReportTableListCreateView/",
+        TechnicalReportTableListCreateView.as_view(),
+        name="TechnicalReportTableListCreateView",
+    ),
     path(
         "technical-report/<pk>/<str:initial_date>/<str:end_date>/",
         TechnicalReportRetrieveAPIView.as_view(),
@@ -97,5 +108,33 @@ urlpatterns = router.urls + [
         "zone/",
         ZoneListCreateView.as_view(),
         name="ZoneListCreateView",
+        "ShiftListCreateView/",
+        ShiftListCreateView.as_view(),
+        name="ShiftListCreateView",
+    ),
+    path(
+        "ChildListCreateView/",
+        ChildListCreateView.as_view(),
+        name="ChildListCreateView",
+    ),
+    path(
+        "PollListView/",
+        PollListView.as_view(),
+        name="PollListView",
+    ),
+    path(
+        "QuestionListView/",
+        QuestionListView.as_view(),
+        name="QuestionListView",
+    ),
+    path(
+        "AnswerListView/",
+        AnswerListView.as_view(),
+        name="AnswerListView",
+    ),
+    path(
+        "ChildAnswerListCreateView/",
+        ChildAnswerListCreateView.as_view(),
+        name="ChildAnswerListCreateView",
     ),
 ]
