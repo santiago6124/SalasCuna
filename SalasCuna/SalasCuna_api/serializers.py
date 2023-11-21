@@ -277,6 +277,7 @@ class DepthChildSerializer(serializers.ModelSerializer):
 class TechnicalReportSerializer(serializers.ModelSerializer):
     pays = serializers.SerializerMethodField()
     maxCapacityStr = serializers.SerializerMethodField()
+    department = serializers.SerializerMethodField()
 
     class Meta:
         model = Cribroom
@@ -290,6 +291,9 @@ class TechnicalReportSerializer(serializers.ModelSerializer):
 
     def get_maxCapacityStr(self, obj):
         return obj.maxCapacityStr()
+    
+    def get_department(self, obj):
+        return obj.get_department()
 
 
 class GroupSerializer(serializers.ModelSerializer):

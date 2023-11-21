@@ -250,6 +250,10 @@ class Cribroom(models.Model):
             return True
         else:
             return False
+        
+    def get_department(self):
+        return self.locality.department.department
+    
 
     def totalImport(self, init_date, end_date):
         """

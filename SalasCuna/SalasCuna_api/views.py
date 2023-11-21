@@ -181,7 +181,7 @@ class PayoutViewSet(viewsets.ModelViewSet):
         DjangoFilterBackend,
         OrderingFilter,
     ]  # This makes django-filters works
-    filterset_fields = ["amount", "zone"]  # fields to filter
+    filterset_fields = ["amount", "zone_id"]  # fields to filter
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
@@ -301,6 +301,7 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         "is_active",
         "shift",
         "id",
+        'locality__department__zone__id'
     ]  # fields to filter
 
     def get_queryset(self):
@@ -348,6 +349,11 @@ class ZoneListCreateView(generics.ListCreateAPIView):
     queryset = Zone.objects.all()
     serializer_class = ZoneSerializer
     permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name", 'id']  # fields to filter
 
 
 class DepartmentListCreateView(generics.ListCreateAPIView):
