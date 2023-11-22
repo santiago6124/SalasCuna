@@ -90,10 +90,10 @@ WSGI_APPLICATION = "SalasCuna.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'manyKids',
+        'NAME': 'backendSalas',
         'USER': 'mysuperuser',
         'PASSWORD': 'Pepe1234',
-        'HOST': 'manykids.cpew4ddmqibh.sa-east-1.rds.amazonaws.com',
+        'HOST': 'backendsalas.cpew4ddmqibh.sa-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
