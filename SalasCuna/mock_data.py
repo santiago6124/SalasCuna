@@ -33,7 +33,12 @@ from SalasCuna_api.models import (
     Department,
     IdentType,
     Sectional,
-    Co_management
+    Co_management,
+    ChildAnswer,
+    Answer,
+    Question,
+    Poll,
+    Phone
 )
 
 fake = Faker()
@@ -168,6 +173,20 @@ def create_phone_features(num_features):
         PhoneFeature.objects.create(feature=feature)
 
 
+def create_phone(num_phones):
+    phoneFeatures = PhoneFeature.objects.all()
+    guardians = Guardian.objects.all()
+    for _ in range(num_phones):
+        phone_name = fake.word()
+        phone_number = fake.random_int(min= 2000000, max=9999999)
+        Phone.objects.create(
+            phone_name=phone_name,
+            phone_number=phone_number,
+            phone_Feature=random.choice(phoneFeatures),
+            guardian = random.choice(guardians)
+        )
+
+
 def create_guardian_types():
     GuardianType.objects.create(type="Parent")
     GuardianType.objects.create(type="Guardian")
@@ -179,7 +198,6 @@ def create_cribroom(num_features):
     shifts = Shift.objects.all()
     co_managements = Co_management.objects.all()
     sectionals = Sectional.objects.all()
-    users = User.objects.all()
     for _ in range(num_features):
         Cribroom.objects.create(
             name=fake.city(),
@@ -310,41 +328,84 @@ def create_payouts(num_payouts):
         date = fake.date_between(start_date="-1y", end_date="today")
         zone = random.choice(zones)
         Payout.objects.create(amount=amount, date=date, zone=zone)
+        
+
+def create_polls(num_polls):
+    for _ in range(num_polls):
+        Poll.objects.create(name=fake.word())
+    
+
+def create_questions(num_questions):
+    polls = Poll.objects.all()
+    types = (
+        ('Single Option', 'Single Option'),
+        ('Single Choice', 'Single Choice'),
+        ('Multiple Choice', 'Multiple Choice'))
+    for _ in range(num_questions):
+        Question.objects.create(
+            description = f"Pregunta N°{fake.random_int(min=1, max=500)}",
+            questionType = random.choice(types),
+            poll = random.choice(polls)
+        )
 
 
-# Set the number of instances you want to create for each model
-nueve = 9
-veinte = 20
-diez = 10
-quince = 15
-cinco = 5
+def create_answer(num_answer):
+    questions = Question.objects.all()
+    types = (
+        ('Boolean', 'Boolean'),
+        ('Integer', 'Integer'),
+        ('Float', 'Float'),
+        ('String', 'String'))
+    for _ in range(num_answer):
+        Answer.objects.create(
+            description=f"Respuesta N°{fake.random_int(min=1, max=500)}",
+            question=random.choice(questions),
+            answerType=random.choice(types)
+        )
+
+
+def create_childAnswer(num_childAnswer):
+    childs = Child.objects.all()
+    answers = Answer.objects.all()
+    for _ in range(num_childAnswer):
+        ChildAnswer.objects.create(
+            child=random.choice(childs),
+            answer=random.choice(answers),
+            value=fake.word()
+        )
+
 
 # Call the functions to create the mock data
 create_identType()
-create_zones(veinte)
-create_departments(veinte)
-create_localities(veinte)
-create_neighborhoods(veinte)
-create_companies(diez)
+create_zones(20)
+create_departments(20)
+create_localities(20)
+create_neighborhoods(20)
+create_companies(10)
 create_genders()
-create_phone_features(veinte)
+create_phone_features(20)
 create_guardian_types()
-create_guardians(quince)
-create_coManagment(veinte)
-create_seccional(veinte)
+create_guardians(15)
+create_phone(10)
+create_coManagment(20)
+create_seccional(20)
 for i in range(15):
-    create_payouts(diez)
+    create_payouts(10)
 create_groups()
-create_users(nueve)
+create_users(9)
 create_superuser()
-create_shifts(veinte)
-create_cribroom(quince)
-create_cribroom_users(diez)
+create_shifts(20)
+create_cribroom(15)
+create_cribroom_users(10)
 for i in range(20):
-    create_desinfections(cinco)
-create_forms(diez)
+    create_desinfections(5)
+create_forms(10)
 create_identType()
-for i in range(50):
-    create_children(diez)
+for i in range(10):
+    create_children(10)
+create_polls(30)
+create_questions(30)
+create_answer(30)
+create_childAnswer(30)
 
 print("Mock data has been successfully created.")
