@@ -27,7 +27,6 @@ from .views import (
     QuestionListView,
     AnswerListView,
     ChildAnswerListCreateView,
-    ShiftModelViewSet,
     TechnicalReportTableListCreateView
 )
 
@@ -108,14 +107,6 @@ urlpatterns = router.urls + [
         "zone/",
         ZoneListCreateView.as_view(),
         name="ZoneListCreateView",
-        "ShiftListCreateView/",
-        ShiftListCreateView.as_view(),
-        name="ShiftListCreateView",
-    ),
-    path(
-        "ChildListCreateView/",
-        ChildListCreateView.as_view(),
-        name="ChildListCreateView",
     ),
     path(
         "PollListView/",

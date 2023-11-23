@@ -152,16 +152,13 @@ class TechnicalReportAdmin(admin.ModelAdmin):
     list_filter = ["id"]
 
 admin.site.register(Payout, PayoutAdmin)
-admin.site.register(Zone, ZoneAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Locality, LocalityAdmin)
-admin.site.register(Child, ChildAdmin)
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Cribroom, CribroomAdmin)
 admin.site.register(CribroomUser, CribroomUserAdmin)
-admin.site.register(UserAccount, UserAccountAdmin)
+
 admin.site.register(Desinfection, DesinfectionAdmin)
-admin.site.register(Company, CompanyAdmin)
 admin.site.register(Form, FormAdmin)
 
 admin.site.register(Child, ChildAdmin)
