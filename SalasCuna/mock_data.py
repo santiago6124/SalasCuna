@@ -38,7 +38,8 @@ from SalasCuna_api.models import (
     Answer,
     Question,
     Poll,
-    Phone
+    Phone,
+    TechnicalReport
 )
 
 fake = Faker()
@@ -328,51 +329,6 @@ def create_payouts(num_payouts):
         date = fake.date_between(start_date="-1y", end_date="today")
         zone = random.choice(zones)
         Payout.objects.create(amount=amount, date=date, zone=zone)
-        
-
-def create_polls(num_polls):
-    for _ in range(num_polls):
-        Poll.objects.create(name=fake.word())
-    
-
-def create_questions(num_questions):
-    polls = Poll.objects.all()
-    types = (
-        ('Single Option', 'Single Option'),
-        ('Single Choice', 'Single Choice'),
-        ('Multiple Choice', 'Multiple Choice'))
-    for _ in range(num_questions):
-        Question.objects.create(
-            description = f"Pregunta N°{fake.random_int(min=1, max=500)}",
-            questionType = random.choice(types),
-            poll = random.choice(polls)
-        )
-
-
-def create_answer(num_answer):
-    questions = Question.objects.all()
-    types = (
-        ('Boolean', 'Boolean'),
-        ('Integer', 'Integer'),
-        ('Float', 'Float'),
-        ('String', 'String'))
-    for _ in range(num_answer):
-        Answer.objects.create(
-            description=f"Respuesta N°{fake.random_int(min=1, max=500)}",
-            question=random.choice(questions),
-            answerType=random.choice(types)
-        )
-
-
-def create_childAnswer(num_childAnswer):
-    childs = Child.objects.all()
-    answers = Answer.objects.all()
-    for _ in range(num_childAnswer):
-        ChildAnswer.objects.create(
-            child=random.choice(childs),
-            answer=random.choice(answers),
-            value=fake.word()
-        )
 
 
 # Call the functions to create the mock data
@@ -403,9 +359,7 @@ create_forms(10)
 create_identType()
 for i in range(10):
     create_children(10)
-create_polls(30)
-create_questions(30)
-create_answer(30)
-create_childAnswer(30)
+
+TechnicalReport.objects.create()
 
 print("Mock data has been successfully created.")
