@@ -610,11 +610,14 @@ class ChildAnswer(models.Model):
             print(f"selfValue: {selfValue}")
 
             valueReturn = (
-                bool(selfValue) if selfAnswerType == "Boolean" else
+                (selfValue in ('True', 'False', 'true', 'false')) if selfAnswerType == "Boolean" else
                 int(selfValue) if selfAnswerType == "Integer" else
                 float(selfValue) if selfAnswerType == "Float" else
                 str(selfValue)
             )
+            if valueReturn != True and selfAnswerType == "Boolean":
+                print(f"ValueError: {valueReturn}")
+                raise ValueError("Invalid answer type")
 
             print(f"valueReturn: {valueReturn}")
 
