@@ -76,7 +76,10 @@ from .serializers import (
     QuestionSerializer,
     AnswerSerializer,
     ChildAnswerSerializer,
-    TechnicalReportTableSerializer
+    TechnicalReportTableSerializer,
+    QuestionDepthSerializer,
+    AnswerDepthSerializer,
+    ChildAnswerDepthSerializer,
 )
 
 from datetime import datetime, date
@@ -140,6 +143,15 @@ class QuestionListView(generics.ListAPIView):
     ]  # This makes django-filters works
     filterset_fields = ["description", 'parentQuestion']  # fields to filter
 
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = QuestionDepthSerializer
+
+        return super().get_queryset()
+
 class AnswerListView(generics.ListAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
@@ -149,6 +161,15 @@ class AnswerListView(generics.ListAPIView):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["description", 'question']  # fields to filter
+
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = AnswerDepthSerializer
+
+        return super().get_queryset()
 
 
 class ChildAnswerListCreateView(generics.ListCreateAPIView):
@@ -160,6 +181,15 @@ class ChildAnswerListCreateView(generics.ListCreateAPIView):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["value", 'answer', 'answer__question']  # fields to filter
+
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = ChildAnswerDepthSerializer
+
+        return super().get_queryset()
 
 class ChildListCreateView(generics.ListCreateAPIView):
     queryset = Child.objects.all()

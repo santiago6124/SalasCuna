@@ -92,10 +92,22 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = "__all__"
 
+class QuestionDepthSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = "__all__"
+        depth = 1
+
 class AnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = "__all__"
+
+class AnswerDepthSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = "__all__"
+        depth = 1
 
 class ChildAnswerSerializer(serializers.ModelSerializer):
 
@@ -107,6 +119,18 @@ class ChildAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChildAnswer
         fields = "__all__"
+
+class ChildAnswerDepthSerializer(serializers.ModelSerializer):
+
+    valueCorrectType = serializers.SerializerMethodField()
+
+    def get_valueCorrectType(self, obj):
+        return obj.returnValueAsAnswerType()
+
+    class Meta:
+        model = ChildAnswer
+        fields = "__all__"
+        depth = 1
 
 
 class LocalitySerializer(serializers.ModelSerializer):

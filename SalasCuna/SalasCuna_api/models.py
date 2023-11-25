@@ -558,7 +558,7 @@ class Answer(models.Model):
     answerType = models.CharField(max_length=255, blank=False, null=False, choices=ANSWER_CHOICES)
 
     def __str__(self):
-        return self.description
+        return f'Pregunta: {self.question.description}, Opcion de Respuesta: {self.description} {self.answerType}'
     
     
     def save(self, *args, **kwargs):
@@ -583,10 +583,13 @@ class ChildAnswer(models.Model):
     value =  models.CharField(max_length=255, blank=False)
 
     def __str__(self):
-        return f"Child: {self.child}, Answer: {self.answer}"
+        return f"Child: {self.child}, Answer: {self.answer}, Value: {self.value}"
     
     def save(self, *args, **kwargs):
         # Check if the associated question's questionType is 'Single Option'
+
+        self.returnValueAsAnswerType()
+        
         if self.answer.question.questionType in ('Single Option','Single Choice'):
             # Check if there is already an answer for this question
             existing_childAnswer = ChildAnswer.objects.filter(answer__question=self.answer.question, child = self.child).first()
@@ -599,13 +602,32 @@ class ChildAnswer(models.Model):
     #     pass
 
     def returnValueAsAnswerType(self):
-        
-        selfAnswerType = self.answer.answerType
-        selfValue = self.value
-        valueReturn = bool(selfValue) if selfAnswerType == 'Boolean' else int(selfValue) if selfAnswerType == 'Integer' else float(selfValue) if selfAnswerType == 'Float' else str(selfValue)
-            
-        return valueReturn    
+        try:
+            selfAnswerType = self.answer.answerType
+            selfValue = self.value
 
+            print(f"selfAnswerType: {selfAnswerType}")
+            print(f"selfValue: {selfValue}")
+
+            valueReturn = (
+                (selfValue in ('True', 'False', 'true', 'false')) if selfAnswerType == "Boolean" else
+                int(selfValue) if selfAnswerType == "Integer" else
+                float(selfValue) if selfAnswerType == "Float" else
+                str(selfValue)
+            )
+            if valueReturn != True and selfAnswerType == "Boolean":
+                print(f"ValueError: {valueReturn}")
+                raise ValueError("Invalid answer type")
+
+            print(f"valueReturn: {valueReturn}")
+
+            return valueReturn
+        except ValueError as ve:
+            print(f"ValueError: {ve}")
+            raise ValueError("Invalid answer type")
+        except Exception as ex:
+            print(f"Exception: {ex}")
+            raise Exception(f"An unexpected error occurred: {ex}")
     
 
 class TechnicalReport(models.Model):

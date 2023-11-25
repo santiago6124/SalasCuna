@@ -136,8 +136,8 @@ class PollAdmin(admin.ModelAdmin):
     list_filter = ["name"]
 
 class ChildAnswerAdmin(admin.ModelAdmin):
-    list_display = ("id", "child", 'answer')
-    list_filter = ["child", 'answer']
+    list_display = ("id", "child", 'answer', 'value')
+    list_filter = ["child", 'answer', 'value']
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ("id", "description", "parentQuestion", "questionType", "poll")
