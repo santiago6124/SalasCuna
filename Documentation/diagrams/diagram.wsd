@@ -10,18 +10,28 @@ entity Cribroom {
     + PRIMARY_KEY(id)
     --
     name
+    entity
+    CUIT
     code
-    max_capacity = int
+    max_capacity
     street
     house_number
+    geolocation = null True
+    is_active
     --
     FOREIGN_KEY(Locality)
-    FOREIGN_KEY(Neighborhood)
     FOREIGN_KEY(Shift)
+    FOREIGN_KEY(Co_management)
+    FOREIGN_KEY(User)
+    FOREIGN_KEY(Neighborhood) (null True)
+    FOREIGN_KEY(Sectional) (null True)
     --
     generarPadron()
     generarNotaDePago()
     generarInformeTecnico()
+    lastDesinfection()
+    actualCapacity()
+    reachMax()
 }
 
 entity Company {
@@ -64,7 +74,7 @@ entity Payout {
 entity Zone {
     + PRIMARY_KEY(id)
     --
-    name
+    zone
     --
 
     ' interior or capital
@@ -80,23 +90,26 @@ entity Child {
     --
     first_name
     last_name
-    dni
+    identification = str, null True
     birthdate
     street
     house_number
+    geolocation = null True
     registration_date
     disenroll_date = default null
+    is_active = bool, default True
     --
     FOREIGN_KEY(Locality)
     FOREIGN_KEY(Neighborhood)
     FOREIGN_KEY(Gender)
     FOREIGN_KEY(Cribroom)
     FOREIGN_KEY(Shift)
-    social_worker = FOREIGN_KEY(User)
+    FOREIGN_KEY(User)
     FOREIGN_KEY(Guardian)
-    FOREIGN_KEY(Child_state)
+    FOREIGN_KEY(Ident_type)
     --
-    ()
+    cribroom_isActive()
+    age()
 }
 
 Cribroom "1" - "*" Child
@@ -133,17 +146,29 @@ entity Guardian {
     --
     first_name
     last_name
-    dni
+    identification = str, null True
+    --
+    FOREIGN_KEY(Guardian_Type)
+    FOREIGN_KEY(Ident_type)
+    --
+    ()
+}
+
+
+entity Phone {
+    + PRIMARY_KEY(id)
+    --
+    phone_name
     phone_number
     --
     FOREIGN_KEY(Phone_feature)
-    FOREIGN_KEY(Gender)
-    FOREIGN_KEY(Guardian_Type)
+    FOREIGN_KEY(Guardian)
     --
     ()
 }
 
 Child "*" -- "1" Guardian
+Phone "*" - "1" Guardian
 
 entity Form {
     + PRIMARY_KEY(id)
@@ -161,15 +186,88 @@ Cribroom_User "*" -- "1" Form
 entity Locality {
     + PRIMARY_KEY(id)
     --
-    name
+    locality
+    --
+    FOREIGN_KEY(Department)
+    --
+    ()
+}
+
+entity Department {
+    + PRIMARY_KEY(id)
+    --
+    department
     --
     FOREIGN_KEY(Zone)
     --
     ()
 }
 
-Zone "1" - "*" Locality
+Department "1" - "*" Locality
+Zone "1" - "*" Department
 Locality "*" - "1" Cribroom
 
+
+entity Poll{
+    name
+    --
+    --
+    ()
+}
+
+entity Question{
+    description
+    parentQuestion
+    questionType = {
+     Single Option,
+     Single Choice,
+     Multiple Choice}
+    --
+    FOREIGN_KEY(Poll)
+    --
+    ()
+}
+
+entity Answer{
+    description
+    answerType = {
+     Boolean,
+     Integer,
+     Float,
+     String}
+    --
+    FOREIGN_KEY(Question)
+    --
+    saveOverride()
+}
+
+class ChildAnswer{
+    value
+    --
+    FOREIGN_KEY(Child)
+    FOREIGN_KEY(Answer)
+    --
+    saveOVerride()
+    checkAnswerType()
+    returnValueAsAnswerType()
+}
+
+Child "*" - "1" ChildAnswer
+ChildAnswer "1" - "1*" Answer
+Answer "*" -- "1" Question
+Poll "1" - "*" Question
+
+class TechnicalReport{
+    '''indepedent table'''
+    *indepedent table
+    encabezado
+    ministro
+    resolucion
+    remitanse
+    --
+    --
+    saveOVerride()
+    deleteOVerride()
+}
 
 @enduml

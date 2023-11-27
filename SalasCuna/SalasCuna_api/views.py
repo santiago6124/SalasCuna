@@ -1,5 +1,5 @@
 from rest_framework import viewsets, status
-from rest_framework import mixins, generics, views
+from rest_framework import generics
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
@@ -22,10 +22,13 @@ from django.contrib.auth.models import Group
 from django.contrib.admin.models import LogEntry
 from .models import (
     Child,
+    Co_management,
+    IdentType,
     Locality,
     Neighborhood,
     Gender,
     Cribroom,
+    Sectional,
     Shift,
     Guardian,
     PhoneFeature,
@@ -34,17 +37,27 @@ from .models import (
     Zone,
     UserAccount,
     Department,
+    Phone,
+    CribroomUser,
+    Poll,
+    Question,
+    Answer,
+    ChildAnswer,
+    TechnicalReport
 )
 from .serializers import (
     ChildSerializer,
-    DeleteChildSerializer,
+    Co_managementSerializer,
     GroupSerializer,
     GuardianSerializer,
+    DepthGuardianSerializer,
+    IdentTypeSerializer,
     NeighborhoodSerializer,
     CribroomSerializer,
     DepthChildSerializer,
     LocalitySerializer,
     GenderSerializer,
+    SectionalSerializer,
     ShiftSerializer,
     PhoneFeatureSerializer,
     GuardianTypeSerializer,
@@ -54,27 +67,148 @@ from .serializers import (
     DepthCribroomSerializer,
     TechnicalReportSerializer,
     DepartmentSerializer,
-    DeleteCribroomSerializer,
     LogEntrySerializer,
+    PhoneSerializer,
+    CribroomUserSerializer,
+    DepthCribroomUserSerializer,
+    DepthPhoneSerializer,
+    PollSerializer,
+    QuestionSerializer,
+    AnswerSerializer,
+    ChildAnswerSerializer,
+    TechnicalReportTableSerializer,
+    QuestionDepthSerializer,
+    AnswerDepthSerializer,
+    ChildAnswerDepthSerializer,
 )
 
 from datetime import datetime, date
 from rest_framework.views import APIView  # Import APIView from rest_framework
 
+class PhoneModelViewSet(viewsets.ModelViewSet):
+    queryset = Phone.objects.all()
+    serializer_class = PhoneSerializer
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "phone_name", "phone_number", "phone_Feature", "guardian"]  # fields to filter
+    
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+        #cribroomUser/?depth=True
+        #cribroomUser/1/?depth=True
+        # '1' para True y '0' para False
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = DepthPhoneSerializer
+
+        return super().get_queryset()
+
+class CribroomUserModelViewSet(viewsets.ModelViewSet):
+    queryset = CribroomUser.objects.all()
+    serializer_class = CribroomUserSerializer
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "cribroom", "user"]  # fields to filter
+    
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+        #cribroomUser/?depth=True
+        #cribroomUser/1/?depth=True
+        # '1' para True y '0' para False
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = DepthCribroomUserSerializer
+
+        return super().get_queryset()
+
+class PollListView(generics.ListAPIView):
+    queryset = Poll.objects.all()
+    serializer_class = PollSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name"]  # fields to filter
+
+class QuestionListView(generics.ListAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["description", 'parentQuestion']  # fields to filter
+
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = QuestionDepthSerializer
+
+        return super().get_queryset()
+
+class AnswerListView(generics.ListAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["description", 'question']  # fields to filter
+
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = AnswerDepthSerializer
+
+        return super().get_queryset()
 
 
+class ChildAnswerListCreateView(generics.ListCreateAPIView):
+    queryset = ChildAnswer.objects.all()
+    serializer_class = ChildAnswerSerializer
+    permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["value", 'answer', 'answer__question']  # fields to filter
+
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = ChildAnswerDepthSerializer
+
+        return super().get_queryset()
 
 class ChildListCreateView(generics.ListCreateAPIView):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
 
+class TechnicalReportTableListCreateView(generics.ListCreateAPIView):
+    queryset = TechnicalReport.objects.all()
+    serializer_class = TechnicalReportTableSerializer
+    permission_classes = [AllUsersPerms]
 
 class LocalityListCreateView(generics.ListCreateAPIView):
     queryset = Locality.objects.all()
     serializer_class = LocalitySerializer
-
+    permission_classes = [AllUsersPerms]
+    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
+    filterset_fields = ["id", "locality"]  # fields to filter
 
 class PhoneFeatureListCreateView(generics.ListCreateAPIView):
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     queryset = PhoneFeature.objects.all()
     serializer_class = PhoneFeatureSerializer
     filter_backends = [
@@ -84,17 +218,31 @@ class PhoneFeatureListCreateView(generics.ListCreateAPIView):
     filterset_fields = ["feature"]  # fields to filter
 
 
-class GuardianListCreateView(generics.ListCreateAPIView):
+class GuardianModelViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllUsersPerms]
     queryset = Guardian.objects.all()
     serializer_class = GuardianSerializer
     filter_backends = [
         DjangoFilterBackend,
         OrderingFilter,
     ]  # This makes django-filters works
-    filterset_fields = ["dni"]  # fields to filter
+    filterset_fields = ["identification"]  # fields to filter
+
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+        #guardian/?depth=True
+        #guardian/1/?depth=True
+        # '1' para True y '0' para False
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = DepthGuardianSerializer
+
+        return super().get_queryset()
 
 
-class NeighborhoodListCreateView(generics.ListCreateAPIView):
+class NeighborhoodListView(generics.ListAPIView):
+    permission_classes = [AllUsersPerms]
     queryset = Neighborhood.objects.all()
     serializer_class = NeighborhoodSerializer
     filter_backends = [
@@ -104,7 +252,8 @@ class NeighborhoodListCreateView(generics.ListCreateAPIView):
     filterset_fields = ["neighborhood"]  # fields to filter
 
 
-class GenderListCreateView(generics.ListCreateAPIView):
+class GenderListView(generics.ListAPIView):
+    permission_classes = [AllUsersPerms]
     queryset = Gender.objects.all()
     serializer_class = GenderSerializer
     filter_backends = [
@@ -112,16 +261,6 @@ class GenderListCreateView(generics.ListCreateAPIView):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["gender"]  # fields to filter
-
-
-class ShiftListCreateView(generics.ListCreateAPIView):
-    queryset = Shift.objects.all()
-    serializer_class = ShiftSerializer
-    filter_backends = [
-        DjangoFilterBackend,
-        OrderingFilter,
-    ]  # This makes django-filters works
-    filterset_fields = ["name"]  # fields to filter
 
 
 class PayoutViewSet(viewsets.ModelViewSet):
@@ -132,7 +271,7 @@ class PayoutViewSet(viewsets.ModelViewSet):
         DjangoFilterBackend,
         OrderingFilter,
     ]  # This makes django-filters works
-    filterset_fields = ["amount", "zone"]  # fields to filter
+    filterset_fields = ["amount", "zone_id"]  # fields to filter
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
@@ -170,38 +309,6 @@ class TechnicalReportRetrieveAPIView(generics.RetrieveAPIView):
         return context
 
 
-class LocalityListView(generics.ListAPIView):
-    queryset = Locality.objects.all()
-    serializer_class = LocalitySerializer
-    permission_classes = [AllUsersPerms]
-    filter_backends = [DjangoFilterBackend]  # This makes django-filters works
-    filterset_fields = ["id", "locality"]  # fields to filter
-
-
-class NeighborhoodListView(generics.ListAPIView):
-    queryset = Neighborhood.objects.all()
-    serializer_class = NeighborhoodSerializer
-    permission_classes = [AllUsersPerms]
-
-
-class GenderListView(generics.ListAPIView):
-    queryset = Gender.objects.all()
-    serializer_class = GenderSerializer
-    permission_classes = [AllUsersPerms]
-
-
-class ShiftListView(generics.ListAPIView):
-    queryset = Shift.objects.all()
-    serializer_class = ShiftSerializer
-    permission_classes = [DevPerms | DirectorPerms]
-
-
-class PhoneFeatureListView(generics.ListAPIView):
-    queryset = PhoneFeature.objects.all()
-    serializer_class = PhoneFeatureSerializer
-    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
-
-
 class GuardianTypeListView(generics.ListAPIView):
     queryset = GuardianType.objects.all()
     serializer_class = GuardianTypeSerializer
@@ -217,72 +324,15 @@ class ChildModelViewSet(viewsets.ModelViewSet):
 
     # Para usar Serializer, utilizar el filtro debajo
     def get_queryset(self):
-        no_depth = self.request.query_params.get("no_depth")
-        delete = self.request.query_params.get("delete")
+        #child/?depth=True
+        #child/1/?depth=True
+        # '1' para True y '0' para False
 
-        if no_depth is not None:
-            self.queryset = Child.objects.all()
-            self.serializer_class = ChildSerializer
-            return super().get_queryset()
-        elif delete is not None:
-            self.queryset = Child.objects.all()
-            self.serializer_class = DeleteChildSerializer
-            return super().get_queryset()
-        else:
-            self.queryset = Child.objects.all()
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
             self.serializer_class = DepthChildSerializer
-            return super().get_queryset()
 
-    def perform_create(self, serializer):
-        # First, create the Child object
-        child_instance = serializer.save()
-
-        request_data = self.request.data
-
-        if child_instance.guardian is None:
-            # Now, create the associated Guardian object
-            guardian_data = {
-                "first_name": request_data.get("guardian_first_name"),
-                "last_name": request_data.get("guardian_last_name"),
-                "dni": request_data.get("guardian_dni"),
-                "phone_number": request_data.get("guardian_phone_number"),
-                "phone_Feature": request_data.get("guardian_phone_Feature_id"),
-                "guardian_Type": request_data.get("guardian_guardian_Type_id"),
-                "gender": request_data.get("guardian_gender_id"),
-            }
-
-            guardian_serializer = GuardianSerializer(data=guardian_data)
-            if guardian_serializer.is_valid():
-                guardian_instance = guardian_serializer.save()
-                child_instance.guardian = guardian_instance
-                child_instance.save()
-            else:
-                return Response(
-                    {"message": "check the guardian data"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        if (
-            child_instance.neighborhood is None
-            and request_data.get("neighborhood_neighborhood") is None
-        ):
-            # Now, create the associated Neighborhood object
-            neighborhood_data = {
-                "neighborhood": request_data.get("neighborhood_neighborhood"),
-            }
-
-            neighborhood_serializer = NeighborhoodSerializer(data=neighborhood_data)
-            if neighborhood_serializer.is_valid():
-                neighborhood_instance = neighborhood_serializer.save()
-                child_instance.neighborhood = neighborhood_instance
-                child_instance.save()
-            else:
-                return Response(
-                    {"message": "check the neighborhood data"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return super().get_queryset()
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -311,10 +361,8 @@ class CribroomListView(generics.ListAPIView):
     filterset_fields = [
         "max_capacity",
         "is_active",
-        "zone",
         "shift",
         "id",
-        "user",
     ]  # fields to filter
 
     def get_queryset(self):
@@ -341,11 +389,21 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         "max_capacity",
         "is_active",
-        "zone",
         "shift",
         "id",
-        "user",
+        'locality__department__zone__id'
     ]  # fields to filter
+
+    def get_queryset(self):
+        #cribroom/?depth=True
+        #cribroom/1/?depth=True
+        # '1' para True y '0' para False
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = DepthCribroomSerializer
+
+        return super().get_queryset()
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -361,38 +419,34 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
 
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def get_queryset(self):
-        no_depth = self.request.query_params.get("no_depth")
-        delete = self.request.query_params.get("delete")
-
-        if no_depth is not None:
-            self.queryset = Cribroom.objects.all()
-            self.serializer_class = CribroomSerializer
-            return super().get_queryset()
-        elif delete is not None:
-            self.queryset = Cribroom.objects.all()
-            self.serializer_class = DeleteCribroomSerializer
-            return super().get_queryset()
-        else:
-            self.queryset = Cribroom.objects.all()
-            self.serializer_class = DepthCribroomSerializer
-            return super().get_queryset()
+        
+    def destroy(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
-class ShiftModelViewSet(viewsets.ModelViewSet):
+class ShiftListCreateView(generics.ListCreateAPIView):
+    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
     queryset = Shift.objects.all()
     serializer_class = ShiftSerializer
-    permission_classes = [DevPerms | DirectorPerms | TrabajadorSocialPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name"]  # fields to filter
 
 
-class ZoneModelViewSet(viewsets.ModelViewSet):
+class ZoneListCreateView(generics.ListCreateAPIView):
     queryset = Zone.objects.all()
     serializer_class = ZoneSerializer
     permission_classes = [AllUsersPerms]
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]  # This makes django-filters works
+    filterset_fields = ["name", 'id']  # fields to filter
 
 
-class DepartmentModelViewSet(viewsets.ModelViewSet):
+class DepartmentListCreateView(generics.ListCreateAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [AllUsersPerms]
@@ -402,3 +456,21 @@ class LogEntryModelViewSet(viewsets.ModelViewSet):
     queryset = LogEntry.objects.all()
     serializer_class = LogEntrySerializer
     permission_classes = [DevPerms | DirectorPerms]
+
+
+class IdentTypeListView(generics.ListAPIView):
+    permission_classes = [AllUsersPerms]
+    queryset = IdentType.objects.all()
+    serializer_class = IdentTypeSerializer
+    
+    
+class SectionalListView(generics.ListAPIView):
+    permission_classes = [AllUsersPerms]
+    queryset = Sectional.objects.all()
+    serializer_class = SectionalSerializer
+    
+    
+class Co_managementListView(generics.ListAPIView):
+    permission_classes = [AllUsersPerms]
+    queryset = Co_management.objects.all()
+    serializer_class = Co_managementSerializer

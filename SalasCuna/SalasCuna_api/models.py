@@ -15,6 +15,8 @@ from django.contrib.auth.models import (
 from simple_history.models import HistoricalRecords
 from num2words import num2words
 
+from django.core.exceptions import ValidationError
+
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -78,61 +80,97 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
         return f"{self.email}, ({self.last_name}, {self.first_name})"
 
 
-class Locality(models.Model):
-    locality = models.CharField(max_length=255, blank=False)
-    history = HistoricalRecords()
-
-    def __str__(self):
-        return f"{self.locality}"
-
-
 class Department(models.Model):
     department = models.CharField(max_length=255, blank=False)
+
+    zone = models.ForeignKey(
+        "Zone", on_delete=models.CASCADE, blank=False
+    )
+
     history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.department}"
 
+class Locality(models.Model):
+    locality = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
+
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, blank=False
+    )
+
+    def __str__(self):
+        return f"{self.locality}"
 
 class Neighborhood(models.Model):
     neighborhood = models.CharField(max_length=255, blank=False)
+
     history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.neighborhood}"
 
+class Sectional(models.Model):
+    sectional = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return f"{self.sectional}"
+
+class Co_management(models.Model):
+    co_management = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return f"{self.co_management}"
+
+class IdentType(models.Model):
+    type = models.CharField(max_length=255, blank=False)
+
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return self.type
+
 
 class Child(models.Model):
     first_name = models.CharField(max_length=255, blank=False)
     last_name = models.CharField(max_length=255, blank=False)
-    dni = models.CharField(max_length=255, blank=False)
+    identification = models.CharField(max_length=255, blank=True, null=True)
+    ident_type = models.ForeignKey(
+        "IdentType", on_delete=models.CASCADE, blank=False
+    )
     birthdate = models.DateField(blank=False)
     street = models.CharField(max_length=255, blank=False)
-    house_number = models.IntegerField(blank=True, null=True)
+    house_number = models.IntegerField(blank=False, null=False )
+    geolocation = models.CharField(max_length=255, blank=True, null=True)
+    
     registration_date = models.DateField(blank=False)
     disenroll_date = models.DateField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(blank=True, default=True)
 
     locality = models.ForeignKey(
-        "Locality", on_delete=models.CASCADE, blank=True, null=True
+        "Locality", on_delete=models.CASCADE, blank=False, null=False
     )
     neighborhood = models.ForeignKey(
-        "Neighborhood", on_delete=models.CASCADE, blank=True, null=True
+        "Neighborhood", on_delete=models.CASCADE, blank=False, null=False
     )
     gender = models.ForeignKey(
-        "Gender", models.DO_NOTHING, db_column="Gender_id", blank=False
+        "Gender", models.DO_NOTHING, db_column="Gender_id", blank=False, null=False
     )  # Field name made lowercase.
     cribroom = models.ForeignKey(
-        "Cribroom", models.DO_NOTHING, db_column="Cribroom_id", blank=False
+        "Cribroom", models.DO_NOTHING, db_column="Cribroom_id", blank=False, null=False
     )  # Field name made lowercase.
     shift = models.ForeignKey(
-        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
+        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=False, null=False
     )  # Field name made lowercase.
-    user = models.ForeignKey(
-        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
-    )  # Field name made lowercase.
+
     guardian = models.ForeignKey(
-        "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=False
+        "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=False, null=False
     )  # Field name made lowercase.
     history = HistoricalRecords()
 
@@ -158,6 +196,7 @@ class Child(models.Model):
 class Company(models.Model):
     title = models.CharField(max_length=255, blank=False)
     phone = models.IntegerField(blank=False)
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -172,28 +211,28 @@ class Cribroom(models.Model):
     max_capacity = models.IntegerField(blank=False)
     is_active = models.BooleanField(default=True)
     street = models.CharField(max_length=255, blank=False)
-    house_number = models.IntegerField(blank=True, null=True)
+    house_number = models.IntegerField(blank=False, null=False)
+    geolocation = models.CharField(max_length=255, blank=False, null=True)
 
     locality = models.ForeignKey(
-        Locality, on_delete=models.CASCADE, blank=True, null=True
+        Locality, on_delete=models.CASCADE
     )
-    department = models.ForeignKey(
-        Department, on_delete=models.CASCADE, blank=True, null=True
-    )
-    neighborhood = models.ForeignKey(
-        Neighborhood, on_delete=models.CASCADE, blank=True, null=True
-    )
-
     shift = models.ForeignKey(
-        "Shift", models.DO_NOTHING, db_column="Shift_id", blank=True, null=True
+        "Shift", models.DO_NOTHING, db_column="Shift_id"
+    )  # Field name made lowercase.
+    
+    co_management = models.ForeignKey(
+        "Co_management", models.DO_NOTHING, db_column="Co_management_id"
     )  # Field name made lowercase.
 
-    zone = models.ForeignKey(
-        "Zone", models.DO_NOTHING, db_column="zone_id", blank=True, null=True
+
+    neighborhood = models.ForeignKey(
+        Neighborhood, on_delete=models.CASCADE, blank=False, null=True
     )
-    user = models.ForeignKey(
-        "UserAccount", models.DO_NOTHING, db_column="User_id", blank=True, null=True
+    sectional = models.ForeignKey(
+        "Sectional", models.DO_NOTHING, db_column="Sectional_id", blank=False, null=True
     )  # Field name made lowercase.
+    
     history = HistoricalRecords()
 
     def __str__(self):
@@ -213,6 +252,10 @@ class Cribroom(models.Model):
             return True
         else:
             return False
+        
+    def get_department(self):
+        return self.locality.department.department
+    
 
     def totalImport(self, init_date, end_date):
         """
@@ -220,10 +263,20 @@ class Cribroom(models.Model):
 
         for n in 12_months:
             month_import_n = max_capacity * amount
+            
+        calculando proporcionalmente el month_import_0 y el month_import_-1
+            segun la cantidad de dias seleccionados. Formula:
+            initYear, initMonth, initDay = 2022, 2, 11 
+            initAmount  = 15006.0
+            init_days_in_month = calendar.monthrange(initYear, initMonth)[1]
+
+            initAmountProporcional = (initAmount/init_days_in_month) * (init_days_in_month - initDay)
+            endAmountProporcional = (endAmount/end_days_in_month) * (0 + initDay)
+            
         """
         try:
             payouts = Payout.objects.filter(
-                zone=self.zone.id, date__range=[init_date, end_date]
+                zone=self.locality.department.zone.id, date__range=[init_date, end_date]
             )
             print(f"payouts: {payouts}")
             min_date = min(payouts, key=lambda payout: payout.date).date
@@ -346,6 +399,7 @@ class CribroomUser(models.Model):
     user = models.ForeignKey(
         "UserAccount", models.DO_NOTHING, db_column="User_id", blank=False
     )  # Field name made lowercase.
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -361,6 +415,7 @@ class Desinfection(models.Model):
     company = models.ForeignKey(
         Company, models.DO_NOTHING, db_column="Company_id", blank=False
     )  # Field name made lowercase.
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -372,6 +427,7 @@ class Form(models.Model):
     cribroom_user = models.ForeignKey(
         CribroomUser, models.DO_NOTHING, db_column="Cribroom_User_id", blank=False
     )  # Field name made lowercase.
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -380,6 +436,7 @@ class Form(models.Model):
 
 class Gender(models.Model):
     gender = models.CharField(max_length=255, blank=False)
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -388,6 +445,7 @@ class Gender(models.Model):
 
 class PhoneFeature(models.Model):
     feature = models.BigIntegerField(blank=False)
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -396,41 +454,52 @@ class PhoneFeature(models.Model):
 
 class GuardianType(models.Model):
     type = models.CharField(max_length=255, blank=False)
+
     history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.type}"
 
-
 class Guardian(models.Model):
     first_name = models.CharField(max_length=255, blank=False)
     last_name = models.CharField(max_length=255, blank=False)
-    dni = models.CharField(max_length=255, blank=False)
+    identification = models.CharField(max_length=255, blank=False, null=True)
 
-    phone_number = models.IntegerField(blank=True, null=True)
+    history = HistoricalRecords()
 
-    phone_Feature = models.ForeignKey(
-        PhoneFeature, on_delete=models.CASCADE, blank=True, null=True
-    )
     guardian_Type = models.ForeignKey(
         GuardianType, on_delete=models.CASCADE, blank=False
     )
-
-    gender = models.ForeignKey(
-        Gender, models.DO_NOTHING, db_column="Gender_id", blank=False
-    )  # Field name made lowercase.
-    history = HistoricalRecords()
+    ident_type = models.ForeignKey(
+        "IdentType", on_delete=models.CASCADE, blank=False
+    )
 
     def __str__(self):
         return f"{self.last_name}, {self.first_name}"
 
+class Phone(models.Model):
+    phone_name = models.CharField(max_length=255, blank=False)
+    phone_number = models.IntegerField(blank=False, null=False)
+
+    history = HistoricalRecords()
+
+    phone_Feature = models.ForeignKey(
+        PhoneFeature, on_delete=models.CASCADE, blank=False
+    )
+    guardian = models.ForeignKey(
+        "Guardian", models.DO_NOTHING, db_column="Guardian_id", blank=False
+    )  # Field name made lowercase.
+
+    def __str__(self):
+        return f"{self.phone_name}, {self.phone_number}"
 
 class Payout(models.Model):
     amount = models.FloatField(blank=False)
     date = models.DateField(blank=False)
     zone = models.ForeignKey(
-        "Zone", models.DO_NOTHING, db_column="Zone_id", blank=True, null=True
+        "Zone", models.DO_NOTHING, db_column="Zone_id", blank=False
     )  # Field name made lowercase.
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -439,6 +508,7 @@ class Payout(models.Model):
 
 class Shift(models.Model):
     name = models.CharField(max_length=255, blank=False)
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -447,7 +517,147 @@ class Shift(models.Model):
 
 class Zone(models.Model):
     name = models.CharField(max_length=255, blank=False)
+
     history = HistoricalRecords()
 
     def __str__(self):
         return self.name
+
+
+class Poll(models.Model):
+    name =  models.CharField(max_length=255, blank=False)
+
+    def __str__(self):
+        return self.name
+
+class Question(models.Model):
+    description =  models.CharField(max_length=255, blank=False)
+    parentQuestion = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    QUESTION_CHOICES = (
+        ('Single Option', 'Single Option'),
+        ('Single Choice', 'Single Choice'),
+        ('Multiple Choice', 'Multiple Choice'),
+    )
+    questionType = models.CharField(max_length=255, blank=False, null=False, choices=QUESTION_CHOICES)
+    poll = models.ForeignKey(
+        "Poll", on_delete=models.CASCADE, blank=False, null=False
+    )
+    
+    def __str__(self):
+        return self.description
+
+class Answer(models.Model):
+    description = models.CharField(max_length=255, blank=False)
+    question = models.ForeignKey('Question', on_delete=models.CASCADE, null=False, blank=False)
+    ANSWER_CHOICES = (
+        ('Boolean', 'Boolean'),
+        ('Integer', 'Integer'),
+        ('Float', 'Float'),
+        ('String', 'String'),
+    )
+    answerType = models.CharField(max_length=255, blank=False, null=False, choices=ANSWER_CHOICES)
+
+    def __str__(self):
+        return f'Pregunta: {self.question.description}, Opcion de Respuesta: {self.description} {self.answerType}'
+    
+    
+    def save(self, *args, **kwargs):
+        # Check if the associated question's questionType is 'Single Option'
+        if self.question.questionType == 'Single Option':
+            # Check if there is already an answer for this question
+            existing_answer = Answer.objects.filter(question=self.question).first()
+            if existing_answer and existing_answer != self:
+                raise ValidationError("There can only be one answer for Single Option questions.")
+        super().save(*args, **kwargs)
+
+
+
+
+class ChildAnswer(models.Model):
+    child = models.ForeignKey(
+        "Child", on_delete=models.CASCADE, blank=False, null=False
+    )
+    answer = models.ForeignKey(
+        "Answer", on_delete=models.CASCADE, blank=False, null=False
+    )
+    value =  models.CharField(max_length=255, blank=False)
+
+    def __str__(self):
+        return f"Child: {self.child}, Answer: {self.answer}, Value: {self.value}"
+    
+    def save(self, *args, **kwargs):
+        # Check if the associated question's questionType is 'Single Option'
+
+        self.returnValueAsAnswerType()
+        
+        if self.answer.question.questionType in ('Single Option','Single Choice'):
+            # Check if there is already an answer for this question
+            existing_childAnswer = ChildAnswer.objects.filter(answer__question=self.answer.question, child = self.child).first()
+            if existing_childAnswer and existing_childAnswer != self:
+                raise ValidationError("There can only be one childAnswer for Single Option/Single Choice questions.")
+        super().save(*args, **kwargs)
+
+    # implementar mas adelante
+    # def checkAnswerType(self):
+    #     pass
+
+    def returnValueAsAnswerType(self):
+        try:
+            selfAnswerType = self.answer.answerType
+            selfValue = self.value
+
+            print(f"selfAnswerType: {selfAnswerType}")
+            print(f"selfValue: {selfValue}")
+
+            valueReturn = (
+                (selfValue in ('True', 'False', 'true', 'false')) if selfAnswerType == "Boolean" else
+                int(selfValue) if selfAnswerType == "Integer" else
+                float(selfValue) if selfAnswerType == "Float" else
+                str(selfValue)
+            )
+            if valueReturn != True and selfAnswerType == "Boolean":
+                print(f"ValueError: {valueReturn}")
+                raise ValueError("Invalid answer type")
+
+            print(f"valueReturn: {valueReturn}")
+
+            return valueReturn
+        except ValueError as ve:
+            print(f"ValueError: {ve}")
+            raise ValueError("Invalid answer type")
+        except Exception as ex:
+            print(f"Exception: {ex}")
+            raise Exception(f"An unexpected error occurred: {ex}")
+    
+
+class TechnicalReport(models.Model):
+    encabezado = models.CharField(max_length=255, blank=False, default="1983/2023 - 40 AÑOS DE DEMOCRACIA")
+    ministro = models.CharField(max_length=255, blank=False, default="Sr. Ministro de Desarrollo Social Dr. Juan Carlos Massei")
+    resolucion = models.CharField(max_length=255, blank=False, default="Resolución Ministerial N° 0007/2023")
+    remitanse = models.CharField(max_length=255, blank=False, default="REMÍTANSE a la Subsecretaria de Administración y Recursos Humanos")
+    history = HistoricalRecords()
+    
+    def save(self, *args, **kwargs):
+
+        existing_obj = TechnicalReport.objects.first()
+
+        if existing_obj:
+            # Update the existing instance with the new values
+            TechnicalReport.objects.filter(id=existing_obj.id).update(
+                encabezado=self.encabezado,
+                ministro=self.ministro,
+                resolucion=self.resolucion,
+                remitanse=self.remitanse
+            )
+        else:
+            super(TechnicalReport, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Avoid deleting the object
+        
+        print('method not allowed')
+        pass
+
+    def __str__(self):
+        return self.resolucion
+
