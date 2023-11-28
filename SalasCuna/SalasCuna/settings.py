@@ -85,9 +85,13 @@ WSGI_APPLICATION = "SalasCuna.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'backend28',
+        'USER': 'mysuperuser',
+        'PASSWORD': 'pepe1234',
+        'HOST': 'backend28.cpew4ddmqibh.sa-east-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
@@ -207,3 +211,13 @@ SITE_NAME = "Salas Cuna"
 CORS_ALLOW_ALL_ORIGINS = True
 
 CELERY_RESULT_BACKEND = 'django-db'
+
+AWS_ACCESS_KEY_ID = 'AKIA2FUBLBHLRRYEBHV2'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'backend28'
+AWS_S3_SIGNATURE_NAME = 's3v4',
+AWS_S3_REGION_NAME = 'sa-east-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL =  None
+AWS_S3_VERITY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
