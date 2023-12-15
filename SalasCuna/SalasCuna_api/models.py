@@ -140,7 +140,7 @@ class IdentType(models.Model):
 class Child(models.Model):
     first_name = models.CharField(max_length=255, blank=False)
     last_name = models.CharField(max_length=255, blank=False)
-    identification = models.CharField(max_length=255, blank=True, null=True)
+    identification = models.CharField(max_length=255, blank=True, null=True, unique=True)
     ident_type = models.ForeignKey(
         "IdentType", on_delete=models.CASCADE, blank=False
     )
