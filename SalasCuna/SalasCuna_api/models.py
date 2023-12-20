@@ -191,6 +191,20 @@ class Child(models.Model):
             - ((today.month, today.day) < (birthdate.month, birthdate.day))
         )
         return age
+    
+    def modification(self):
+        
+        options = 'Alta', 'Baja', 'Sin Modificar'
+        
+        print(self.history)
+        print(self.registration_date)
+        print(self.disenroll_date)
+
+        today = date.today()
+
+        modification = options[0] if (today.year, today.month) == (self.registration_date.year, self.registration_date.month) and self.is_active else options[1] if (today.year, today.month) == (self.disenroll_date.year, self.disenroll_date.month) and self.is_active == False else options[2]
+        
+        return modification
 
 
 class Company(models.Model):

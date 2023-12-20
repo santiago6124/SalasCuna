@@ -316,6 +316,7 @@ class ChildSerializer(serializers.ModelSerializer):
 
 class DepthChildSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField()
+    modification = serializers.SerializerMethodField() 
 
     class Meta:
         model = Child
@@ -333,6 +334,9 @@ class DepthChildSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         return obj.age()
+
+    def get_modification(self, obj):
+        return obj.modification()
 
 
 class TechnicalReportSerializer(serializers.ModelSerializer):
