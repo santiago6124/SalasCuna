@@ -1,8 +1,10 @@
 import random
-from datetime import date
+from datetime import date, datetime
 from django.utils import timezone
 import os
 import django
+
+from django.core.exceptions import ValidationError
 
 # Set the DJANGO_SETTINGS_MODULE environment variable
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SalasCuna.settings")
@@ -322,11 +324,18 @@ def create_guardians(num_guardians):
         )
 
 
+def validate_date_format(value):
+    try:
+        datetime.strptime(value, '%Y-%m')
+    except ValueError:
+        raise ValidationError('El formato de fecha debe ser YYYY-MM')
+
 def create_payouts(num_payouts):
     zones = Zone.objects.all()
     for _ in range(num_payouts):
         amount = fake.random_int(min=15000, max=85000)
-        date = fake.date_between(start_date="-1y", end_date="today")
+        # Genera una fecha en el formato 'YYYY-MM'
+        date = fake.date_between(start_date="-1y", end_date="today").strftime('%Y-%m')
         zone = random.choice(zones)
         Payout.objects.create(amount=amount, date=date, zone=zone)
 

@@ -4,7 +4,7 @@
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-from datetime import date
+from datetime import date, datetime
 from django.db import models
 from django.db.models import Count
 from django.contrib.auth.models import (
@@ -507,9 +507,16 @@ class Phone(models.Model):
     def __str__(self):
         return f"{self.phone_name}, {self.phone_number}"
 
+def validate_date_format(value):
+    try:
+        # Intenta parsear la fecha, esto arrojará una excepción si el formato no es correcto
+        datetime.strptime(value, '%Y-%m')
+    except ValueError:
+        raise ValidationError('El formato de fecha debe ser YYYY-MM')
+
 class Payout(models.Model):
     amount = models.FloatField(blank=False)
-    date = models.DateField(blank=False)
+    date = models.CharField(max_length=7, validators=[validate_date_format], blank=False)
     zone = models.ForeignKey(
         "Zone", models.DO_NOTHING, db_column="Zone_id", blank=False
     )  # Field name made lowercase.
