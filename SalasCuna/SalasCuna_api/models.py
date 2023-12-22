@@ -261,6 +261,17 @@ class Cribroom(models.Model):
     def actualCapacity(self):
         return self.child_set.filter(is_active=True).count()
 
+    def payNote_amount(self, year, month):
+        print(f'year: {year}')
+        print(f'month: {month}')
+        print(f'self.locality.department.zone.id: {self.locality.department.zone.id}')
+        
+        payout_amount = Payout.objects.filter(zone=self.locality.department.zone.id, date=f'{year}-{month}')[0].amount
+        
+        print(f'payout_amount: {payout_amount}')
+
+        return self.child_set.filter(is_active=True).count() * payout_amount
+
     def reachMax(self):
         if self.actualCapacity() == self.max_capacity:
             return True

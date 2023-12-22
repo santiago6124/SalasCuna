@@ -240,6 +240,22 @@ class DepthCribroomSerializer(serializers.ModelSerializer):
     
     """
 
+class PayNoteCribroomSerializer(serializers.ModelSerializer):
+    actualCapacity = serializers.SerializerMethodField()
+    payNote_amount = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cribroom
+        fields = "__all__"
+
+    def get_actualCapacity(self, obj):
+        return obj.actualCapacity()
+    
+    def get_payNote_amount(self, obj):
+        year = self.context.get("year")
+        month = self.context.get("month")
+
+        return obj.payNote_amount(year, month)
 
 class ShiftSerializer(serializers.ModelSerializer):
     class Meta:

@@ -80,6 +80,7 @@ from .serializers import (
     QuestionDepthSerializer,
     AnswerDepthSerializer,
     ChildAnswerDepthSerializer,
+    PayNoteCribroomSerializer,
 )
 
 from datetime import datetime, date
@@ -402,8 +403,20 @@ class CribroomModelViewSet(viewsets.ModelViewSet):
         depth = str(self.request.query_params.get("depth"))
         if depth=='1':
             self.serializer_class = DepthCribroomSerializer
+            
+        paynote = str(self.request.query_params.get("paynote"))
+        print(f'paynote: {paynote}')
+        if paynote=='1':
+            self.serializer_class = PayNoteCribroomSerializer
+            print('paynote equal 1')
 
         return super().get_queryset()
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["month"] = self.request.query_params.get("month")
+        context["year"] = self.request.query_params.get("year")
+        return context
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
