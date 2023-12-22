@@ -533,6 +533,17 @@ class Payout(models.Model):
     )  # Field name made lowercase.
 
     history = HistoricalRecords()
+    
+    def save(self, *args, **kwargs):
+        # Check if there is already a payout for this zone and date
+        existing_payout = Payout.objects.filter(zone=self.zone, date=self.date)
+        ids = [obj.id for obj in existing_payout] # validation added for updating objects and not raising error
+        
+        if existing_payout.exists() and self.pk not in ids:
+            raise ValidationError("Already exists a payout for this zone and date")
+
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f"{self.id}, {self.amount}, {self.date}"
