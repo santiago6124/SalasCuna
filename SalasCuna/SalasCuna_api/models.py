@@ -17,6 +17,7 @@ from num2words import num2words
 
 from django.core.exceptions import ValidationError
 
+import calendar
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -304,85 +305,85 @@ class Cribroom(models.Model):
                 zone=self.locality.department.zone.id, date__range=[init_date, end_date]
             )
             print(f"payouts: {payouts}")
-            min_date = min(payouts, key=lambda payout: payout.date).date
-            max_date = max(payouts, key=lambda payout: payout.date).date
+            min_date = min(payouts, key=lambda payout: payout.date)
+            max_date = max(payouts, key=lambda payout: payout.date)
 
             pays = {}
 
-            pays["totalSumEndMonth"] = max_date.month
-            pays["totalSumEndYear"] = max_date.year
-            pays["totalSumInitMonth"] = min_date.month
-            pays["totalSumInitYear"] = min_date.year
+            try:
+                init_date_year = int(init_date[0:4])
+                init_date_month = int(init_date[5:7])
+                init_date_day = int(init_date[8:])
+
+                init_payout = Payout.objects.get(zone=self.locality.department.zone.id, date=str(init_date)[:7])
+                
+                init_month_days = calendar.monthrange(init_date_year, init_date_month)[1]
+                
+                init_amount = init_payout.amount / init_month_days * (init_month_days - init_date_day)
+            except Payout.DoesNotExist:
+                init_payout = min_date
+                init_amount = init_payout.amount
+                init_date_year = int(str(init_payout.date[0:4]))
+                init_date_month = int(str(init_payout.date[5:7]))
+            
+            try:
+                end_date_year = int(end_date[0:4])
+                end_date_month = int(end_date[5:7])
+                end_date_day = int(end_date[8:])
+                
+                end_payout = Payout.objects.get(zone=self.locality.department.zone.id, date=str(end_date)[:7])
+            
+                end_month_days = calendar.monthrange(end_date_year, end_date_month)[1]
+                
+                end_amount = end_payout.amount / end_month_days * end_date_day
+                
+            except Payout.DoesNotExist:
+                end_payout = max_date
+                end_amount = end_payout.amount
+                end_date_year = int(str(end_payout.date[0:4]))
+                end_date_month = int(str(end_payout.date[5:7]))
+                
+            
+            
+            pays = {
+
+                'totalSumInitYear': init_date_year,
+                'totalSumInitMonth': init_date_month,
+                'firstSubTotalSumEndMonth': 0,
+                'firstSubTotalSumFloat': init_amount,
+
+                'totalSumEndYear': end_date_year,
+                'SecSubTotalSumInitMonth': 0,
+                'totalSumEndMonth': end_date_month,
+                'SecSubTotalSumFloat': end_amount,
+
+                'totalSumFloat': end_amount+init_amount,
+            }
 
             for payout in payouts:
-                pays[str(payout.date)] = payout.amount * self.max_capacity
+                payout_id = payout.id
 
-                try:
-                    pays[str(payout.date.year)] += payout.amount * self.max_capacity
-                except:
-                    pays[str(payout.date.year)] = payout.amount * self.max_capacity
+                if payout_id != init_payout.id and payout_id != end_payout.id:
+                    payout_amount = payout.amount
+                    payout_date = payout.date                
+                    
+                    payout_year = int(payout_date[0:4])
+                    payout_month = int(payout_date[5:7])
+                    
+                    if payout_year == pays["totalSumInitYear"]:
+                        pays['firstSubTotalSumFloat'] += payout_amount
+                        
+                        if payout_month > pays["firstSubTotalSumEndMonth"]:
+                            pays["firstSubTotalSumEndMonth"] = payout_month
 
-                try:
-                    pays["totalSumFloat"] += payout.amount * self.max_capacity
-                    pays["totalSumStr"] = num2words(pays["totalSumFloat"], lang="es")
-                except:
-                    pays["totalSumFloat"] = payout.amount * self.max_capacity
-                    pays["totalSumStr"] = num2words(pays["totalSumFloat"], lang="es")
-
-                try:
-                    pays["firstSubTotalSumFloat"] += (
-                        payout.amount * self.max_capacity
-                        if payout.date.year <= pays["totalSumInitYear"]
-                        else 0
-                    )
-
-                except:
-                    pays["firstSubTotalSumFloat"] = (
-                        payout.amount * self.max_capacity
-                        if payout.date.year <= pays["totalSumInitYear"]
-                        else 0
-                    )
-
-                try:
-                    pays["SecSubTotalSumFloat"] += (
-                        payout.amount * self.max_capacity
-                        if payout.date.year >= pays["totalSumEndYear"]
-                        else 0
-                    )
-                except:
-                    pays["SecSubTotalSumFloat"] = (
-                        payout.amount * self.max_capacity
-                        if payout.date.year >= pays["totalSumEndYear"]
-                        else 0
-                    )
-
-                try:
-                    pays["firstSubTotalSumEndMonth"] = (
-                        payout.date.month
-                        if payout.date.year <= pays["totalSumInitYear"]
-                        and payout.date.month >= pays["firstSubTotalSumEndMonth"]
-                        else pays["firstSubTotalSumEndMonth"]
-                    )
-                except:
-                    pays["firstSubTotalSumEndMonth"] = (
-                        payout.date.month
-                        if payout.date.year <= pays["totalSumInitYear"]
-                        else 100
-                    )
-
-                try:
-                    pays["SecSubTotalSumInitMonth"] = (
-                        payout.date.month
-                        if payout.date.year >= pays["totalSumEndYear"]
-                        and payout.date.month <= pays["SecSubTotalSumInitMonth"]
-                        else pays["SecSubTotalSumInitMonth"]
-                    )
-                except:
-                    pays["SecSubTotalSumInitMonth"] = (
-                        payout.date.month
-                        if payout.date.year >= pays["totalSumEndYear"]
-                        else 100
-                    )
+                    else: #payout_year > pays["totalSumInitYear"]
+                        pays["SecSubTotalSumFloat"] += payout_amount
+                        
+                        if payout_month < pays['SecSubTotalSumInitMonth'] or pays['SecSubTotalSumInitMonth'] == 0:
+                            pays['SecSubTotalSumInitMonth'] = payout_month
+                            
+                    pays["totalSumFloat"] += payout_amount
+                    
 
             month_names_spanish = {
                 1: "enero",
@@ -398,15 +399,16 @@ class Cribroom(models.Model):
                 11: "noviembre",
                 12: "diciembre",
             }
-
-            pays["totalSumEndMonth"] = month_names_spanish[pays["totalSumEndMonth"]]
-            pays["totalSumInitMonth"] = month_names_spanish[pays["totalSumInitMonth"]]
-            pays["firstSubTotalSumEndMonth"] = month_names_spanish[
-                pays["firstSubTotalSumEndMonth"]
-            ]
-            pays["SecSubTotalSumInitMonth"] = month_names_spanish[
-                pays["SecSubTotalSumInitMonth"]
-            ]
+            
+            print(f'pays: {pays}')
+            
+            month_names_keys_dict = ["totalSumEndMonth", "totalSumInitMonth", "firstSubTotalSumEndMonth", "SecSubTotalSumInitMonth"]
+            
+            for key in month_names_keys_dict:
+                try:
+                    pays[key] = month_names_spanish[ pays[key] ]
+                except KeyError:
+                    pays[key] = None
 
         except Exception as e:
             return f"An error ocurred: {e}"
