@@ -712,3 +712,35 @@ class TechnicalReport(models.Model):
     def __str__(self):
         return self.resolucion
 
+
+class PayNote(models.Model):
+    dirige_a_sr = models.CharField(max_length=255, blank=False, default="Sr. Subsecretario de Administracióny Recursos Humanos")
+    dirige_a_persona_cr = models.CharField(max_length=255, blank=False, default="Cr. Alejandro Francesconi")
+    ministerio = models.CharField(max_length=255, blank=False, default="Ministerio de Desarrollo Social")    
+    resolucion = models.CharField(max_length=255, blank=False, default="Resolución Ministerial N° 2023/MDS00-00000731")
+
+    history = HistoricalRecords()
+    
+    def save(self, *args, **kwargs):
+
+        existing_obj = PayNote.objects.first()
+
+        if existing_obj:
+            # Update the existing instance with the new values
+            PayNote.objects.filter(id=existing_obj.id).update(
+                dirige_a_sr=self.dirige_a_sr,
+                dirige_a_persona_cr=self.dirige_a_persona_cr,
+                ministerio=self.ministerio,
+                resolucion=self.resolucion,
+            )
+        else:
+            super(PayNote, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Avoid deleting the object
+        
+        print('method not allowed')
+        pass
+
+    def __str__(self):
+        return self.resolucion

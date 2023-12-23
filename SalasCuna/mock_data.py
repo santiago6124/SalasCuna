@@ -5,6 +5,7 @@ import os
 import django
 
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 
 # Set the DJANGO_SETTINGS_MODULE environment variable
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SalasCuna.settings")
@@ -41,7 +42,8 @@ from SalasCuna_api.models import (
     Question,
     Poll,
     Phone,
-    TechnicalReport
+    TechnicalReport,
+    PayNote,
 )
 
 fake = Faker()
@@ -334,10 +336,22 @@ def create_payouts(num_payouts):
     zones = Zone.objects.all()
     for _ in range(num_payouts):
         amount = fake.random_int(min=15000, max=85000)
-        # Genera una fecha en el formato 'YYYY-MM'
         date = fake.date_between(start_date="-1y", end_date="today").strftime('%Y-%m')
         zone = random.choice(zones)
-        Payout.objects.create(amount=amount, date=date, zone=zone)
+
+        try:
+            # Try to create the Payout object
+            Payout.objects.create(amount=amount, date=date, zone=zone)
+        except IntegrityError as e:
+            # Catch IntegrityError, which includes ValidationError for unique constraint
+            if 'unique constraint' in str(e):
+                print(f"Skipping creation of duplicate payout for zone {zone} and date {date}")
+            else:
+                # Re-raise the exception if it's not related to uniqueness
+                raise e
+        except ValidationError as e:
+            # Catch and print the validation error
+            print(f"Validation error: {e}")
 
 
 # Call the functions to create the mock data
@@ -370,5 +384,6 @@ for i in range(10):
     create_children(10)
 
 TechnicalReport.objects.create()
+PayNote.objects.create()
 
 print("Mock data has been successfully created.")

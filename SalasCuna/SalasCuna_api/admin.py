@@ -151,6 +151,11 @@ class TechnicalReportAdmin(admin.ModelAdmin):
     list_display = ("id", "encabezado_ministerio", "encabezado_gobierno", "ministro", "resolucion", "remitanse")
     list_filter = ["id"]
 
+
+class PayNoteAdmin(admin.ModelAdmin):
+    list_display = ("id", "dirige_a_sr", "dirige_a_persona_cr", "ministerio", "resolucion")
+    list_filter = ["id"]
+
 admin.site.register(Payout, PayoutAdmin)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Locality, LocalityAdmin)
@@ -186,3 +191,4 @@ admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer, AnswerAdmin)
 
 admin.site.register(TechnicalReport, TechnicalReportAdmin)
+admin.site.register(PayNote, PayNoteAdmin)
