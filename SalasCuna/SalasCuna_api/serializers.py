@@ -29,7 +29,8 @@ from .models import (
     Question,
     Answer,
     ChildAnswer,
-    TechnicalReport
+    TechnicalReport,
+    PayNote,
 )
 
 
@@ -419,9 +420,14 @@ class LogEntrySerializer(serializers.ModelSerializer):
 
 
 
-class TechnicalReportTableSerializer(serializers.ModelSerializer):
+class TechnicalReportHeadersSerializer(serializers.ModelSerializer):
     class Meta:
         model = TechnicalReport
+        exclude = ("id",)
+        
+class PayNoteHeadersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PayNote
         exclude = ("id",)
 
 class HistoricalRecordSerializer(serializers.ModelSerializer):

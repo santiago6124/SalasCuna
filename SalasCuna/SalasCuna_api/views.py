@@ -43,7 +43,8 @@ from .models import (
     Question,
     Answer,
     ChildAnswer,
-    TechnicalReport
+    TechnicalReport,
+    PayNote,
 )
 from .serializers import (
     ChildSerializer,
@@ -76,11 +77,12 @@ from .serializers import (
     QuestionSerializer,
     AnswerSerializer,
     ChildAnswerSerializer,
-    TechnicalReportTableSerializer,
+    TechnicalReportHeadersSerializer,
     QuestionDepthSerializer,
     AnswerDepthSerializer,
     ChildAnswerDepthSerializer,
     PayNoteCribroomSerializer,
+    PayNoteHeadersSerializer,
 )
 
 from datetime import datetime, date
@@ -196,9 +198,14 @@ class ChildListCreateView(generics.ListCreateAPIView):
     queryset = Child.objects.all()
     serializer_class = ChildSerializer
 
-class TechnicalReportTableListCreateView(generics.ListCreateAPIView):
+class TechnicalReportHeadersListCreateView(generics.ListCreateAPIView):
     queryset = TechnicalReport.objects.all()
-    serializer_class = TechnicalReportTableSerializer
+    serializer_class = TechnicalReportHeadersSerializer
+    permission_classes = [AllUsersPerms]
+
+class PayNoteHeadersListCreateView(generics.ListCreateAPIView):
+    queryset = PayNote.objects.all()
+    serializer_class = PayNoteHeadersSerializer
     permission_classes = [AllUsersPerms]
 
 class LocalityListCreateView(generics.ListCreateAPIView):
