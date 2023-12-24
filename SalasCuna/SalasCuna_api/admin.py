@@ -148,7 +148,7 @@ class AnswerAdmin(admin.ModelAdmin):
     list_filter = ["description"]
 
 class TechnicalReportAdmin(admin.ModelAdmin):
-    list_display = ("id", "encabezado_ministerio", "encabezado_gobierno", "ministro", "resolucion", "remitanse")
+    list_display = ("id", "ministro", "resolucion", "remitanse")
     list_filter = ["id"]
 
 
