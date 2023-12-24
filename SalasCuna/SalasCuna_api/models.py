@@ -399,11 +399,12 @@ class Cribroom(models.Model):
                 11: "noviembre",
                 12: "diciembre",
             }
-            
+            pays["totalSumStr"] = num2words(pays["totalSumFloat"], lang="es")
+
             print(f'pays: {pays}')
             
             month_names_keys_dict = ["totalSumEndMonth", "totalSumInitMonth", "firstSubTotalSumEndMonth", "SecSubTotalSumInitMonth"]
-            
+
             for key in month_names_keys_dict:
                 try:
                     pays[key] = month_names_spanish[ pays[key] ]
