@@ -83,6 +83,7 @@ from .serializers import (
     ChildAnswerDepthSerializer,
     PayNoteCribroomSerializer,
     PayNoteHeadersSerializer,
+    DepthPayoutSerializer,
 )
 
 from datetime import datetime, date
@@ -280,6 +281,18 @@ class PayoutViewSet(viewsets.ModelViewSet):
         OrderingFilter,
     ]  # This makes django-filters works
     filterset_fields = ["amount", "zone_id"]  # fields to filter
+    
+    # Para usar Serializer, utilizar el filtro debajo
+    def get_queryset(self):
+        #payout/?depth=True
+        #payout/1/?depth=True
+        # '1' para True y '0' para False
+
+        depth = str(self.request.query_params.get("depth"))
+        if depth=='1':
+            self.serializer_class = DepthPayoutSerializer
+
+        return super().get_queryset()
 
 
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):

@@ -389,6 +389,14 @@ class PayoutSerializer(serializers.ModelSerializer):
         model = Payout
         fields = "__all__"
 
+
+class DepthPayoutSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Payout
+        fields = "__all__"
+        depth = 1
+
 class ZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zone
