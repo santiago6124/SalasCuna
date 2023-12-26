@@ -675,11 +675,26 @@ class ChildAnswer(models.Model):
             print(f"Exception: {ex}")
             raise Exception(f"An unexpected error occurred: {ex}")
     
-
+def default_base64_images(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            # Read the entire contents of the file
+            file_contents = file.read()
+            print(file_contents)
+            
+            return file_contents
+    except FileNotFoundError:
+        print(f"The file '{file_path}' was not found.")
+        
+        return ''
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        
+        return ''
 
 class TechnicalReport(models.Model):
-    encabezado_ministerio_base64 = models.TextField(blank=True, null=True, default= "")
-    encabezado_gobierno_base64 = models.TextField(blank=True, null=True, default= "")
+    encabezado_ministerio_base64 = models.TextField(blank=True, null=True, default= default_base64_images('encabezados/gobierno_base64.txt'))
+    encabezado_gobierno_base64 = models.TextField(blank=True, null=True, default= default_base64_images('encabezados/ministerio_base64.txt'))
     ministro = models.CharField(max_length=255, blank=False, default="Sr. Ministro de Desarrollo Social Dr. Juan Carlos Massei")
     resolucion = models.CharField(max_length=255, blank=False, default="Resolución Ministerial N° 0007/2023")
     remitanse = models.CharField(max_length=255, blank=False, default="REMÍTANSE a la Subsecretaria de Administración y Recursos Humanos")
