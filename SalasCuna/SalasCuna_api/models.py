@@ -4,7 +4,7 @@
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-from datetime import date
+from datetime import date, datetime
 from django.db import models
 from django.db.models import Count
 from django.contrib.auth.models import (
@@ -17,6 +17,7 @@ from num2words import num2words
 
 from django.core.exceptions import ValidationError
 
+import calendar
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -191,6 +192,20 @@ class Child(models.Model):
             - ((today.month, today.day) < (birthdate.month, birthdate.day))
         )
         return age
+    
+    def modification(self):
+        
+        options = 'Alta', 'Baja', 'Sin Modificar'
+        
+        print(self.history)
+        print(self.registration_date)
+        print(self.disenroll_date)
+
+        today = date.today()
+
+        modification = options[0] if (today.year, today.month) == (self.registration_date.year, self.registration_date.month) and self.is_active else options[1] if (today.year, today.month) == (self.disenroll_date.year, self.disenroll_date.month) and self.is_active == False else options[2]
+        
+        return modification
 
 
 class Company(models.Model):
@@ -247,6 +262,17 @@ class Cribroom(models.Model):
     def actualCapacity(self):
         return self.child_set.filter(is_active=True).count()
 
+    def payNote_amount(self, year, month):
+        print(f'year: {year}')
+        print(f'month: {month}')
+        print(f'self.locality.department.zone.id: {self.locality.department.zone.id}')
+        
+        payout_amount = Payout.objects.filter(zone=self.locality.department.zone.id, date=f'{year}-{month}')[0].amount
+        
+        print(f'payout_amount: {payout_amount}')
+
+        return self.child_set.filter(is_active=True).count() * payout_amount
+
     def reachMax(self):
         if self.actualCapacity() == self.max_capacity:
             return True
@@ -279,85 +305,85 @@ class Cribroom(models.Model):
                 zone=self.locality.department.zone.id, date__range=[init_date, end_date]
             )
             print(f"payouts: {payouts}")
-            min_date = min(payouts, key=lambda payout: payout.date).date
-            max_date = max(payouts, key=lambda payout: payout.date).date
+            min_date = min(payouts, key=lambda payout: payout.date)
+            max_date = max(payouts, key=lambda payout: payout.date)
 
             pays = {}
 
-            pays["totalSumEndMonth"] = max_date.month
-            pays["totalSumEndYear"] = max_date.year
-            pays["totalSumInitMonth"] = min_date.month
-            pays["totalSumInitYear"] = min_date.year
+            try:
+                init_date_year = int(init_date[0:4])
+                init_date_month = int(init_date[5:7])
+                init_date_day = int(init_date[8:])
+
+                init_payout = Payout.objects.get(zone=self.locality.department.zone.id, date=str(init_date)[:7])
+                
+                init_month_days = calendar.monthrange(init_date_year, init_date_month)[1]
+                
+                init_amount = init_payout.amount / init_month_days * (init_month_days - init_date_day)
+            except Payout.DoesNotExist:
+                init_payout = min_date
+                init_amount = init_payout.amount
+                init_date_year = int(str(init_payout.date[0:4]))
+                init_date_month = int(str(init_payout.date[5:7]))
+            
+            try:
+                end_date_year = int(end_date[0:4])
+                end_date_month = int(end_date[5:7])
+                end_date_day = int(end_date[8:])
+                
+                end_payout = Payout.objects.get(zone=self.locality.department.zone.id, date=str(end_date)[:7])
+            
+                end_month_days = calendar.monthrange(end_date_year, end_date_month)[1]
+                
+                end_amount = end_payout.amount / end_month_days * end_date_day
+                
+            except Payout.DoesNotExist:
+                end_payout = max_date
+                end_amount = end_payout.amount
+                end_date_year = int(str(end_payout.date[0:4]))
+                end_date_month = int(str(end_payout.date[5:7]))
+                
+            
+            
+            pays = {
+
+                'totalSumInitYear': init_date_year,
+                'totalSumInitMonth': init_date_month,
+                'firstSubTotalSumEndMonth': 0,
+                'firstSubTotalSumFloat': init_amount,
+
+                'totalSumEndYear': end_date_year,
+                'SecSubTotalSumInitMonth': 0,
+                'totalSumEndMonth': end_date_month,
+                'SecSubTotalSumFloat': end_amount,
+
+                'totalSumFloat': end_amount+init_amount,
+            }
 
             for payout in payouts:
-                pays[str(payout.date)] = payout.amount * self.max_capacity
+                payout_id = payout.id
 
-                try:
-                    pays[str(payout.date.year)] += payout.amount * self.max_capacity
-                except:
-                    pays[str(payout.date.year)] = payout.amount * self.max_capacity
+                if payout_id != init_payout.id and payout_id != end_payout.id:
+                    payout_amount = payout.amount
+                    payout_date = payout.date                
+                    
+                    payout_year = int(payout_date[0:4])
+                    payout_month = int(payout_date[5:7])
+                    
+                    if payout_year == pays["totalSumInitYear"]:
+                        pays['firstSubTotalSumFloat'] += payout_amount
+                        
+                        if payout_month > pays["firstSubTotalSumEndMonth"]:
+                            pays["firstSubTotalSumEndMonth"] = payout_month
 
-                try:
-                    pays["totalSumFloat"] += payout.amount * self.max_capacity
-                    pays["totalSumStr"] = num2words(pays["totalSumFloat"], lang="es")
-                except:
-                    pays["totalSumFloat"] = payout.amount * self.max_capacity
-                    pays["totalSumStr"] = num2words(pays["totalSumFloat"], lang="es")
-
-                try:
-                    pays["firstSubTotalSumFloat"] += (
-                        payout.amount * self.max_capacity
-                        if payout.date.year <= pays["totalSumInitYear"]
-                        else 0
-                    )
-
-                except:
-                    pays["firstSubTotalSumFloat"] = (
-                        payout.amount * self.max_capacity
-                        if payout.date.year <= pays["totalSumInitYear"]
-                        else 0
-                    )
-
-                try:
-                    pays["SecSubTotalSumFloat"] += (
-                        payout.amount * self.max_capacity
-                        if payout.date.year >= pays["totalSumEndYear"]
-                        else 0
-                    )
-                except:
-                    pays["SecSubTotalSumFloat"] = (
-                        payout.amount * self.max_capacity
-                        if payout.date.year >= pays["totalSumEndYear"]
-                        else 0
-                    )
-
-                try:
-                    pays["firstSubTotalSumEndMonth"] = (
-                        payout.date.month
-                        if payout.date.year <= pays["totalSumInitYear"]
-                        and payout.date.month >= pays["firstSubTotalSumEndMonth"]
-                        else pays["firstSubTotalSumEndMonth"]
-                    )
-                except:
-                    pays["firstSubTotalSumEndMonth"] = (
-                        payout.date.month
-                        if payout.date.year <= pays["totalSumInitYear"]
-                        else 100
-                    )
-
-                try:
-                    pays["SecSubTotalSumInitMonth"] = (
-                        payout.date.month
-                        if payout.date.year >= pays["totalSumEndYear"]
-                        and payout.date.month <= pays["SecSubTotalSumInitMonth"]
-                        else pays["SecSubTotalSumInitMonth"]
-                    )
-                except:
-                    pays["SecSubTotalSumInitMonth"] = (
-                        payout.date.month
-                        if payout.date.year >= pays["totalSumEndYear"]
-                        else 100
-                    )
+                    else: #payout_year > pays["totalSumInitYear"]
+                        pays["SecSubTotalSumFloat"] += payout_amount
+                        
+                        if payout_month < pays['SecSubTotalSumInitMonth'] or pays['SecSubTotalSumInitMonth'] == 0:
+                            pays['SecSubTotalSumInitMonth'] = payout_month
+                            
+                    pays["totalSumFloat"] += payout_amount
+                    
 
             month_names_spanish = {
                 1: "enero",
@@ -373,15 +399,17 @@ class Cribroom(models.Model):
                 11: "noviembre",
                 12: "diciembre",
             }
+            pays["totalSumStr"] = num2words(pays["totalSumFloat"], lang="es")
 
-            pays["totalSumEndMonth"] = month_names_spanish[pays["totalSumEndMonth"]]
-            pays["totalSumInitMonth"] = month_names_spanish[pays["totalSumInitMonth"]]
-            pays["firstSubTotalSumEndMonth"] = month_names_spanish[
-                pays["firstSubTotalSumEndMonth"]
-            ]
-            pays["SecSubTotalSumInitMonth"] = month_names_spanish[
-                pays["SecSubTotalSumInitMonth"]
-            ]
+            print(f'pays: {pays}')
+            
+            month_names_keys_dict = ["totalSumEndMonth", "totalSumInitMonth", "firstSubTotalSumEndMonth", "SecSubTotalSumInitMonth"]
+
+            for key in month_names_keys_dict:
+                try:
+                    pays[key] = month_names_spanish[ pays[key] ]
+                except KeyError:
+                    pays[key] = None
 
         except Exception as e:
             return f"An error ocurred: {e}"
@@ -493,14 +521,32 @@ class Phone(models.Model):
     def __str__(self):
         return f"{self.phone_name}, {self.phone_number}"
 
+def validate_date_format(value):
+    try:
+        # Intenta parsear la fecha, esto arrojará una excepción si el formato no es correcto
+        datetime.strptime(value, '%Y-%m')
+    except ValueError:
+        raise ValidationError('El formato de fecha debe ser YYYY-MM')
+
 class Payout(models.Model):
     amount = models.FloatField(blank=False)
-    date = models.DateField(blank=False)
+    date = models.CharField(max_length=7, validators=[validate_date_format], blank=False)
     zone = models.ForeignKey(
         "Zone", models.DO_NOTHING, db_column="Zone_id", blank=False
     )  # Field name made lowercase.
 
     history = HistoricalRecords()
+    
+    def save(self, *args, **kwargs):
+        # Check if there is already a payout for this zone and date
+        existing_payout = Payout.objects.filter(zone=self.zone, date=self.date)
+        ids = [obj.id for obj in existing_payout] # validation added for updating objects and not raising error
+        
+        if existing_payout.exists() and self.pk not in ids:
+            raise ValidationError("Already exists a payout for this zone and date")
+
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return f"{self.id}, {self.amount}, {self.date}"
@@ -630,8 +676,10 @@ class ChildAnswer(models.Model):
             raise Exception(f"An unexpected error occurred: {ex}")
     
 
+
 class TechnicalReport(models.Model):
-    encabezado = models.CharField(max_length=255, blank=False, default="1983/2023 - 40 AÑOS DE DEMOCRACIA")
+    encabezado_ministerio_base64 = models.TextField(blank=True, null=True, default= "")
+    encabezado_gobierno_base64 = models.TextField(blank=True, null=True, default= "")
     ministro = models.CharField(max_length=255, blank=False, default="Sr. Ministro de Desarrollo Social Dr. Juan Carlos Massei")
     resolucion = models.CharField(max_length=255, blank=False, default="Resolución Ministerial N° 0007/2023")
     remitanse = models.CharField(max_length=255, blank=False, default="REMÍTANSE a la Subsecretaria de Administración y Recursos Humanos")
@@ -644,7 +692,8 @@ class TechnicalReport(models.Model):
         if existing_obj:
             # Update the existing instance with the new values
             TechnicalReport.objects.filter(id=existing_obj.id).update(
-                encabezado=self.encabezado,
+                encabezado_ministerio_base64=self.encabezado_ministerio_base64,
+                encabezado_gobierno_base64=self.encabezado_gobierno_base64,
                 ministro=self.ministro,
                 resolucion=self.resolucion,
                 remitanse=self.remitanse
@@ -661,3 +710,35 @@ class TechnicalReport(models.Model):
     def __str__(self):
         return self.resolucion
 
+
+class PayNote(models.Model):
+    dirige_a_sr = models.CharField(max_length=255, blank=False, default="Sr. Subsecretario de Administracióny Recursos Humanos")
+    dirige_a_persona_cr = models.CharField(max_length=255, blank=False, default="Cr. Alejandro Francesconi")
+    ministerio = models.CharField(max_length=255, blank=False, default="Ministerio de Desarrollo Social")    
+    resolucion = models.CharField(max_length=255, blank=False, default="Resolución Ministerial N° 2023/MDS00-00000731")
+
+    history = HistoricalRecords()
+    
+    def save(self, *args, **kwargs):
+
+        existing_obj = PayNote.objects.first()
+
+        if existing_obj:
+            # Update the existing instance with the new values
+            PayNote.objects.filter(id=existing_obj.id).update(
+                dirige_a_sr=self.dirige_a_sr,
+                dirige_a_persona_cr=self.dirige_a_persona_cr,
+                ministerio=self.ministerio,
+                resolucion=self.resolucion,
+            )
+        else:
+            super(PayNote, self).save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Avoid deleting the object
+        
+        print('method not allowed')
+        pass
+
+    def __str__(self):
+        return self.resolucion

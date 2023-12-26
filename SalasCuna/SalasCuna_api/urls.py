@@ -27,7 +27,8 @@ from .views import (
     QuestionListView,
     AnswerListView,
     ChildAnswerListCreateView,
-    TechnicalReportTableListCreateView
+    TechnicalReportHeadersListCreateView,
+    PayNoteHeadersListCreateView,
 )
 
 router = routers.DefaultRouter()
@@ -43,9 +44,14 @@ router.register(r"cribroomUser", CribroomUserModelViewSet)
 
 urlpatterns = router.urls + [
     path(
-        "TechnicalReportTableListCreateView/",
-        TechnicalReportTableListCreateView.as_view(),
-        name="TechnicalReportTableListCreateView",
+        "TechnicalReportHeadersListCreateView/",
+        TechnicalReportHeadersListCreateView.as_view(),
+        name="TechnicalReportHeadersListCreateView",
+    ),
+    path(
+        "PayNoteHeadersListCreateView/",
+        PayNoteHeadersListCreateView.as_view(),
+        name="PayNoteHeadersListCreateView",
     ),
     path(
         "technical-report/<pk>/<str:initial_date>/<str:end_date>/",

@@ -29,7 +29,8 @@ from .models import (
     Question,
     Answer,
     ChildAnswer,
-    TechnicalReport
+    TechnicalReport,
+    PayNote,
 )
 
 
@@ -240,6 +241,22 @@ class DepthCribroomSerializer(serializers.ModelSerializer):
     
     """
 
+class PayNoteCribroomSerializer(serializers.ModelSerializer):
+    actualCapacity = serializers.SerializerMethodField()
+    payNote_amount = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Cribroom
+        fields = "__all__"
+
+    def get_actualCapacity(self, obj):
+        return obj.actualCapacity()
+    
+    def get_payNote_amount(self, obj):
+        year = self.context.get("year")
+        month = self.context.get("month")
+
+        return obj.payNote_amount(year, month)
 
 class ShiftSerializer(serializers.ModelSerializer):
     class Meta:
@@ -316,6 +333,7 @@ class ChildSerializer(serializers.ModelSerializer):
 
 class DepthChildSerializer(serializers.ModelSerializer):
     age = serializers.SerializerMethodField()
+    modification = serializers.SerializerMethodField() 
 
     class Meta:
         model = Child
@@ -333,6 +351,9 @@ class DepthChildSerializer(serializers.ModelSerializer):
 
     def get_age(self, obj):
         return obj.age()
+
+    def get_modification(self, obj):
+        return obj.modification()
 
 
 class TechnicalReportSerializer(serializers.ModelSerializer):
@@ -368,6 +389,14 @@ class PayoutSerializer(serializers.ModelSerializer):
         model = Payout
         fields = "__all__"
 
+
+class DepthPayoutSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Payout
+        fields = "__all__"
+        depth = 1
+
 class ZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zone
@@ -399,9 +428,14 @@ class LogEntrySerializer(serializers.ModelSerializer):
 
 
 
-class TechnicalReportTableSerializer(serializers.ModelSerializer):
+class TechnicalReportHeadersSerializer(serializers.ModelSerializer):
     class Meta:
         model = TechnicalReport
+        exclude = ("id",)
+        
+class PayNoteHeadersSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PayNote
         exclude = ("id",)
 
 class HistoricalRecordSerializer(serializers.ModelSerializer):
